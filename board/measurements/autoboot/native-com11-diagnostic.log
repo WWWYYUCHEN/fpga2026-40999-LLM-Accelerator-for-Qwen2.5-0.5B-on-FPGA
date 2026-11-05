@@ -1,0 +1,6 @@
+
+[HOST] 2026-10-25T12:01:53.172701+08:00 OPEN COM11 115200 8N1, native ReadFile, DTR/RTS off; no automatic boot interruption
+
+[HOST] 2026-10-25T12:01:56.231435+08:00 TX one CR to request an idle prompt; not a boot or inference command
+
+[HOST] 2026-10-25T12:02:05.291564+08:00 CLOSE rx_bytes=0 tx_bytes=1 status=completed

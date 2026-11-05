@@ -1,0 +1,212 @@
+{
+  "started_at": "2026-10-25T12:11:06.734879+08:00",
+  "status": "completed",
+  "receiver_pid": 17652,
+  "commands": [
+    {
+      "id": "51afe49197-001",
+      "scenario": "tokenizer",
+      "command": "/selftest",
+      "completed_at": "2026-10-25T12:11:06.941732+08:00",
+      "response": "/selftest\nTOKENIZER_SELFTEST_OK 40 tokens\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-002",
+      "scenario": "final_all_layers",
+      "command": "/template raw",
+      "completed_at": "2026-10-25T12:11:07.167044+08:00",
+      "response": "/template raw\nTEMPLATE=raw\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-003",
+      "scenario": "final_all_layers",
+      "command": "/mode events",
+      "completed_at": "2026-10-25T12:11:07.378319+08:00",
+      "response": "/mode events\nMODE=events\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-004",
+      "scenario": "final_all_layers",
+      "command": "/max 2",
+      "completed_at": "2026-10-25T12:11:07.589063+08:00",
+      "response": "/max 2\nMAX_NEW=2\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-005",
+      "scenario": "final_all_layers",
+      "command": "你好",
+      "completed_at": "2026-10-25T12:11:08.001090+08:00",
+      "response": "你好\n@BEGIN 1 prompt_tokens=1 max_new=2\n@TOKEN 1 0 3837 13466163 efbc8c\n@TOKEN 1 1 35946 13709209 e68891\n\n@END 1 produced=2 reason=limit status=0\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-006",
+      "scenario": "final_repeat_context_reset",
+      "command": "/template raw",
+      "completed_at": "2026-10-25T12:11:08.258847+08:00",
+      "response": "/template raw\nTEMPLATE=raw\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-007",
+      "scenario": "final_repeat_context_reset",
+      "command": "/mode events",
+      "completed_at": "2026-10-25T12:11:08.465602+08:00",
+      "response": "/mode events\nMODE=events\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-008",
+      "scenario": "final_repeat_context_reset",
+      "command": "/max 1",
+      "completed_at": "2026-10-25T12:11:08.671411+08:00",
+      "response": "/max 1\nMAX_NEW=1\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-009",
+      "scenario": "final_repeat_context_reset",
+      "command": "你好",
+      "completed_at": "2026-10-25T12:11:08.983983+08:00",
+      "response": "你好\n@BEGIN 2 prompt_tokens=1 max_new=1\n@TOKEN 2 0 3837 13395310 efbc8c\n\n@END 2 produced=1 reason=limit status=0\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-010",
+      "scenario": "final_repeat_context_reset",
+      "command": "你好",
+      "completed_at": "2026-10-25T12:11:09.343481+08:00",
+      "response": "你好\n@BEGIN 3 prompt_tokens=1 max_new=1\n@TOKEN 3 0 3837 13386691 efbc8c\n\n@END 3 produced=1 reason=limit status=0\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-011",
+      "scenario": "final_rows9_prefill",
+      "command": "/template raw",
+      "completed_at": "2026-10-25T12:11:09.565246+08:00",
+      "response": "/template raw\nTEMPLATE=raw\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-012",
+      "scenario": "final_rows9_prefill",
+      "command": "/mode events",
+      "completed_at": "2026-10-25T12:11:09.775288+08:00",
+      "response": "/mode events\nMODE=events\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-013",
+      "scenario": "final_rows9_prefill",
+      "command": "/max 1",
+      "completed_at": "2026-10-25T12:11:09.987344+08:00",
+      "response": "/max 1\nMAX_NEW=1\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-014",
+      "scenario": "final_rows9_prefill",
+      "command": "123456789",
+      "completed_at": "2026-10-25T12:11:10.649451+08:00",
+      "response": "123456789\n@BEGIN 4 prompt_tokens=9 max_new=1\n@TOKEN 4 0 16 52291094 31\n\n@END 4 produced=1 reason=limit status=0\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-015",
+      "scenario": "final_decode_trace",
+      "command": "/template raw",
+      "completed_at": "2026-10-25T12:11:10.865698+08:00",
+      "response": "/template raw\nTEMPLATE=raw\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-016",
+      "scenario": "final_decode_trace",
+      "command": "/mode events",
+      "completed_at": "2026-10-25T12:11:11.071694+08:00",
+      "response": "/mode events\nMODE=events\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-017",
+      "scenario": "final_decode_trace",
+      "command": "/max 2",
+      "completed_at": "2026-10-25T12:11:11.278338+08:00",
+      "response": "/max 2\nMAX_NEW=2\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-018",
+      "scenario": "final_decode_trace",
+      "command": "你好",
+      "completed_at": "2026-10-25T12:11:11.743342+08:00",
+      "response": "你好\n@BEGIN 5 prompt_tokens=1 max_new=2\n@TOKEN 5 0 3837 13385384 efbc8c\n@TOKEN 5 1 35946 13699025 e68891\n\n@END 5 produced=2 reason=limit status=0\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-019",
+      "scenario": "final_chat_nihao",
+      "command": "/template chat",
+      "completed_at": "2026-10-25T12:11:11.961660+08:00",
+      "response": "/template chat\nTEMPLATE=chat\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-020",
+      "scenario": "final_chat_nihao",
+      "command": "/mode events",
+      "completed_at": "2026-10-25T12:11:12.167728+08:00",
+      "response": "/mode events\nMODE=events\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-021",
+      "scenario": "final_chat_nihao",
+      "command": "/max 8",
+      "completed_at": "2026-10-25T12:11:12.379273+08:00",
+      "response": "/max 8\nMAX_NEW=8\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-022",
+      "scenario": "final_chat_nihao",
+      "command": "你好",
+      "completed_at": "2026-10-25T12:11:15.950635+08:00",
+      "response": "你好\n@BEGIN 6 prompt_tokens=30 max_new=8\n@TOKEN 6 0 108386 167524314 e4bda0e5a5bd\n@TOKEN 6 1 6313 23054774 efbc81\n@TOKEN 6 2 112169 23369085 e5be88e9ab98e585b4\n@TOKEN 6 3 102804 23741970 e4b8bae682a8\n@TOKEN 6 4 47874 24075257 e69c8de58aa1\n@TOKEN 6 5 1773 24396725 e38082\n@TOKEN 6 6 104139 24719901 e69c89e4bb80e4b988\n@TOKEN 6 7 109944 25054505 e68891e58fafe4bba5\n\n@END 6 produced=8 reason=limit status=0\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-023",
+      "scenario": "final_chat_eos",
+      "command": "/template chat",
+      "completed_at": "2026-10-25T12:11:16.163602+08:00",
+      "response": "/template chat\nTEMPLATE=chat\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-024",
+      "scenario": "final_chat_eos",
+      "command": "/mode events",
+      "completed_at": "2026-10-25T12:11:16.428756+08:00",
+      "response": "/mode events\nMODE=events\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-025",
+      "scenario": "final_chat_eos",
+      "command": "/max 20",
+      "completed_at": "2026-10-25T12:11:16.641069+08:00",
+      "response": "/max 20\nMAX_NEW=20\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-026",
+      "scenario": "final_chat_eos",
+      "command": "1+1等于几？",
+      "completed_at": "2026-10-25T12:11:20.418504+08:00",
+      "response": "1+1等于几？\n@BEGIN 7 prompt_tokens=35 max_new=20\n@TOKEN 7 0 16 207455737 31\n@TOKEN 7 1 10 24719889 2b\n@TOKEN 7 2 16 25043470 31\n@TOKEN 7 3 107106 25366666 e7ad89e4ba8e\n@TOKEN 7 4 17 25689008 32\n@TOKEN 7 5 1773 26012373 e38082\n@TOKEN 7 6 151645 26406277 3c7c696d5f656e647c3e\n\n@END 7 produced=7 reason=eos status=0\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-027",
+      "scenario": "restore",
+      "command": "/template chat",
+      "completed_at": "2026-10-25T12:11:20.679727+08:00",
+      "response": "/template chat\nTEMPLATE=chat\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-028",
+      "scenario": "restore",
+      "command": "/mode text",
+      "completed_at": "2026-10-25T12:11:20.894297+08:00",
+      "response": "/mode text\nMODE=text\n\nREADY\nprompt> "
+    },
+    {
+      "id": "51afe49197-029",
+      "scenario": "restore",
+      "command": "/max 20",
+      "completed_at": "2026-10-25T12:11:21.104958+08:00",
+      "response": "/max 20\nMAX_NEW=20\n\nREADY\nprompt> "
+    }
+  ],
+  "finished_at": "2026-10-25T12:11:21.108639+08:00",
+  "defaults": "chat / text / max 20"
+}
