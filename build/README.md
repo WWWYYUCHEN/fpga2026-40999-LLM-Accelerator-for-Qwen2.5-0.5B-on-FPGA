@@ -1,28 +1,34 @@
 # 构建与实现
 
-工程采用 Vivado 100 MHz 约束完成综合、布局布线和 bitstream 导出。
+| 路径 | 内容 |
+| --- | --- |
+| `scripts/build_candidate9.ps1` | 端到端仿真构建（RTL + 行为级模型 + 固件 + 桥接），需新 `-Tag` |
+| `scripts/run_candidate.ps1` | 运行仿真程序，指定模板、长度、prompt |
+| `scripts/fw/`、`scripts/verification/` | 固件与验证的构建脚本副本 |
+| `vivado/create_rtl_project.tcl` | 生成 `rtl_project/candidate9.xpr`（器件 `xck26-sfvc784-2LV-c`） |
+| `vivado/ip_package.tcl` | 把加速器打包成 IP（输出 `package_candidate9/`） |
+| `vivado/bd_build_ps.tcl` | 重建 KV260 PS Block Design |
+| `vivado/clk.xdc` | 100 MHz 顶层 OOC 时钟约束 |
+| `vivado/address_map.json` / `.h` | 寄存器与地址段定义 |
+| `reports/timing_summary.rpt` | GEMM 局部综合时序（含 −5.238 ns 违规路径） |
+| `reports/utilization.rpt` | 对应资源利用率 |
+| `logs/create_rtl_project.log` | 工程创建日志 |
 
-| 项目 | 路径 | 结果 |
-| --- | --- | --- |
-| 综合输入 | `synth/` | Vivado 工程基线 |
-| bitstream | `hardware/qwen25_system_100mhz.bit` | 7,797,912 字节 |
-| PL 启动镜像 | `../board/deployment/QWEN25.BIN` | 7,797,692 字节 |
-| XSA | `hardware/qwen25_system_100mhz.xsa` | 6,274,719 字节 |
-| 时序报告 | `timing/` | 100 MHz 实现 |
+## 已知限制
 
-## 关键哈希
+- `clk.xdc` 的 100 MHz 是 **OOC 时钟约束，不是闭合保证**。
+- 300 MHz 约束下 GEMM 局部综合 **WNS = −5.238 ns**，未收敛。
+- **没有完整的 BD 布局布线结果**，200 MHz 与 300 MHz 均未验证通过。
+- **没有 bitstream**，也没有 XSA。本分支不可直接上板。
+- `bd_build_ps.tcl` 依赖本机 KV260 board preset 路径，换机器需先装好 board files。
 
-- bitstream：`e1c3110a27d7ab07b4d4e88af222c42c4dc2c9bde4050eeaff5cd2f92e4de12a`
-- PL BIN：`73a06211577e199bb4ff3735581899a50c48c2e4f94f81189d3469e8d9874d26`
+## 工具路径
 
-XSA 内的 bitstream 与独立 bitstream 已逐字节核对一致。
+`build_candidate9.ps1` / `run_candidate.ps1` 默认使用：
 
-## 时序
+```text
+C:\Users\ZKHC\tools\oss-cad-suite
+C:\Users\ZKHC\tools\ziglang_verilator\ziglang\zig.exe
+```
 
-| 项目 | 结果 |
-| --- | ---: |
-| 时钟约束 | 10.000 ns / 100 MHz |
-| Setup uncertainty | 0.100 ns |
-| Setup WNS | +1.700 ns |
-| Hold WHS | +0.010 ns |
-
+换机器必须修改。

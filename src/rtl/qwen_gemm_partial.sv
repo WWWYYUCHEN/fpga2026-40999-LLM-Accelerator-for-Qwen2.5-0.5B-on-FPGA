@@ -3,7 +3,7 @@
 
 // Sixteen independent 64x32 LUTRAM columns retain the 8x128 FP32 partial tile.
 // 中间和保存在GEMM内部LUTRAM；真实加法器valid驱动写回，不占BRAM/URAM。
-module qwen_gemm_partial (
+module qwen_gemm_partial #(parameter integer COL = 16) (
     input  wire         clk,
     input  wire         rst_n,
     input  wire         clear,
@@ -11,13 +11,13 @@ module qwen_gemm_partial (
     input  wire         first_k,
     input  wire [2:0]   update_slot,
     input  wire [2:0]   update_row,
-    input  wire [511:0] update_data,
+    input  wire [COL*32-1:0] update_data,
     output wire         update_done,
     output wire         busy,
     output wire         protocol_error,
     input  wire         read_enable,
     input  wire [5:0]   read_address,
-    output wire [511:0] read_data,
+    output wire [COL*32-1:0] read_data,
     output wire         read_valid
 );
     wire select_valid = update_valid || read_enable;
@@ -25,9 +25,9 @@ module qwen_gemm_partial (
     wire [2:0] select_row = update_valid ? update_row : read_address[2:0];
     logic [1:0] reg_valid, reg_update, reg_first;
     logic [2:0] reg_slot [0:1], reg_row [0:1];
-    logic [511:0] reg_sum [0:1];
-    wire [511:0] add_results;
-    wire [15:0] add_output_valid;
+    logic [COL*32-1:0] reg_sum [0:1];
+    wire [COL*32-1:0] add_results;
+    wire [COL-1:0] add_output_valid;
 
     // 16列同拍，一个共享地址FIFO对应最终加法器真实完成事件。
     (* ram_style = "distributed" *) logic [5:0] addition_identity [0:15];
@@ -38,20 +38,20 @@ module qwen_gemm_partial (
     wire first_write = reg_valid[1] && reg_update[1] && reg_first[1];
     wire accumulate_write = (&add_output_valid) && (pending_additions != 0);
     wire write_fire = first_write || accumulate_write;
-    wire [511:0] first_results;
-    wire [511:0] write_data = first_write ? first_results : add_results;
+    wire [COL*32-1:0] first_results;
+    wire [COL*32-1:0] write_data = first_write ? first_results : add_results;
     wire [5:0] write_address = first_write ? {reg_slot[1],reg_row[1]} : addition_identity[identity_read_pointer];
     logic reg_write_valid;
     logic [5:0] reg_write_address;
-    logic [511:0] reg_write_data;
-    wire [15:0] write_committed;
+    logic [COL*32-1:0] reg_write_data;
+    wire [COL-1:0] write_committed;
     wire commit_fire = &write_committed;
 
     assign update_done = commit_fire;
     assign busy = pending_updates != 0;
     assign protocol_error = 1'b0;
     assign read_valid = reg_valid[1] && !reg_update[1];
-    for (genvar col = 0; col < 16; col++) begin : gen_column_accumulator
+    for (genvar col = 0; col < COL; col++) begin : gen_column_accumulator
         // 首块树结果直接写，±0规范为+0，保持原+0初值加法的数值合同。
         assign first_results[col*32 +: 32] =
             (reg_sum[1][col*32 +: 31] == 0) ? 32'b0 : reg_sum[1][col*32 +: 32];
@@ -67,7 +67,7 @@ module qwen_gemm_partial (
     end
 
     always_ff @(posedge clk) begin
-        if (!rst_n || clear) begin
+        if (!rst_n ) begin
             reg_valid <= 0; reg_update <= 0; reg_first <= 0;
             identity_write_pointer <= 0; identity_read_pointer <= 0;
             pending_additions <= 0; pending_updates <= 0;

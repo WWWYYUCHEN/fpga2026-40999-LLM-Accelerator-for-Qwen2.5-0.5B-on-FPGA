@@ -1,3 +1,0 @@
-/mode events
-/max 20
-1+1等于几？

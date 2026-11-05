@@ -167,8 +167,7 @@ module qwen25_accel_axi4_top #(parameter AXIL_AW=16, parameter AXIL_DW=64, param
     input wire [3:0] m_axi3_bid,
     input wire [1:0] m_axi3_bresp,
     input wire m_axi3_bvalid,
-    output wire m_axi3_bready,
-    output wire irq
+    output wire m_axi3_bready
 );
     wire m_gemm_cmd_valid;
     wire s_gemm_cmd_ready;
@@ -221,6 +220,20 @@ module qwen25_accel_axi4_top #(parameter AXIL_AW=16, parameter AXIL_DW=64, param
     wire [127:0] ctrl_result_aux;
     wire [127:0] ctrl_result_meta;
     wire [7:0] ctrl_result_mask;
+    wire ctrl_rope_req_valid;
+    wire ctrl_rope_req_ready;
+    wire ctrl_rope_req_last;
+    wire [127:0] ctrl_rope_req_x;
+    wire [127:0] ctrl_rope_req_y;
+    wire [127:0] ctrl_rope_req_meta;
+    wire [7:0] ctrl_rope_req_mask;
+    wire ctrl_rope_res_valid;
+    wire ctrl_rope_res_ready;
+    wire ctrl_rope_res_last;
+    wire [127:0] ctrl_rope_res_data;
+    wire [127:0] ctrl_rope_res_aux;
+    wire [127:0] ctrl_rope_res_meta;
+    wire [7:0] ctrl_rope_res_mask;
     wire internal_busy;
     wire internal_error;
     wire ctrl_afu_abort;
@@ -393,7 +406,6 @@ module qwen25_accel_axi4_top #(parameter AXIL_AW=16, parameter AXIL_DW=64, param
         .m_axi3_bresp(m_axi3_bresp),
         .m_axi3_bvalid(m_axi3_bvalid),
         .m_axi3_bready(m_axi3_bready),
-        .irq(irq),
         .abort_req(abort_req),
         .soft_reset_req(soft_reset_req),
         .ctrl_afu_valid(ctrl_afu_valid),
@@ -417,6 +429,20 @@ module qwen25_accel_axi4_top #(parameter AXIL_AW=16, parameter AXIL_DW=64, param
         .ctrl_result_aux(ctrl_result_aux),
         .ctrl_result_meta(ctrl_result_meta),
         .ctrl_result_mask(ctrl_result_mask),
+        .ctrl_rope_req_valid(ctrl_rope_req_valid),
+        .ctrl_rope_req_ready(ctrl_rope_req_ready),
+        .ctrl_rope_req_last(ctrl_rope_req_last),
+        .ctrl_rope_req_x(ctrl_rope_req_x),
+        .ctrl_rope_req_y(ctrl_rope_req_y),
+        .ctrl_rope_req_meta(ctrl_rope_req_meta),
+        .ctrl_rope_req_mask(ctrl_rope_req_mask),
+        .ctrl_rope_res_valid(ctrl_rope_res_valid),
+        .ctrl_rope_res_ready(ctrl_rope_res_ready),
+        .ctrl_rope_res_last(ctrl_rope_res_last),
+        .ctrl_rope_res_data(ctrl_rope_res_data),
+        .ctrl_rope_res_aux(ctrl_rope_res_aux),
+        .ctrl_rope_res_meta(ctrl_rope_res_meta),
+        .ctrl_rope_res_mask(ctrl_rope_res_mask),
         .internal_busy(internal_busy),
         .internal_error(internal_error),
         .ctrl_afu_abort(ctrl_afu_abort),
@@ -451,7 +477,12 @@ module qwen25_accel_axi4_top #(parameter AXIL_AW=16, parameter AXIL_DW=64, param
         .s_gemm_aborted(s_gemm_aborted),
         .s_gemm_error_code(s_gemm_error_code)
     );
-    qwen25_gemm gemm_Inst(.clk(clk),.rst_n(rst_n),
+    // [STAGE4] single INT8 array for all four GEMMs (opcodes 3/4 = the two
+    // attention GEMMs, 5/6/9 = projections and LM head).  qwen25_gemm_i is
+    // port-identical to qwen25_gemm, so this instance swap is the whole change
+    // in this file: no bf_sel mux exists in this tree (that 2:1 array mux only
+    // ever existed in the hybrid experiment tree).
+    qwen25_gemm_i gemm_Inst(.clk(clk),.rst_n(rst_n),
         .s_cmd_valid(m_gemm_cmd_valid),
         .s_cmd_ready(s_gemm_cmd_ready),
         .s_cmd(m_gemm_cmd),
@@ -505,6 +536,20 @@ module qwen25_accel_axi4_top #(parameter AXIL_AW=16, parameter AXIL_DW=64, param
         .ctrl_result_aux(ctrl_result_aux),
         .ctrl_result_meta(ctrl_result_meta),
         .ctrl_result_mask(ctrl_result_mask),
+        .rope_req_valid(ctrl_rope_req_valid),
+        .rope_req_ready(ctrl_rope_req_ready),
+        .rope_req_last(ctrl_rope_req_last),
+        .rope_req_x(ctrl_rope_req_x),
+        .rope_req_y(ctrl_rope_req_y),
+        .rope_req_meta(ctrl_rope_req_meta),
+        .rope_req_mask(ctrl_rope_req_mask),
+        .rope_res_valid(ctrl_rope_res_valid),
+        .rope_res_ready(ctrl_rope_res_ready),
+        .rope_res_last(ctrl_rope_res_last),
+        .rope_res_data(ctrl_rope_res_data),
+        .rope_res_aux(ctrl_rope_res_aux),
+        .rope_res_meta(ctrl_rope_res_meta),
+        .rope_res_mask(ctrl_rope_res_mask),
         .internal_busy(internal_busy),
         .internal_error(internal_error),
         .ctrl_afu_abort(ctrl_afu_abort)

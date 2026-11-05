@@ -1,5 +1,8 @@
 `timescale 1ns / 1ps
-// Gamma table: two independent 64-bit URAM words form one 128-bit vector.
+// Gamma table: two independent 64-bit words form one 128-bit vector.
+// [P16K] 64-bit x 5488 x2 = 702 Kbit 的 norm 系数表，读带宽每拍 1 字，放 BRAM 完全够；
+//        改前 URAM 是 100% 硬阻塞资源，这张小表占着 4 块 URAM288，改到 BRAM 后
+//        全芯片 URAM 52→48，BRAM36 仍有余量（89→~109 / 144）。端口/延迟/行为不变。
 module qwen25_fixed_gamma (
     input wire clk,
     input wire rst_n,
@@ -29,19 +32,19 @@ module qwen25_fixed_gamma (
 
     wire final_write_pending=write_pending && write_pending_last;
     wire restart=load_start && !loaded_reg && !final_write_pending;
-    wire write_commit=rst_n && write_pending && !restart;
-    assign load_ready=rst_n && !loaded_reg && !load_start && !final_write_pending;
+    wire write_commit=write_pending && !restart;
+    assign load_ready=!loaded_reg && !load_start && !final_write_pending;
     assign load_done=done_reg;
     assign loaded=loaded_reg;
     assign read_valid=read_valid_pipe[3];
     assign read_data={read1,read0};
 
-    qwen25_param_mem64 #(.C_DEPTH(DEPTH),.C_ADDR_W(13),.C_STYLE("ultra"),.C_READ_LATENCY(3)) mem0_Inst (
+    qwen25_param_mem64 #(.C_DEPTH(DEPTH),.C_ADDR_W(13),.C_STYLE("block"),.C_READ_LATENCY(3)) mem0_Inst (
         .i_clk(clk),.i_rstn(rst_n),
         .i_wr_en(write_commit),.i_wr_addr(write_pending_address),.i_wr_data(write_pending_data[63:0]),
         .i_rd_en(read_request),.i_rd_addr(read_address),.o_rd_data(read0)
     );
-    qwen25_param_mem64 #(.C_DEPTH(DEPTH),.C_ADDR_W(13),.C_STYLE("ultra"),.C_READ_LATENCY(3)) mem1_Inst (
+    qwen25_param_mem64 #(.C_DEPTH(DEPTH),.C_ADDR_W(13),.C_STYLE("block"),.C_READ_LATENCY(3)) mem1_Inst (
         .i_clk(clk),.i_rstn(rst_n),
         .i_wr_en(write_commit),.i_wr_addr(write_pending_address),.i_wr_data(write_pending_data[127:64]),
         .i_rd_en(read_request),.i_rd_addr(read_address),.o_rd_data(read1)

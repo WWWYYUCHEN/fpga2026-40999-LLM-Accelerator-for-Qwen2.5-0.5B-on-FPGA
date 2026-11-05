@@ -212,7 +212,10 @@ module qwen25_gemm (
     // 每个输出行独立推断FF写使能，清空时序与原输出打包合同相同。
     for(genvar pack_row=0;pack_row<8;pack_row++)begin:gen_output_pack
         always_ff @(posedge clk)begin
-            if(!rst_n || (bundle_valid&&bundle_ready) ||
+            if(!rst_n)begin
+                reg_bf16[pack_row*256+:256]<=0;
+                reg_fp32[pack_row*512+:512]<=0;
+            end else if((bundle_valid&&bundle_ready) ||
                ((state_current==G_STREAM)&&m_ready&&(output_slot!=7)))begin
                 reg_bf16[pack_row*256+:256]<=0;
                 reg_fp32[pack_row*512+:512]<=0;

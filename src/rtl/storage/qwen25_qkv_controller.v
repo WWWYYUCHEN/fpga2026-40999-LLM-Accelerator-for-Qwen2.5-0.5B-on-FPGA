@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-// 固定数据流：AXI-Lite快照驱动固化参数、RMSNorm、K到V到Q、bias、RoPE有效边界和真实DDR写回
+// 鍥哄畾鏁版嵁娴侊細AXI-Lite蹇収椹卞姩鍥哄寲鍙傛暟銆丷MSNorm銆並鍒癡鍒癚銆乥ias銆丷oPE鏈夋晥杈圭晫鍜岀湡瀹濪DR鍐欏洖
 module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT_READ=0) (
     output wire m_gemm_cmd_valid,
     input wire s_gemm_cmd_ready,
@@ -31,77 +31,93 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     input wire s_gemm_error,
     input wire s_gemm_aborted,
     input wire [7:0] s_gemm_error_code,
-    input wire clk, // 系统300MHz同钟域
-    input wire rst_n, // 同步低有效复位
-    input wire start, // AXI-Lite完整配置快照提交
-    input wire [575:0] cfg, // 不可变任务快照
-    input wire abort_req, // 停止新阶段并排空
-    input wire soft_reset, // 排空后恢复控制
-    output wire dma_cmd_valid, // DMA真实命令有效
-    input wire dma_cmd_ready, // DMA命令接受
-    output wire [127:0] dma_cmd, // 完整64bit地址描述符
-    output wire [127:0] dma_meta, // DMA完整metadata
-    output wire dma_abort, // 真实DMA排空请求
-    input wire rd_busy, // AXI读事务在途
-    input wire rd_done, // AXI读与本地流真实成功
-    input wire rd_error, // AXI读失败
-    input wire rd_aborted, // AXI读取消完成
-    input wire [7:0] rd_error_code, // 读错误原因
+    input wire clk, // 绯荤粺300MHz鍚岄挓鍩?
+    input wire rst_n, // 鍚屾浣庢湁鏁堝浣?
+    input wire start, // AXI-Lite瀹屾暣閰嶇疆蹇収鎻愪氦
+    input wire [575:0] cfg, // 涓嶅彲鍙樹换鍔″揩鐓?
+    input wire abort_req, // 鍋滄鏂伴樁娈靛苟鎺掔┖
+    input wire soft_reset, // 鎺掔┖鍚庢仮澶嶆帶鍒?
+    output wire dma_cmd_valid, // DMA鐪熷疄鍛戒护鏈夋晥
+    input wire dma_cmd_ready, // DMA鍛戒护鎺ュ彈
+    output wire [127:0] dma_cmd, // 瀹屾暣64bit鍦板潃鎻忚堪绗?
+    output wire [127:0] dma_meta, // DMA瀹屾暣metadata
+    output wire dma_abort, // 鐪熷疄DMA鎺掔┖璇锋眰
+    input wire rd_busy, // AXI璇讳簨鍔″湪閫?
+    input wire rd_done, // AXI璇讳笌鏈湴娴佺湡瀹炴垚鍔?
+    input wire rd_error, // AXI璇诲け璐?
+    input wire rd_aborted, // AXI璇诲彇娑堝畬鎴?
+    input wire [7:0] rd_error_code, // 璇婚敊璇師鍥?
     input wire [3:0] direct_rd_valid, output wire [3:0] direct_rd_ready,
     input wire [511:0] direct_rd_data, input wire [39:0] direct_rd_word,
     input wire [63:0] direct_rd_keep, input wire [7:0] direct_rd_error,
     input wire [127:0] direct_rd_meta,
-    input wire rd_valid, // DMA本地128bit流有效
-    output wire rd_ready, // 接受128bit流
-    input wire [127:0] rd_data, // DDR读数据
-    input wire [15:0] rd_keep, // 有效byte
-    input wire rd_last, // descriptor末拍
-    input wire [127:0] rd_meta, // 读数据身份
-    input wire [15:0] rd_tag, // descriptor关联
-    input wire [3:0] rd_resource, // 读取资源编号
-    input wire [1:0] rd_beat_error, // AXI本拍错误
-    output wire wr_valid, // 送DMA的128bit流
-    input wire wr_ready, // DMA接受写流
-    output wire [127:0] wr_data, // DDR写数据
-    output wire [15:0] wr_keep, // 八BF16完整byte
-    output wire wr_last, // 写descriptor末拍
-    output wire [127:0] wr_meta, // 写descriptor身份
-    input wire wr_busy, // AXI写事务在途
-    input wire wr_done, // 真实B响应成功
-    input wire wr_error, // 写失败
-    input wire wr_aborted, // 写排空取消
-    input wire [7:0] wr_error_code, // 写失败原因
-    output wire afu_valid, // 有效算术frame输入
-    input wire afu_ready, // 外部AFU接受
-    output wire [3:0] afu_command, // 11RMSNorm12RoPE边界
-    output wire [20:0] afu_command_4, // 阶段控制保留
-    output wire [26:0] afu_sum_command_buffer, // 归约阶段控制保留
+    input wire rd_valid, // DMA鏈湴128bit娴佹湁鏁?
+    output wire rd_ready, // 鎺ュ彈128bit娴?
+    input wire [127:0] rd_data, // DDR璇绘暟鎹?
+    input wire [15:0] rd_keep, // 鏈夋晥byte
+    input wire rd_last, // descriptor鏈媿
+    input wire [127:0] rd_meta, // 璇绘暟鎹韩浠?
+    input wire [15:0] rd_tag, // descriptor鍏宠仈
+    input wire [3:0] rd_resource, // 璇诲彇璧勬簮缂栧彿
+    input wire [1:0] rd_beat_error, // AXI鏈媿閿欒
+    output wire wr_valid, // 閫丏MA鐨?28bit娴?
+    input wire wr_ready, // DMA鎺ュ彈鍐欐祦
+    output wire [127:0] wr_data, // DDR鍐欐暟鎹?
+    output wire [15:0] wr_keep, // 鍏獴F16瀹屾暣byte
+    output wire wr_last, // 鍐檇escriptor鏈媿
+    output wire [127:0] wr_meta, // 鍐檇escriptor韬唤
+    input wire wr_busy, // AXI鍐欎簨鍔″湪閫?
+    input wire wr_done, // 鐪熷疄B鍝嶅簲鎴愬姛
+    input wire wr_error, // 鍐欏け璐?
+    input wire wr_aborted, // 鍐欐帓绌哄彇娑?
+    input wire [7:0] wr_error_code, // 鍐欏け璐ュ師鍥?
+    output wire afu_valid, // 鏈夋晥绠楁湳frame杈撳叆
+    input wire afu_ready, // 澶栭儴AFU鎺ュ彈
+    output wire [3:0] afu_command, // 11RMSNorm12RoPE杈圭晫
+    output wire [20:0] afu_command_4, // 闃舵鎺у埗淇濈暀
+    output wire [26:0] afu_sum_command_buffer, // 褰掔害闃舵鎺у埗淇濈暀
     output wire [31:0] afu_eps, // FP32 RMS epsilon
-    output wire afu_latch, // 归约参数保持请求
-    output wire afu_gelu_sign, // QKV不启用GELU
-    output wire [127:0] afu_x, // 八lane BF16 X
-    output wire [127:0] afu_y, // gamma或RoPE配对第二半
-    output wire [127:0] afu_meta, // 有效行字地址位置身份
-    output wire afu_last, // 行或RoPE当前向量结束
-    output wire [7:0] afu_mask, // 有效八lane
-    output wire [63:0] afu_length, // 896维RMS或64维head
-    input wire afu_result_valid, // 外部实际计算结果valid
-    output wire afu_result_ready, // Controller接受结果
-    input wire [127:0] afu_result_data, // 第一组八lane结果
-    input wire [127:0] afu_result_aux, // RoPE第二组结果
-    input wire [127:0] afu_result_meta, // 结果完整身份
-    input wire afu_result_last, // 结果行末
+    output wire afu_latch, // 褰掔害鍙傛暟淇濇寔璇锋眰
+    output wire afu_gelu_sign, // QKV涓嶅惎鐢℅ELU
+    output wire [127:0] afu_x, // 鍏玪ane BF16 X
+    output wire [127:0] afu_y, // gamma鎴朢oPE閰嶅绗簩鍗?
+    output wire [127:0] afu_meta, // 鏈夋晥琛屽瓧鍦板潃浣嶇疆韬唤
+    output wire afu_last, // 琛屾垨RoPE褰撳墠鍚戦噺缁撴潫
+    output wire [7:0] afu_mask, // 鏈夋晥鍏玪ane
+    output wire [63:0] afu_length, // 896缁碦MS鎴?4缁磆ead
+    input wire afu_result_valid, // 澶栭儴瀹為檯璁＄畻缁撴灉valid
+    output wire afu_result_ready, // Controller鎺ュ彈缁撴灉
+    input wire [127:0] afu_result_data, // 绗竴缁勫叓lane缁撴灉
+    input wire [127:0] afu_result_aux, // RoPE绗簩缁勭粨鏋?
+    input wire [127:0] afu_result_meta, // 缁撴灉瀹屾暣韬唤
+    input wire afu_result_last, // 缁撴灉琛屾湯
     input wire [7:0] afu_result_mask,
+    // Dedicated RoPE channel: private request and result ports so the RoPE
+    // engine no longer shares afu_valid/afu_result_valid with the scalar AFU.
+    output wire rope_req_valid,
+    input wire rope_req_ready,
+    output wire rope_req_last,
+    output wire [127:0] rope_req_x,
+    output wire [127:0] rope_req_y,
+    output wire [127:0] rope_req_meta,
+    output wire [7:0] rope_req_mask,
+    input wire rope_res_valid,
+    output wire rope_res_ready,
+    input wire rope_res_last,
+    input wire [127:0] rope_res_data,
+    input wire [127:0] rope_res_aux,
+    input wire [127:0] rope_res_meta,
+    input wire [7:0] rope_res_mask,
     input wire afu_busy,
-    input wire afu_error, // 结果lane有效
-    output wire afu_abort, // Attention错误时取消未完成的AFU frame
-    output wire busy, // QKV阶段尚未完成
-    output wire qkv_done, // K,V,Q全部真实DDR写回完成
-    output wire param_ready, // 三表真实完成后只读
-    output wire result_commit, // 最终Greedy结果单拍提交
-    output wire [17:0] best_token_id, // 提交前已锁存的词表位置
-    output wire error, // 控制错误保持
-    output wire [31:0] error_code // 兼容CSR接口；不汇总错误码，固定输出零
+    input wire afu_error, // 缁撴灉lane鏈夋晥
+    output wire afu_abort, // Attention閿欒鏃跺彇娑堟湭瀹屾垚鐨凙FU frame
+    output wire busy, // QKV闃舵灏氭湭瀹屾垚
+    output wire qkv_done, // K,V,Q鍏ㄩ儴鐪熷疄DDR鍐欏洖瀹屾垚
+    output wire param_ready, // 涓夎〃鐪熷疄瀹屾垚鍚庡彧璇?
+    output wire result_commit, // 鏈€缁圙reedy缁撴灉鍗曟媿鎻愪氦
+    output wire [17:0] best_token_id, // 鎻愪氦鍓嶅凡閿佸瓨鐨勮瘝琛ㄤ綅缃?
+    output wire error, // 鎺у埗閿欒淇濇寔
+    output wire [31:0] error_code // 鍏煎CSR鎺ュ彛锛涗笉姹囨€婚敊璇爜锛屽浐瀹氳緭鍑洪浂
 );
 
     localparam [6:0] S_IDLE=0,S_DESC=1,S_RD_CMD=2,S_RD_DATA=3,S_RD_FINISH=4,S_DESC_CHECK=5,S_PARAM=6,S_INPUT=7,
@@ -254,6 +270,13 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     reg [15:0] fetch_column_index;
     reg [32:0] fetch_column_low;
     reg [6:0] post_state,post_next;
+    // [STAGE5] post-FSM states that drain the INT8 KV producers.  These numbers
+    // only live in the 7-bit binary post FSM; the main FSM is one-hot (81 bits)
+    // and is deliberately left untouched.
+    localparam [6:0] PS_KV8_TAIL=7'd40, PS_KV8_EMIT=7'd41, PS_KV8_CMD=7'd42, PS_KV8_SEND=7'd43,
+                     PS_KV8_FLUSH=7'd44, PS_KV8_SCALE=7'd45, PS_KV8_SCALE_SEND=7'd46,
+                     PS_KV8_VCMD=7'd47, PS_KV8_VSEND=7'd48, PS_KV8_VLOAD=7'd49,
+                     PS_KV8_VLOAD_CMD=7'd50, PS_KV8_VRD=7'd51;
     reg compute_bank,post_bank;
     reg [1:0] post_operation;
     reg [2:0] post_output_tile;
@@ -263,6 +286,129 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     reg [127:0] write_command_reg,write_metadata_reg;
     reg command_hold_valid,command_hold_write;
     reg [127:0] command_hold,metadata_hold;
+    // =========================================================================
+    // [STAGE5] INT8 KV cache: producer chains + the DDR write/scale plumbing
+    // -------------------------------------------------------------------------
+    // The K and V producers replace the BF16 post-write of the projection
+    // results (post_operation 0 = K, 1 = V) and they own the scale RAM:
+    //   K : 16 BF16 beats/token -> block32 INT8 in DDR + per-(head,token) scale
+    //       append + per-(head,256-token block) exponent publish
+    //   V : 16 BF16 beats/token -> token-major INT8 in DDR + the per-(head,dim)
+    //       scale of the whole layer (first token of the layer is the lock),
+    //       whose 256 B image goes to DDR once per layer and is bulk-loaded back
+    //       into kv8_scale_ram.vmem before the layer's first attention.
+    // =========================================================================
+    // ---- K producer --------------------------------------------------------
+    wire        kv8_k_start, kv8_k_flush;
+    wire [4:0]  kv8_k_layer;
+    wire [15:0] kv8_k_token;
+    wire        kv8_k_valid;
+    wire [127:0] kv8_k_data;
+    wire        kv8_k_ready, kv8_k_vready, kv8_k_busy, kv8_k_flush_done;
+    wire        kv8_k_beat_valid, kv8_k_beat_ready;
+    wire [63:0] kv8_k_beat_addr;
+    wire [127:0] kv8_k_beat_data;
+    wire [4:0]  kv8_k_beat_len, kv8_k_blk_tok, kv8_k_token_beats;
+    wire        kv8_k_clip_sticky;
+    wire [15:0] kv8_k_clip_count;
+    // ---- V producer --------------------------------------------------------
+    wire        kv8_v_start;
+    wire        kv8_v_valid;
+    wire [127:0] kv8_v_data;
+    wire        kv8_v_ready, kv8_v_vready;
+    wire        kv8_v_beat_valid, kv8_v_beat_ready;
+    wire [63:0] kv8_v_beat_addr;
+    wire [127:0] kv8_v_beat_data;
+    wire        kv8_v_scale_valid;
+    wire [31:0] kv8_v_scale_bf16;
+    reg         kv8_v_scale_clear;
+    wire [3:0]  kv8_v_token_beats;
+    wire        kv8_v_clip_sticky;
+    wire [15:0] kv8_v_clip_count;
+    // [V-PERTOK-M] per-token V mantissa append (producer -> scale RAM) and the
+    // per-token mantissa read port the PV activation scaling uses.
+    wire        kv8_v_m_app_valid, kv8_v_m_app_ready;
+    wire [15:0] kv8_v_m_app_token;
+    wire        kv8_v_m_app_head;
+    wire [15:0] kv8_v_m_app_mant;
+    wire [31:0] kv8_v_clip_codes;
+    wire [7:0]  kv8_v_m_max;
+    wire        kv8_vm_rd_en;
+    wire [11:0] kv8_vm_rd_word;
+    wire [127:0] kv8_vm_rd_data;
+    reg         kv8_v_scale_written, kv8_v_table_loaded;
+    reg         kv8_v_scale_we;
+    reg  [3:0]  kv8_v_scale_word;
+    reg  [127:0] kv8_v_scale_data;
+    wire        kv8_v_we_chain;
+    wire [3:0]  kv8_v_word_chain;
+    wire [127:0] kv8_v_data_chain;
+    wire [3:0]  kv8_v_rd_word;
+    wire [127:0] kv8_v_rd_data;
+    // ---- scale-RAM bank ownership -----------------------------------------
+    // 0 = EMPTY (acquire before the layer's first K token), 1 = LOADING,
+    // 2 = READY (attention reads; appends still allowed)
+    reg  [1:0]  kv8_bank_state;
+    reg         kv8_acq_pending, kv8_own_layer_valid;
+    reg  [4:0]  kv8_own_layer;
+    reg         kv8_wr_acquire, kv8_wr_release, kv8_rd_release;
+    wire        kv8_rd_grant;
+    // [STAGE5-FIX] The attention may only read the K scale table while the
+    // bank is READY: kv8_scale_ram drops every read (rd_ok = 0) while the bank
+    // is LOADING, and the read has no error/retry path.  The V chain writes the
+    // V-table words into vmem directly at lock time, so the DDR bulk load
+    // (PS_KV8_VLOAD) is not needed -- but the LOADING -> READY hand-off is, and
+    // it was the only thing missing (attention S_SCALE_FILL waited forever).
+    // Wait only when a bank is actually owned: EMPTY (0) means no KV8 traffic.
+    wire        kv8_scale_wait=(kv8_bank_state!=2'd0) && !kv8_rd_grant;
+    // ---- DMA command / write-stream arbitration ----------------------------
+    reg  [63:0] kv8_cmd_addr;
+    reg  [23:0] kv8_cmd_bytes;
+    reg         kv8_cmd_is_write;
+    reg  [4:0]  kv8_desc_left;          // beats left in the current descriptor
+    reg  [3:0]  kv8_img_word;           // V scale image beat counter
+    reg  [4:0]  kv8_vbyte_cnt;          // token beat counter (K 16, V 8)
+    reg  [3:0]  kv8_vrd_count;          // V table bulk-load beat counter
+    reg  [4:0]  kv8_beat_lim;           // beats this token's command carries (from the chain)
+    reg  [4:0]  kv8_vone_cnt;           // V table 1.0 fill counter
+    wire        kv8_push_ready;
+    reg         kv8_flush_pending;
+    wire        kv8_cmd_valid;
+    wire        kv8_cmd_fire;
+    wire        kv8_stream_valid;
+    wire [127:0] kv8_stream_data;
+    wire [127:0] kv8_scale_stream_data;
+    // sticky diagnostics
+    reg         kv8_dma_conflict;
+    // ---- [16K-ONE-LAYER] per-layer scale-image sequencer -------------------
+    localparam [3:0] LS_IDLE=4'd0, LS_D_CMD=4'd1, LS_D_WAIT=4'd2, LS_D_BEAT=4'd3,
+                     LS_D_WR=4'd4, LS_D_EBC=4'd5, LS_D_EBB=4'd6, LS_D_EBW=4'd7,
+                     LS_OWN=4'd8, LS_L_CMD=4'd9, LS_L_RD=4'd10, LS_L_NEXT=4'd11, LS_FIN=4'd12;
+    reg  [3:0]  kv8_ls_state;
+    reg  [3:0]  kv8_ls_rgn;          // load region 0..3
+    reg  [1:0]  kv8_ls_item;         // dump item 0..3 (K0,K1,V0,V1)
+    reg  [1:0]  kv8_ls_phase;        // etab beat phase
+    reg  [12:0] kv8_ls_cnt;          // beats / words in flight
+    reg  [10:0] kv8_ls_w;            // dump word index
+    reg  [3:0]  kv8_ls_i;            // etab on-chip word index
+    reg  [15:0] kv8_vis_lo;          // produced token range of the previous visit
+    reg  [15:0] kv8_vis_hi;
+    reg  [4:0]  kv8_vis_layer;       // layer that produced that range
+    reg  [15:0] kv8_own_lo;           // [16K-FIX5] pass_lo of the last visit start
+    // A "visit" is one ROW GROUP (<=8 rows), not one layer: a rows>8 task
+    // is swept as consecutive groups of the same layer, with task_cfg[52:37]
+    // advancing by `rows` at every group (batch_reconfigure_fire).
+    reg         kv8_ls_eb_dirty;     // this visit produced a 256-token block start
+    wire        kv8_ls_own_go;
+    // image sequencer command fields + write-beat interface (the shared dma_cmd /
+    // wr_data muxes above are defined before the sequencer, so declare here)
+    reg  [63:0]  kv8_ls_cmd_addr;
+    reg  [23:0]  kv8_ls_cmd_bytes;
+    reg          kv8_ls_cmd_wr;
+    wire         kv8_ls_cmd_sel;
+    wire         kv8_img_wr;
+    wire [127:0] kv8_img_wr_data;
+    wire         kv8_img_wr_last;
     reg rope_outstanding;
     // Four reservations cover both synchronous RAM responses and queued input vectors.
     reg [7:0] bias_issued,bias_retired;
@@ -273,7 +419,7 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     reg [6:0] bias_input_address[0:3];
     reg [127:0] bias_input_metadata;
     reg [575:0] task_cfg;
-    reg [127:0] descriptor[0:9]; // format3末字提供E转置权重基址
+    reg [127:0] descriptor[0:9]; // format3鏈瓧鎻愪緵E杞疆鏉冮噸鍩哄潃
     reg [63:0] descriptor_base,first_descriptor,first_input,first_context,first_q;
     reg [15:0] remaining_rows,total_rows,group_offset,first_position;
     reg [2:0] ffn_block;
@@ -288,14 +434,14 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     reg [3:0] rows_last_reg;
     wire [3:0] rows_last = rows_last_reg;
     reg [15:0] task_id;
-    reg [2:0] operation; // 0K、1V、2Q、3O、4Gate、5Up
+    reg [2:0] operation; // 0K銆?V銆?Q銆?O銆?Gate銆?Up
     // Predecode the next operation on the same edge as operation itself.
     // The one-hot register isolates the wide phase fanout from the opcode path.
     reg [7:0] operation_decode_reg;
     reg [2:0] operation_path_next;
     reg [10:0] output_tile;
     reg [5:0] input_tile;
-    reg [3:0] inner_k; // 128输入tile内十六个8K块
+    reg [3:0] inner_k; // 128杈撳叆tile鍐呭崄鍏釜8K鍧?
     reg [2:0] row_index,norm_row;
     reg [1:0] norm_word_cmd_pending; // [1] clear, [0] increment
     reg [6:0] norm_word_storage;
@@ -304,13 +450,13 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire [6:0] norm_word=norm_word_cmd_pending[1] ? 7'd0 :
         norm_word_cmd_pending[0] ? norm_word_storage+7'd1 : norm_word_storage;
     reg [1:0] norm_row_cmd_pending; // 01 clear, 10 increment/wrap, 11 set last row
-    reg [7:0] norm_results_count; // 仅接受结果时更新，不复位计数存储
-    reg norm_results_valid; // FFN/归一化阶段边界拉低，下一结果从1开始计数
+    reg [7:0] norm_results_count; // 浠呮帴鍙楃粨鏋滄椂鏇存柊锛屼笉澶嶄綅璁℃暟瀛樺偍
+    reg norm_results_valid; // FFN/褰掍竴鍖栭樁娈佃竟鐣屾媺浣庯紝涓嬩竴缁撴灉浠?寮€濮嬭鏁?
     wire [7:0] norm_results=norm_results_valid ? norm_results_count : 8'd0;
-    reg norm_apply; // 0平方和统计、1重读并归一化输出
+    reg norm_apply; // 0骞虫柟鍜岀粺璁°€?閲嶈骞跺綊涓€鍖栬緭鍑?
     reg [127:0] norm_x,norm_gamma;
     reg [1:0] coeff_kind; reg [3:0] coeff_word;
-    reg [2047:0] scales,biases; // 当前128列参数，无跨层复制
+    reg [2047:0] scales,biases; // 褰撳墠128鍒楀弬鏁帮紝鏃犺法灞傚鍒?
     reg [127:0] command_reg,metadata_reg;
     // Keep layer and batch offsets on separate DSPs. BREG captures the row
     // before multiplication; PREG captures the full product before base addition.
@@ -326,6 +472,70 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire batch_reconfigure_fire=state_current[S_BATCH_NEXT] &&
         (batch_restore_first || batch_address_valid[1]);
     wire [17:0] batch_address_row={2'd0,group_offset}+{14'd0,rows};
+    // ---- [STAGE5] derived addresses and the producer/handshake wires --------
+    // K bytes : k_base + layer*8MiB + token[13:5]*4096 + dg*1024 + head*512 + tok*16
+    // V bytes : v_base + layer*8MiB + token*128 + head*64 + dg*16
+    // V scale : k_layer_base + 0x8000 (inside the layer's own 64 KiB window)
+    wire [63:0] kv8_v_layer_base = task_cfg[447:384]+{36'd0,layer,23'd0};
+    // ---- [16K-ONE-LAYER] scale image, 0x3000_0000 + layer*1 MiB -------------
+    // The on-chip scale tables are one layer deep and 16384 tokens deep, so the
+    // per-layer scales live in DDR and are loaded at every layer visit.  The
+    // 0x3000_0000 region is the one the owner reserved for exactly this (24 MiB
+    // at a 1 MiB stride, ~129 KiB used per layer):
+    //   +0x00000 K m16 64 KiB, +0x10000 V m16 64 KiB,
+    //   +0x20000 V 2^  256 B (32 KiB reserved), +0x28000 K etab 256 B
+    localparam [63:0] KV8_IMG_BASE = 64'h0000_0000_3000_0000;
+    localparam [63:0] KV8_IMG_K    = 64'h0000_0000_0000_0000;
+    localparam [63:0] KV8_IMG_V    = 64'h0000_0000_0001_0000;
+    localparam [63:0] KV8_IMG_V2   = 64'h0000_0000_0002_0000;
+    localparam [63:0] KV8_IMG_EB   = 64'h0000_0000_0002_8000;
+    wire [63:0] kv8_img_layer   = KV8_IMG_BASE+{39'd0,layer,20'd0};
+    wire [63:0] kv8_img_k_base  = kv8_img_layer+KV8_IMG_K;
+    wire [63:0] kv8_img_v_base  = kv8_img_layer+KV8_IMG_V;
+    wire [63:0] kv8_img_v2_base = kv8_img_layer+KV8_IMG_V2;
+    wire [63:0] kv8_img_eb_base = kv8_img_layer+KV8_IMG_EB;
+    // the V 2^ image moved here from k_base+0x8000 (same 256 B, new region)
+    wire [63:0] kv8_scale_base   = kv8_img_v2_base;
+    wire [15:0] kv8_token_now    = token_position[15:0];
+    reg  [127:0] kv8_dma_command, kv8_dma_metadata;
+    // [STAGE5-FIX3] the V producer is wired exactly like the K one; parking it
+    // leaves the attention reading an INT8 V region nobody wrote and a V scale
+    // table of zeros (context = 0).  Restored from qwen25_qkv_controller.v.bak.
+    assign kv8_v_start      = (post_state==S_WRITE) && (post_operation==1) && kv8_v_ready;
+    assign kv8_k_flush      = (post_state==PS_KV8_FLUSH) && (kv8_k_blk_tok!=5'd0);
+    assign kv8_push_ready   = (post_operation==0) ? kv8_k_vready : kv8_v_vready;
+    assign kv8_k_valid      = (post_state==S_WR_SEND) && (post_operation==0);
+    assign kv8_v_valid      = (post_state==S_WR_SEND) && (post_operation==1);
+    assign kv8_k_data       = write_hold;
+    assign kv8_v_data       = write_hold;
+    assign kv8_k_beat_ready = (post_state==PS_KV8_VSEND) && (post_operation==0) && wr_ready;
+    assign kv8_v_beat_ready = (post_state==PS_KV8_VSEND) && (post_operation==1) && wr_ready;
+    assign kv8_stream_valid = ((post_state==PS_KV8_VSEND) &&
+                               ((post_operation==0) ? kv8_k_beat_valid : kv8_v_beat_valid)) ||
+                              (post_state==PS_KV8_SCALE_SEND);
+    assign kv8_scale_stream_data = {8{(kv8_img_word[3] ? kv8_v_scale_bf16[31:16]
+                                                      : kv8_v_scale_bf16[15:0])}};
+    assign kv8_stream_data = (post_state==PS_KV8_SCALE_SEND) ? kv8_scale_stream_data :
+                             ((post_operation==0) ? kv8_k_beat_data : kv8_v_beat_data);
+    assign kv8_cmd_valid = (post_state==PS_KV8_CMD) || (post_state==PS_KV8_SCALE) ||
+                           (post_state==PS_KV8_VCMD) || (post_state==PS_KV8_VLOAD_CMD) ||
+                           (kv8_ls_state==LS_D_CMD) || (kv8_ls_state==LS_D_EBC) ||
+                           (kv8_ls_state==LS_L_CMD);
+    assign kv8_cmd_fire  = kv8_cmd_owned && dma_cmd_ready;
+    always @(*)begin
+        kv8_dma_command=0;
+        kv8_dma_command[63:0]   = kv8_ls_cmd_sel ? kv8_ls_cmd_addr  : kv8_cmd_addr;
+        kv8_dma_command[87:64]  = kv8_ls_cmd_sel ? kv8_ls_cmd_bytes : kv8_cmd_bytes;
+        kv8_dma_command[95:88]  = task_cfg[103:96];
+        kv8_dma_command[111:96] = task_id;
+        kv8_dma_command[115:112]= 4'd2;
+        kv8_dma_command[118]    = kv8_ls_cmd_sel ? kv8_ls_cmd_wr   : kv8_cmd_is_write;
+        kv8_dma_metadata=0;
+        kv8_dma_metadata[15:0]  = task_id;
+        kv8_dma_metadata[20:16] = layer;
+        kv8_dma_metadata[56:53] = rows;
+        kv8_dma_metadata[60:57] = 8;
+    end
     wire [47:0] layer_address_product,batch_address_product;
     always @(posedge clk)begin
         if(!rst_n)begin layer_address_valid<=0;batch_address_valid<=0;rows_group_final<=1'b1;end
@@ -436,21 +646,18 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     reg [4:0] raw_issued;
     reg raw_busy; reg [2047:0] raw_slice; reg [2:0] raw_number; reg [3:0] raw_vector;
     reg [3:0] post_word; reg [2:0] post_row;
-    reg [127:0] post_input;
     reg [2:0] rope_pair;
     reg [127:0] rope_x,rope_y,rope_first,rope_second;
     reg rope_write_half;
     reg [4:0] write_word;
     reg [127:0] write_hold;
     reg [127:0] compute_identity,afu_identity;
-    reg [63:0] norm_vector_address;
-    // 写回地址分成行号、窄偏移、低32位进位、高32位四段。
+    // 鍐欏洖鍦板潃鍒嗘垚琛屽彿銆佺獎鍋忕Щ銆佷綆32浣嶈繘浣嶃€侀珮32浣嶅洓娈点€?
     reg [16:0] hidden_absolute_row;
     (* use_dsp = "no" *) reg [26:0] hidden_row_offset;
     reg [63:0] hidden_write_base;
     reg [32:0] hidden_address_low;
-    // 原始X保存在O bank 1，Wo输出保存在bank 0；残差后bank 1复用为H。
-    // Activate仅保存归一化计算输入、Context暂存和FFN中间向量。
+    // 鍘熷X淇濆瓨鍦∣ bank 1锛學o杈撳嚭淇濆瓨鍦╞ank 0锛涙畫宸悗bank 1澶嶇敤涓篐銆?    // Activate浠呬繚瀛樺綊涓€鍖栬绠楄緭鍏ャ€丆ontext鏆傚瓨鍜孎FN涓棿鍚戦噺銆?
     wire output_enabled=descriptor[5][63:0]!=0;
     wire output_phase=operation_decode_reg[3];
     wire ffn_phase=operation_decode_reg[4] || operation_decode_reg[5];
@@ -465,7 +672,6 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire [3:0] compute_rows=lm_phase ? 4'd1 : rows;
     wire [6:0] ffn_words=complete_layer && ffn_block==5 ? 7'd48 : 7'd112;
     wire [2:0] ffn_last_tile=ffn_words==48 ? 3'd2 : 3'd6;
-    wire [5:0] ffn_global_tile=ffn_block*6'd7+output_tile;
     wire [11:0] last_k=down_phase ? 12'd607 : 12'd111;
     wire [5:0] fetch_last_tile=fetch_operation==6 ? 6'd37 : 6'd6;
     wire [5:0] fetch_last_output=ffn_phase ? ffn_block*6'd7+ffn_last_tile : 6'd6;
@@ -508,7 +714,6 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     reg hidden_dma_sent,hidden_afu_sent,hidden_b_done,hidden_stats_done;
     wire output_read_valid;
     wire [127:0] output_read_x,output_read_y;
-    wire [1:0] output_pair_full;
     wire residual_result=(output_phase || down_phase) && state_residual_active && afu_result_valid && afu_result_ready;
     wire normalized_result=output_phase && state_normalized_active && afu_result_valid && afu_result_ready;
     wire hidden_both_sent=(hidden_dma_sent || (wr_valid && wr_ready)) && (down_phase || hidden_afu_sent || (afu_valid && afu_ready));
@@ -526,8 +731,27 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire context_scratch_write;
     wire output_ram_read=state_current[S_NORM_READ] || state_current[S_RES_READ] || state_current[S_H_READ] || state_current[S_Z_READ] || state_current[S_Z_COPY_READ];
     wire output_ram_write=linear_phase && !lm_phase && raw_busy && bias_valid;
-    wire [6:0] output_write_word=raw_busy ? {output_tile,4'd0}+{raw_number,1'b0}+raw_vector[0] : norm_results[6:0];
-    wire [2:0] output_write_row=raw_busy ? raw_vector[3:1] : norm_row_visible;
+    // Hoisted declaration (semantically neutral): xvlog rejects the forward
+    // reference used by output_write_row below, so the original file cannot be
+    // analyzed by xvlog/xsim at all.  This move makes the module simulatable.
+    wire [2:0] norm_row_visible=norm_row_cmd_pending==2'b01 ? 3'd0 :
+        norm_row_cmd_pending==2'b10 ? (norm_row==rows_last ? 3'd0 : norm_row+3'd1) :
+        norm_row_cmd_pending==2'b11 ? rows_last : norm_row;
+    // [WIDTH-689] The tensor_buffers output_wr_word port is 7 bits (128 x 128-bit
+    // words = 896 columns, i.e. one output row) while the raw-write expression
+    // {output_tile,4'd0}+{raw_number,1'b0}+raw_vector[0] is 15 bits wide because
+    // output_tile is declared [10:0].  The upper bits are DEAD, not meaningful:
+    //  * this port is written from the output/FFN path only, where output_tile is
+    //    the 0..6 output tile (S_O_NEXT/S_FFN_NEXT compare it with 6), raw_number
+    //    is 3 bits and raw_vector 4 bits, so the largest value is 6*16+7*2+1 = 111
+    //    which fits in 7 bits;
+    //  * bit-identically for ANY output_tile: {raw_number,1'b0}+raw_vector[0] <= 15
+    //    never carries past bit 3, so bits [6:4] of the sum are exactly
+    //    output_tile[2:0] and every bit above 6 was already dropped by the 7-bit
+    //    port.  Slicing output_tile to 3 bits therefore changes no reachable value
+    //    and only removes the [Synth 8-689] width-mismatch warning.
+    // (output_write_word above already truncated the same expression silently.)
+    wire [6:0] output_raw_word = {output_tile[2:0],4'd0}+{raw_number,1'b0}+raw_vector[0];
     wire [127:0] output_write_data;
     wire [11:0] global_k={2'd0,input_tile,inner_k};
     // Each original input tile has two 64-K chunks, so every output tile
@@ -544,7 +768,7 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire context_reload_write=output_phase &&
         stream_checked_kind==READ_CONTEXT && stream_checked_fire;
     wire hidden_reload_write=stream_checked_kind==READ_H && stream_checked_fire;
-    // READ_INPUT装载原始X到O bank 1，包括Wo前恢复X；DMA按O写口ready推进。
+    // READ_INPUT瑁呰浇鍘熷X鍒癘 bank 1锛屽寘鎷琖o鍓嶆仮澶峏锛汥MA鎸塐鍐欏彛ready鎺ㄨ繘銆?
     wire input_load_active=state_current[S_RD_DATA] && read_kind==READ_INPUT;
     wire input_reload_write=stream_checked_kind==READ_INPUT && stream_checked_fire;
     wire [15:0] operation_scale_offset=fetch_operation==6 ? 16'd11776 : (fetch_operation==4 ? 16'd2048 : (fetch_operation==5 ? 16'd6912 :
@@ -585,7 +809,6 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire [63:0] token_position={48'd0,task_cfg[52:37]}+row_index;
     wire [2:0] params_loaded;
     wire scale_load_ready,bias_load_ready,gamma_load_ready;
-    wire scale_load_done,bias_load_done,gamma_load_done;
     wire scale_read_valid,bias_read_valid,gamma_read_valid;
     wire [255:0] scale_read_data;
     wire [127:0] bias_read_data,gamma_read_data;
@@ -650,7 +873,7 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire [2:0] act_vec_row=context_reload_write ? row_index : (state_current[S_Z_COPY_WRITE] ? norm_row_visible : (act_norm_result ? norm_row_visible : stream_checked_row));
     wire [9:0] act_vec_word=context_reload_write ? 10'd112+stream_checked_word : (state_current[S_Z_COPY_WRITE] ? {3'd0,norm_word} : (act_norm_result ? {2'd0,norm_results} : stream_checked_word));
     wire [127:0] act_vec_data=state_current[S_Z_COPY_WRITE] ? norm_x : (act_norm_result ? afu_result_data : stream_checked_data);
-    wire weight_load_ready,weight_valid,weight_valid_pair; wire [1023:0] weight_q,weight_q_pair; wire [1:0] weight_full;
+    wire weight_load_ready, weight_valid; wire [1023:0] weight_q,weight_q_pair; wire [1:0] weight_full;
     wire weight_chunk_ready=weight_full[weight_bank];
 
     wire dequant_ready,dequant_valid,dequant_busy; wire [255:0] dequant_data; wire [15:0] dequant_word;
@@ -670,7 +893,7 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire p0_valid,p1_valid;wire [127:0] p0_q,p1_q;
     reg [127:0] selected_bias;
     wire [127:0] selected_scale=post_scales[bias_read_address[3:0]*128+:128];
-    wire [127:0] selected_norm_meta={9'd0,10'd0,3'd0,1'b0,16'd0,1'b0,4'd0,4'd11,1'b0,2'd0,16'd0,4'd8,rows,16'd0,16'd0,layer,task_id}; // 后续按位覆写word和query_row
+    // 鍚庣画鎸変綅瑕嗗啓word鍜宷uery_row
     wire gemm_cmd_ready,gemm_act_ready,gemm_weight_ready,gemm_valid,gemm_done,gemm_input_done,gemm_partial,gemm_error,gemm_aborted,gemm_busy;
     wire [7:0] gemm_error_code;wire [2047:0] gemm_bf16;wire [4095:0] gemm_fp32;wire [127:0] gemm_meta;
     wire [2:0] gemm_slice;wire [7:0] gemm_rows;wire [15:0] gemm_cols;wire gemm_last;
@@ -734,10 +957,15 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
                                 {2'd0,direct_write_fire[2]}+{2'd0,direct_write_fire[3]};
     assign output_write_data=raw_vector_data;
     reg [127:0] afu_metadata;
+    // The RoPE request carries its own identity word; it must not overwrite the
+    // scalar AFU word when the postprocessor and the main FSM run together.
+    reg [127:0] rope_metadata;
     // Attention owns the existing services only after QKV has drained.
-    wire attn_busy,attn_done,attn_error;wire [7:0] attn_error_code;
-    wire attn_service_abort,attn_weight_bank,attn_p_write_bank,attn_p_bank,attn_p_afu_bank,attn_p_commit,attn_p_release;
-    wire [1:0] attn_p_full;
+    wire attn_busy, attn_done;
+    // [P16K] P单块：不再有bank选择，只剩一块归属标志。
+    wire attn_weight_bank;
+    wire attn_p_commit, attn_p_release;
+    wire attn_p_full;
     wire [11:0] attn_p_afu_word;
     wire attn_enabled=task_cfg[255:192]!=0 && task_cfg[36:21]!=0;
     wire [16:0] attn_cache_end={1'b0,first_position}+total_rows;
@@ -754,7 +982,8 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire attn_cache_invalidate=((state_current[S_IDLE] || state_current[S_DONE]) && start) ||
         layer_reconfigure_fire;
     wire attn_active=state_current[S_ATTN_BEGIN] || state_current[S_ATTN_RUN];
-    wire attn_start=state_current[S_ATTN_BEGIN];
+    // [STAGE5-FIX] hold the attention until the scale-RAM bank is READY
+    wire attn_start=state_current[S_ATTN_BEGIN] && !kv8_scale_wait;
     // These state-bit copies have the same D inputs and reset as the ownership state.
     // Each protected control register drives one interface or 256-bit payload group.
     (* DONT_TOUCH = "yes" *) reg [1:0] attn_dma_owner_copies,attn_afu_owner_copies;
@@ -791,9 +1020,12 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire attn_weight_valid,attn_weight_commit,attn_weight_release,attn_weight_read;
     wire [9:0] attn_weight_word;wire [255:0] attn_weight_data;wire [7:0] attn_weight_read_word;
     wire attn_p_write,attn_p_read,attn_p_valid,attn_p_afu_read,attn_p_afu_valid;
-    wire attn_p_write_ready,attn_p_afu_write,attn_p_afu_write_bank;
+    wire attn_p_write_ready,attn_p_afu_write;
     wire [14:0] attn_p_afu_address;
     wire [127:0] attn_p_afu_write_data;
+    // [P16K] attn_p_address同时是P行的{行[2:0],字[11:0]}线性地址，也是LM-head
+    // logits流的字序号（0..18991，集测TB逐字比对lm_write_address）。logits走
+    // stat_only，不落盘，所以这两重身份不再冲突。
     wire [14:0] attn_p_address;wire [11:0] attn_p_word;wire [2:0] attn_p_row;
     wire [127:0] attn_p_write_data,attn_p_afu_data;wire [1023:0] attn_p_data;
     wire [2:0] attn_p_max_row;
@@ -809,8 +1041,10 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire [127:0] attn_dma_command,attn_dma_metadata,attn_dma_wr_data,attn_dma_wr_meta;wire [15:0] attn_dma_wr_keep;
 
     assign context_scratch_write=attn_active && attn_context_valid && attn_context_ready;
-    wire [127:0] afu_expected_meta=afu_identity;
     wire afu_fire=afu_valid && afu_ready;
+    // The RoPE channel has its own handshakes and its own outstanding flag.
+    wire rope_fire=rope_req_valid && rope_req_ready;
+    wire rope_return=rope_res_valid && rope_res_ready;
     // Register request acceptance at the measured 2.247 ns path midpoint.
     // Hold the SEND cursor for this acknowledgement and suppress a second issue.
     reg norm_accept_pending;
@@ -866,13 +1100,18 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         layer_reconfigure_fire ||
         batch_reconfigure_fire;
     wire ffn_block_increment_event=state_current[S_FFN_WAIT] && state_next[S_FFN_BEGIN];
-    wire [2:0] norm_row_visible=norm_row_cmd_pending==2'b01 ? 3'd0 :
-        norm_row_cmd_pending==2'b10 ? (norm_row==rows_last ? 3'd0 : norm_row+3'd1) :
-        norm_row_cmd_pending==2'b11 ? rows_last : norm_row;
     wire read_request=state_current[S_RD_CMD] || fetch_state==F_COMMAND;
     wire write_request=post_state==S_WR_CMD || state_current[S_H_COMMAND] || (ffn_active && ffn_dma_valid);
-    wire read_command_fire=command_hold_valid && dma_cmd_ready && !command_hold_write;
-    wire write_command_fire=command_hold_valid && dma_cmd_ready && command_hold_write;
+    // The hold register owns the bus only when neither the attention DMA nor the
+    // INT8 KV producer is presenting a command -- otherwise a shared dma_cmd_ready
+    // would retire a command that was never sent.  [16K-ONE-LAYER] the scale-image
+    // sequencer additionally borrows the bus for its whole window: the image beats
+    // must not interleave with a weight-fetch read descriptor.
+    wire kv8_hold_block=(kv8_ls_state!=LS_IDLE) && (kv8_ls_state!=LS_OWN);
+    wire command_hold_present=command_hold_valid && !kv8_hold_block;
+    wire command_hold_taken=dma_cmd_ready && !attn_dma_owner && command_hold_present;
+    wire read_command_fire=command_hold_valid && command_hold_taken && !command_hold_write;
+    wire write_command_fire=command_hold_valid && command_hold_taken && command_hold_write;
     wire fetch_begin=fetch_enabled && fetch_scale_ready && fetch_state==F_IDLE && !weight_full[fetch_bank] && (!output_phase || state_current[S_WEIGHT]);
     wire all_dequant_busy=dequant_busy || (|direct_dequant_busy);
     // Cut the read-completion cone before it joins the main FSM hold reduction.
@@ -885,15 +1124,33 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
             READ_SCALE:read_payload_complete=params_loaded[0];
             READ_BIAS:read_payload_complete=params_loaded[1];
             READ_GAMMA:read_payload_complete=params_loaded[2];
-            READ_WEIGHT:read_payload_complete=weight_load_done && !all_dequant_busy;
+            // weight_full[bank] is the LEVEL form of 'this tile is in the bank'; the
+            // pulse-derived weight_load_done can already be 0 here because the next
+            // tile's fetch_begin clears it.
+            READ_WEIGHT:read_payload_complete=(weight_load_done || weight_full[weight_bank]) && !all_dequant_busy;
             default:begin end
         endcase
     end
+    // The flag must be LATCHED, not recomputed every cycle: `weight_load_done` is a
+    // pulse-updated flag and `fetch_begin` (the next tile's prefetch) clears it, so a
+    // one-cycle-wide coincidence between "payload complete" and FINISH could be
+    // missed and the FSM would wait in S_RD_FINISH forever.  Set on any qualifying
+    // cycle, consumed (and cleared) when FINISH is left.
     always @(posedge clk)begin
         if(!rst_n)read_finish_pending<=1'b0;
-        else read_finish_pending<=read_payload_complete &&
+        else if((read_payload_complete || payload_ok_r) &&
             ((state_current[S_RD_DATA] && rd_done) ||
-             (state_current[S_RD_FINISH] && read_terminal));
+             (state_current[S_RD_FINISH] && read_terminal)))read_finish_pending<=1'b1;
+        else if(!state_current[S_RD_FINISH])read_finish_pending<=1'b0;
+    end
+    // Sticky "this tile's payload has been complete at least once".  `weight_load_done`
+    // is only updated on dequant/direct write pulses and is cleared by `fetch_begin`,
+    // so the live value can be 0 again long before the FSM reaches FINISH.
+    reg payload_ok_r;
+    always @(posedge clk)begin
+        if(!rst_n)payload_ok_r<=1'b0;
+        else if(fetch_begin)payload_ok_r<=1'b0;
+        else if(read_payload_complete)payload_ok_r<=1'b1;
     end
     wire weight_direct_write=(DIRECT_WEIGHT_READ!=0) && (direct_write_count!=0);
     wire weight_dequant_write=dequant_valid && weight_load_ready;
@@ -901,9 +1158,9 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     always @(posedge clk)begin
         if(!rst_n)weight_load_done<=1'b0;
         else if(weight_direct_write)
-            weight_load_done<=(weight_written+{12'd0,direct_write_count}==16'd512);
+            weight_load_done<=(weight_written+{12'd0,direct_write_count}>=16'd512);
         else if(weight_dequant_write)
-            weight_load_done<=(weight_written==16'd511);
+            weight_load_done<=(weight_written>=16'd511);
         else if(fetch_begin)weight_load_done<=1'b0;
     end
     // Preserve the original bank-update priority while separating sixteen scale-address loads.
@@ -918,7 +1175,9 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         if(fetch_commit && !output_phase)fetch_bank_copy_next=!fetch_bank;
     end
     always @(posedge clk)begin
-        if(!rst_n || state_current[S_IDLE] || state_current[S_LAYER_DONE] || state_current[S_BATCH_NEXT] || (state_current[S_DONE] && start))
+        if(!rst_n)
+            fetch_bank_scale_copies<=16'd0;
+        else if(state_current[S_IDLE] || state_current[S_LAYER_DONE] || state_current[S_BATCH_NEXT] || (state_current[S_DONE] && start))
             fetch_bank_scale_copies<=16'd0;
         else fetch_bank_scale_copies<={16{fetch_bank_copy_next}};
     end
@@ -956,18 +1215,82 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     wire [3:0] p1_write_word=post_state==S_ROPE_WRITE ? (rope_write_half ? rope_second_word : rope_first_word) : bias_meta[112:109];
     wire [127:0] p1_write_data=post_state==S_ROPE_WRITE ? (rope_write_half ? rope_second : rope_first) : bias_data;
 
-    assign dma_cmd_valid=attn_dma_owner ? attn_dma_valid : command_hold_valid;
-    assign dma_cmd=attn_dma_owner ? attn_dma_command : command_hold; assign dma_meta=attn_dma_owner ? attn_dma_metadata : metadata_hold;
+    // =========================================================================
+    // [16K-ONE-LAYER] layer-start guard: the scale-image sequencer owns the DMA
+    // command/read/write stream for its window, so (a) it only starts from a
+    // quiet window and (b) the K producer cannot start until it is done.
+    // =========================================================================
+    // A pass (one layer sweep over `rows` tokens) starts at task_cfg[52:37]; every
+    // layer of the pass produces the SAME token range, so the range a visit will
+    // produce is [pass_lo, pass_lo+rows) and the range ALREADY in the cache (which
+    // this visit must load) is [0, pass_lo).
+    wire [15:0] kv8_pass_lo = task_cfg[52:37];
+    wire [15:0] kv8_pass_hi = task_cfg[52:37]+{12'd0,rows};
+    wire [11:0] kv8_ld_nw  = {1'b0,kv8_pass_lo[15:3]}+(|kv8_pass_lo[2:0] ? 12'd1 : 12'd0);
+    wire [15:0] kv8_ld_blk = (kv8_pass_lo+16'd255)>>8;
+    wire [3:0]  kv8_ld_nb  = {1'b0,kv8_ld_blk[5:3]}+(kv8_ld_blk[2:0]!=3'd0 ? 4'd1 : 4'd0);
+    wire [15:0] kv8_dp_hi  = kv8_vis_hi-16'd1;
+    wire [11:0] kv8_dp_wlo = kv8_vis_lo[15:3];
+    wire [11:0] kv8_dp_whi = kv8_dp_hi[15:3];
+    wire        kv8_dp_eb  = (kv8_vis_lo[7:0]==8'd0)||(kv8_vis_lo[15:8]!=kv8_dp_hi[15:8]);
+    wire        kv8_dp_any = kv8_own_layer_valid && (kv8_vis_hi>kv8_vis_lo);
+    wire        kv8_ld_any = (kv8_pass_lo!=16'd0);
+    // first K token of a layer visit (same predicate the ownership hand-off used)
+    // [16K-FIX5] the sequencer must run at the FIRST ROW OF EVERY GROUP, not only
+    // at the first group of a layer.  With rows>8 the controller visits layer L as
+    // [0,8) [8,16) [16,24) ... back to back, so a layer-only qualifier skipped every
+    // group after the first: those rows were never dumped and the T>8 decode load
+    // read unwritten image words (measured: image K/V m16 word 1 = 0 at T=10, and
+    // chat /max 6 therefore decoded 9707,78,... instead of 9707,0,...).
+    // A second group of the same layer is a new visit because its pass_lo moved.
+    wire        kv8_ls_start = (post_state==S_WRITE) && (post_operation==0) &&
+                               (!kv8_own_layer_valid || kv8_own_layer!=layer ||
+                                kv8_own_lo!=kv8_pass_lo);
+    // Quiet = no descriptor in flight, no pending command, no client mid-stream.
+    // A read descriptor in flight would otherwise feed its beats into the image
+    // loader and its own consumer would wait for them forever.
+    // The DUMP only drives the write stream and can start at once.  The LOAD reads
+    // through the shared read stream, so it must not begin while another read
+    // descriptor is in flight (its beats would be swallowed by the image loader and
+    // its own consumer would wait forever) nor while a command is pending.  The
+    // wait happens in LS_OWN, where the command bus is deliberately NOT blocked, so
+    // a pending fetch command can still fire and complete.
+    wire        kv8_ld_quiet = !attn_dma_owner && !rd_busy && !command_hold_valid &&
+                               !(state_current[S_RD_CMD] || state_current[S_RD_DATA]) &&
+                               !(fetch_state==F_COMMAND) && !(fetch_state==F_DATA);
+    // armed = a layer start WITH image work has not been taken yet
+    wire        kv8_ls_armed = (kv8_ls_state==LS_IDLE) && kv8_ls_start &&
+                               (kv8_dp_any||kv8_ld_any);
+    wire        kv8_ls_idle  = (kv8_ls_state==LS_IDLE) && !kv8_ls_armed;
+    assign      kv8_k_start  = (post_state==S_WRITE) && (post_operation==0) && kv8_k_ready && kv8_ls_idle;
+
+    // Existing clients (main FSM reads, weight prefetch, hidden/context writes) keep
+    // priority: the INT8 producer only borrows the command bus when it is free, so a
+    // pending read command can never be starved by the producer.
+    wire kv8_cmd_owned = kv8_cmd_valid && !command_hold_present && !attn_dma_owner;
+    assign dma_cmd_valid=attn_dma_owner ? attn_dma_valid : (command_hold_present ? 1'b1 : kv8_cmd_valid);
+    assign dma_cmd=attn_dma_owner ? attn_dma_command : (command_hold_present ? command_hold : kv8_dma_command);
+    assign dma_meta=attn_dma_owner ? attn_dma_metadata : (command_hold_present ? metadata_hold : kv8_dma_metadata);
     assign dma_abort=1'b0;
     assign afu_abort=1'b0;
-    assign rd_ready=attn_dma_owner ? attn_dma_rd_ready : ((state_current[S_RD_DATA] || fetch_state==F_DATA) &&
+    assign rd_ready=attn_dma_owner ? attn_dma_rd_ready :
+        (kv8_ls_state==LS_L_RD ? 1'b1 :
+        ((state_current[S_RD_DATA] || fetch_state==F_DATA) &&
         ((read_kind>=READ_SCALE && read_kind<=READ_GAMMA) ? params_load_ready :
-        (read_kind==READ_WEIGHT ? dequant_ready : (read_kind==READ_INPUT ? output_gemm_write_ready : 1'b1))));
-    assign wr_valid=attn_dma_owner ? attn_dma_wr_valid : (ffn_active ? ffn_write_valid : (post_state==S_WR_SEND || (state_current[S_H_SEND] && !hidden_dma_sent)));
-    assign wr_data=attn_dma_owner ? attn_dma_wr_data : (ffn_active ? ffn_write_data : write_hold);
+        (read_kind==READ_WEIGHT ? dequant_ready : (read_kind==READ_INPUT ? output_gemm_write_ready : 1'b1)))));
+    assign wr_valid=attn_dma_owner ? attn_dma_wr_valid : (ffn_active ? ffn_write_valid :
+        ((kv8_stream_valid || kv8_img_wr) ? 1'b1 : ((post_state==S_WR_SEND && post_operation>=1) || (state_current[S_H_SEND] && !hidden_dma_sent))));
+    assign wr_data=attn_dma_owner ? attn_dma_wr_data : (ffn_active ? ffn_write_data : (kv8_img_wr ? kv8_img_wr_data : (kv8_stream_valid ? kv8_stream_data : write_hold)));
     assign wr_keep=attn_dma_owner ? attn_dma_wr_keep : 16'hffff;
-    assign wr_last=attn_dma_owner ? attn_dma_wr_last : (ffn_active ? ffn_write_last : ((output_phase || down_phase) ? norm_word==111 : write_word==15));
-    assign wr_meta=attn_dma_owner ? attn_dma_wr_meta : (ffn_active ? ffn_write_meta : write_metadata_reg);
+    assign wr_last=attn_dma_owner ? attn_dma_wr_last : (ffn_active ? ffn_write_last :
+        (kv8_img_wr ? kv8_img_wr_last :
+        (kv8_stream_valid ? (post_state==PS_KV8_SCALE_SEND ? (kv8_img_word==4'd15) :
+                             // WLAST must be the SAME expression as the state exit, otherwise
+                             // the engine waits for a WLAST that never comes (owed-beat
+                             // contract stated twice = the classic orphan-descriptor wedge).
+                             (post_state==PS_KV8_VSEND ? ((kv8_vbyte_cnt+5'd1)==kv8_beat_lim) : (kv8_desc_left==5'd1)))
+                          : ((output_phase || down_phase) ? norm_word==111 : write_word==15))));
+    assign wr_meta=attn_dma_owner ? attn_dma_wr_meta : (ffn_active ? ffn_write_meta : ((kv8_stream_valid || kv8_img_wr) ? kv8_dma_metadata : write_metadata_reg));
     assign busy=!state_current[S_IDLE] && !state_current[S_DONE];
     assign qkv_done=state_current[S_DONE];assign param_ready=&params_loaded;
     assign result_commit=state_current[S_LM_COMMIT];
@@ -977,20 +1300,25 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     assign lm_write_address=attn_p_address;
     assign lm_complete=lm_write_valid && attn_p_write_ready && attn_p_max_last;
     assign error=1'b0;
-    // 配置和帧身份由软件保证；Controller不保存错误码或产生全局错误反馈。
+    // 閰嶇疆鍜屽抚韬唤鐢辫蒋浠朵繚璇侊紱Controller涓嶄繚瀛橀敊璇爜鎴栦骇鐢熷叏灞€閿欒鍙嶉銆?
     assign error_code=32'd0;
-    assign afu_valid=attn_afu_owner ? attn_afu_valid : ffn_active ? ffn_afu_valid : (state_current[S_NORM_SEND] && !norm_frontend_midpoint_reg) || post_state==S_ROPE_SEND || ((state_current[S_RES_SEND] || state_current[S_Z_SEND]) && !norm_accept_pending) || (state_current[S_H_SEND] && !hidden_afu_sent && !down_phase);
-    assign afu_command=attn_afu_owner ? attn_afu_command : ffn_active ? 4'd13 : (state_current[S_RES_SEND] ? 4'd14 : (post_state==S_ROPE_SEND ? 4'd12 : 4'd11));
+    assign afu_valid=attn_afu_owner ? attn_afu_valid : ffn_active ? ffn_afu_valid : (state_current[S_NORM_SEND] && !norm_frontend_midpoint_reg) || ((state_current[S_RES_SEND] || state_current[S_Z_SEND]) && !norm_accept_pending) || (state_current[S_H_SEND] && !hidden_afu_sent && !down_phase);
+    // RoPE owns a private request/result pair; the postprocessor is its only client.
+    assign rope_req_valid=post_state==S_ROPE_SEND;
+    assign afu_command=attn_afu_owner ? attn_afu_command : ffn_active ? 4'd13 : (state_current[S_RES_SEND] ? 4'd14 : 4'd11);
     assign afu_command_4=attn_afu_owner ? {19'd0,attn_afu_phase} : ffn_active ? 21'd1 : state_current[S_RES_SEND] ? 21'd0 : {20'd0,norm_apply};assign afu_sum_command_buffer=0;
     assign afu_eps={task_cfg[95:80],16'd0};assign afu_latch=1'b0;assign afu_gelu_sign=1'b0;
-    assign afu_x=attn_afu_owner ? attn_afu_x : ffn_active ? ffn_afu_x : (post_state==S_ROPE_SEND ? rope_x : norm_x);
-    assign afu_y=attn_afu_owner ? attn_afu_y : ffn_active ? ffn_afu_y : (post_state==S_ROPE_SEND ? rope_y : norm_gamma);
-    assign afu_meta=attn_afu_owner ? attn_afu_meta : (ffn_active ? ffn_afu_meta : afu_metadata);assign afu_last=attn_afu_owner ? attn_afu_last : ffn_active ? ffn_afu_last : post_state==S_ROPE_SEND || norm_word==111;
-    assign afu_mask=attn_afu_owner ? attn_afu_mask : 8'hff;assign afu_length=attn_afu_owner ? attn_afu_length : ffn_active ? {54'd0,ffn_service_words,3'd0} : (post_state==S_ROPE_SEND ? 64'd64 : 64'd896);
+    assign afu_x=attn_afu_owner ? attn_afu_x : ffn_active ? ffn_afu_x : norm_x;
+    assign afu_y=attn_afu_owner ? attn_afu_y : ffn_active ? ffn_afu_y : norm_gamma;
+    assign rope_req_x=rope_x;assign rope_req_y=rope_y;assign rope_req_meta=rope_metadata;
+    assign rope_req_last=1'b1;assign rope_req_mask=8'hff;
+    assign afu_meta=attn_afu_owner ? attn_afu_meta : (ffn_active ? ffn_afu_meta : afu_metadata);assign afu_last=attn_afu_owner ? attn_afu_last : ffn_active ? ffn_afu_last : norm_word==111;
+    assign afu_mask=attn_afu_owner ? attn_afu_mask : 8'hff;assign afu_length=attn_afu_owner ? attn_afu_length : ffn_active ? {54'd0,ffn_service_words,3'd0} : 64'd896;
     assign afu_result_ready=attn_afu_owner ? attn_afu_result_ready : ffn_active ? ffn_result_ready : (state_norm_active && !state_current[S_NORM_READ]) ||
-        post_state==S_ROPE_WAIT || state_current[S_NORM_STATS] || ((output_phase || down_phase) && state_residual_to_norm);
+        state_current[S_NORM_STATS] || ((output_phase || down_phase) && state_residual_to_norm);
+    assign rope_res_ready=post_state==S_ROPE_WAIT;
 
-    // 在AFU结果写回与O-buffer端口仲裁之间切开控制路径，负载随使能延后一拍。
+    // 鍦ˋFU缁撴灉鍐欏洖涓嶰-buffer绔彛浠茶涔嬮棿鍒囧紑鎺у埗璺緞锛岃礋杞介殢浣胯兘寤跺悗涓€鎷嶃€?
     reg output_afu_write_pending;
     reg [1:0] output_afu_write_bank;
     reg [2:0] output_afu_write_row;
@@ -999,14 +1327,14 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     always @(posedge clk)begin
         if(!rst_n)output_afu_write_pending<=1'b0;
         else output_afu_write_pending<=residual_result || normalized_result || ffn_store_fire;
-        // 无效负载不参与写入；数据寄存器无需复位或额外使能MUX。
+        // 鏃犳晥璐熻浇涓嶅弬涓庡啓鍏ワ紱鏁版嵁瀵勫瓨鍣ㄦ棤闇€澶嶄綅鎴栭澶栦娇鑳組UX銆?
         output_afu_write_bank<=ffn_store_fire ? ffn_store_bank : (residual_result ? 2'd1 : 2'd0);
         output_afu_write_row<=ffn_store_fire ? ffn_store_row : norm_row_visible;
         output_afu_write_word<=ffn_store_fire ? ffn_store_word : norm_results[6:0];
         output_afu_write_data<=ffn_store_fire ? ffn_store_data : afu_result_data;
     end
 
-    // 每个buffer独立接口，系统阶段Controller直接产生地址和使能。
+    // 姣忎釜buffer鐙珛鎺ュ彛锛岀郴缁熼樁娈礐ontroller鐩存帴浜х敓鍦板潃鍜屼娇鑳姐€?
     qwen25_tensor_buffers #(.DIRECT_WEIGHT_PORTS(DIRECT_WEIGHT_READ)) buffers_Inst (
         .clk(clk),.rst_n(rst_n),
         .act_wide_layout(down_phase),
@@ -1047,14 +1375,14 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         .weight_gemm_rd_en_pair(!attn_buffer_owner && weight_read_enable),
         .weight_gemm_bank_pair(weight_bank),
         .weight_gemm_word_pair(weight_read_word1),
-        .weight_gemm_valid_pair(weight_valid_pair),
+        .weight_gemm_valid_pair(),
         .weight_gemm_q_pair(weight_q_pair),
         .scale_load_start(params_load_start && read_kind==READ_DESC),
         .scale_load_valid(params_load_valid && stream_checked_kind==READ_SCALE),
         .scale_load_ready(scale_load_ready),
         .scale_load_data(stream_checked_data),
         .scale_load_last(stream_checked_last),
-        .scale_load_done(scale_load_done),
+        .scale_load_done(),
         .scale_loaded(params_loaded[0]),
         .scale_read_en(scale_read_en),
         .scale_read_addr(scale_read_element[18:4]),
@@ -1065,7 +1393,7 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         .bias_load_ready(bias_load_ready),
         .bias_load_data(stream_checked_data),
         .bias_load_last(stream_checked_last),
-        .bias_load_done(bias_load_done),
+        .bias_load_done(),
         .bias_loaded(params_loaded[1]),
         .bias_read_en(bias_read_en),
         .bias_read_addr(bias_read_element[14:3]),
@@ -1076,7 +1404,7 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         .gamma_load_ready(gamma_load_ready),
         .gamma_load_data(stream_checked_data),
         .gamma_load_last(stream_checked_last),
-        .gamma_load_done(gamma_load_done),
+        .gamma_load_done(),
         .gamma_loaded(params_loaded[2]),
         .gamma_read_en(gamma_read_en),
         .gamma_read_addr(gamma_read_element[15:3]),
@@ -1115,22 +1443,20 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         .proj1_rd_valid(p1_valid),
         .proj1_rd_data(p1_q),
         .attention_fill_done(lm_complete || (attn_buffer_owner && attn_p_commit)),
-        .attention_fill_bank(lm_phase ? 1'b0 : attn_p_bank),
-        .attention_release_bank(!attn_buffer_owner ? 1'b0 : attn_p_bank),
         .attention_release_en(state_current[S_DESC_EXTRA_CHECK] || state_current[S_FINAL_BEGIN] || (attn_buffer_owner && attn_p_release)),
         .attention_full(attn_p_full),
-        .attention_wr_en(lm_write_valid || (attn_buffer_owner && attn_p_write)),
-        .attention_wr_bank(attn_p_write_bank),
-        .attention_wr_address(lm_phase ? lm_write_address : attn_p_address),
-        .attention_wr_data(lm_phase ? lm_write_data : attn_p_write_data),
+        // [P16K] logits不再写入P：stat_only时写口只推进行argmax，数据不落盘。
+        .attention_wr_en(attn_buffer_owner && attn_p_write),
+        .attention_wr_address(attn_p_address),
+        .attention_wr_data(attn_p_write_data),
+        .attention_stat_only(lm_phase && !attn_buffer_owner),
         .attention_wr_ready(attn_p_write_ready),.attention_afu_wr_en(attn_p_afu_write),
-        .attention_afu_wr_bank(attn_p_afu_write_bank),.attention_afu_wr_address(attn_p_afu_address),.attention_afu_wr_data(attn_p_afu_write_data),
+        .attention_afu_wr_address(attn_p_afu_address),.attention_afu_wr_data(attn_p_afu_write_data),
         .attention_rd_en(attn_buffer_owner && attn_p_read),
-        .attention_rd_bank(attn_p_bank),
         .attention_rd_word(attn_p_word),
         .attention_rd_valid(attn_p_valid),
         .attention_rd_tile(attn_p_data),
-        .attention_afu_rd_en(attn_buffer_owner && attn_p_afu_read),.attention_afu_rd_bank(lm_phase ? 1'b0 : attn_p_afu_bank),
+        .attention_afu_rd_en(attn_buffer_owner && attn_p_afu_read),
         .attention_afu_rd_row(lm_phase ? 3'd0 : attn_p_row),.attention_afu_rd_word(attn_p_afu_word),
         .attention_afu_rd_valid(attn_p_afu_valid),.attention_afu_rd_data(attn_p_afu_data),
         .attention_max_wr_en((attn_buffer_owner || lm_phase) && attn_p_write),.attention_max_wr_row(attn_p_max_row),
@@ -1143,11 +1469,11 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
             (state_current[S_FFN_BEGIN] && ffn_block==0) || state_current[S_H_LOAD] || (ffn_phase && ffn_post_valid && ffn_done)),
         .output_release_pair(ffn_phase && ffn_post_valid && ffn_done ? ffn_service_pair :
             ((ffn_phase || state_current[S_FFN_BEGIN]) ? ffn_pair : 1'd0)),
-        .output_pair_full(output_pair_full),
+        .output_pair_full(),
         .output_wr_en(output_ram_write || hidden_reload_write || input_reload_write),
         .output_wr_bank((input_reload_write || input_load_active) ? 2'd1 : hidden_reload_write ? 2'd0 : down_phase ? 2'd1 : ffn_phase ? {ffn_pair,operation_decode_reg[5]} : 2'd0),
         .output_wr_row((hidden_reload_write || input_reload_write) ? stream_checked_row : raw_vector[3:1]),
-        .output_wr_word((hidden_reload_write || input_reload_write) ? stream_checked_word[6:0] : {output_tile,4'd0}+{raw_number,1'b0}+raw_vector[0]),
+        .output_wr_word((hidden_reload_write || input_reload_write) ? stream_checked_word[6:0] : output_raw_word),
         .output_wr_data((hidden_reload_write || input_reload_write) ? stream_checked_data : raw_vector_data),
         .output_wr_ready(output_gemm_write_ready),
         .output_afu_wr_en(output_afu_write_pending),
@@ -1164,8 +1490,6 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         .output_rd_y(output_read_y)
     );
 
-
-
     genvar direct_lane;
     generate for(direct_lane=0;direct_lane<4;direct_lane=direct_lane+1)begin:gen_direct_decode
         wire lane_ok=1'b1;
@@ -1173,13 +1497,16 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         wire decoder_ready;
         assign direct_rd_ready[direct_lane]=fetch_state==F_DATA && decoder_ready;
         assign direct_load_word[direct_lane*8+:8]=direct_dequant_word[direct_lane*16+2+:8];
-        qwen25_weight_dequant convert_Inst(
+        // [STAGE4] INT8 -> 16-bit slot packing (port-identical replacement for
+        // the BF16 dequantizer; qwen_int8_to_bf16 is gone with the BF16 array)
+        qwen25_weight_pack8 convert_Inst(
             .i_clk(clk),.i_rstn(rst_n),.i_valid(direct_rd_valid[direct_lane] && lane_accept),.o_ready(decoder_ready),
             .i_data(direct_rd_data[direct_lane*128+:128]),.i_word(direct_rd_word[direct_lane*10+:10]),.i_scales(2048'd0),
             .o_valid(direct_dequant_valid[direct_lane]),.i_ready(direct_dequant_ready[direct_lane]),
             .o_data(direct_dequant_data[direct_lane*256+:256]),.o_word(direct_dequant_word[direct_lane*16+:16]),.o_busy(direct_dequant_busy[direct_lane]));
     end endgenerate
-    qwen25_weight_dequant dequant_Inst(
+    // [STAGE4] same replacement on the non-direct-read path (inactive here)
+    qwen25_weight_pack8 dequant_Inst(
         .i_clk(clk),.i_rstn(rst_n),.i_valid(DIRECT_WEIGHT_READ==0 && fetch_state==F_DATA && rd_valid && stream_ok),
         .o_ready(dequant_ready),.i_data(rd_data),.i_word(read_count[9:0]),.i_scales(scales),
         .o_valid(dequant_valid),.i_ready(weight_load_ready),.o_data(dequant_data),.o_word(dequant_word),.o_busy(dequant_busy)
@@ -1231,7 +1558,9 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         assign gemm_aborted=s_gemm_aborted;
         assign gemm_error_code=s_gemm_error_code;
     end else begin:gen_local_gemm
-    qwen25_gemm gemm_Inst(
+    // [STAGE4] single INT8 array for all four GEMMs (opcodes 3/4 = the two
+    // attention GEMMs, 5/6/9 = projections + LM head).  Port-identical.
+    qwen25_gemm_i gemm_Inst(
         .clk(clk),.rst_n(rst_n),.s_cmd_valid(m_gemm_cmd_valid),.s_cmd_ready(gemm_cmd_ready),.s_cmd(m_gemm_cmd),.s_cmd_meta(m_gemm_cmd_meta),
         .s_act_valid(m_gemm_act_valid),.s_act_ready(gemm_act_ready),.s_act_data(m_gemm_act_data),.s_act_meta(m_gemm_act_meta),
         .s_weight_valid(m_gemm_weight_valid),.s_weight_ready(gemm_weight_ready),.s_weight_data(m_gemm_weight_data),.s_weight_meta(m_gemm_weight_meta),
@@ -1242,14 +1571,13 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     end endgenerate
 
 
-    qwen25_attention #(.ENABLE_LOGITS(1)) attention_Inst (
-        .i_clk(clk),.i_rstn(rst_n),.i_start(attn_start),.i_abort(1'b0),
+    qwen25_attention #(.ENABLE_LOGITS(1)) attention_Inst (        .i_clk(clk),.i_rstn(rst_n),.i_start(attn_start),.i_abort(1'b0),
         .i_logits_mode(lm_phase),.i_logits_valid(lm_phase && raw_busy && bias_valid),
         .o_logits_ready(lm_input_ready),.i_logits_address(lm_input_address),.i_logits_data(bias_data),.o_logits_busy(lm_busy),
         .i_rows(rows),.i_position(task_cfg[52:37]),.i_context(attn_context),.i_layer(layer),.i_task(task_id),
         .i_first_head(4'd0),.i_last_head(4'd13),.i_q_base(task_cfg[511:448]),.i_k_base(task_cfg[383:320]),.i_v_base(task_cfg[447:384]),
-        .o_busy(attn_busy),.o_done(attn_done),.o_error(attn_error),.o_error_code(attn_error_code),
-        .o_service_abort(attn_service_abort),
+        .o_busy(attn_busy),.o_done(attn_done),.o_error(),.o_error_code(),
+        .o_service_abort(),
         .o_read_valid(attn_read_valid),.i_read_ready(attn_read_ready),.o_read_address(attn_read_address),
         .o_read_base(attn_read_base),.o_read_bytes(attn_read_bytes),
         .i_data_valid(attn_data_valid),.o_data_ready(attn_data_ready),.i_data(attn_read_data),.i_memory_busy(attn_memory_busy),.i_memory_error(attn_memory_error),
@@ -1258,10 +1586,18 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         .o_weight_valid(attn_weight_valid),.i_weight_ready(weight_load_ready),.o_weight_word(attn_weight_word),.o_weight_data(attn_weight_data),
         .o_weight_commit(attn_weight_commit),.o_weight_release(attn_weight_release),.o_weight_bank(attn_weight_bank),.i_weight_full(weight_full[attn_weight_bank]),
         .o_weight_read(attn_weight_read),.o_weight_read_word(attn_weight_read_word),.i_weight_read_valid(weight_valid),.i_weight_read_data(weight_q),
+        // [STAGE3] per-token K scale table read port (kv8_k_write_chain's kv8_scale_ram)
+        .o_scale_rd_en(attn_scale_rd_en),.o_scale_rd_word(attn_scale_rd_word),
+        .i_scale_rd_valid(attn_scale_rd_valid),.i_scale_rd_data(attn_scale_rd_data),
+        // [STAGE5] per-(head,dim) V scale table read port
+        .o_v_scale_word(kv8_v_rd_word),.i_v_scale_data(kv8_v_rd_data),
+        // [V-PERTOK-M] per-token V mantissa read port (8 tokens per cycle)
+        .o_v_m_rd_en(kv8_vm_rd_en),.o_v_m_rd_word(kv8_vm_rd_word),
+        .i_v_m_rd_data(kv8_vm_rd_data),
         .o_p_write(attn_p_write),.o_p_address(attn_p_address),.o_p_data(attn_p_write_data),.o_p_read(attn_p_read),.o_p_word(attn_p_word),.i_p_valid(attn_p_valid),.i_p_data(attn_p_data),
-        .i_p_write_ready(attn_p_write_ready),.o_p_afu_write(attn_p_afu_write),.o_p_afu_write_bank(attn_p_afu_write_bank),
+        .i_p_write_ready(attn_p_write_ready),.o_p_afu_write(attn_p_afu_write),
         .o_p_afu_address(attn_p_afu_address),.o_p_afu_data(attn_p_afu_write_data),
-        .o_p_write_bank(attn_p_write_bank),.o_p_bank(attn_p_bank),.o_p_afu_bank(attn_p_afu_bank),.o_p_commit(attn_p_commit),.o_p_release(attn_p_release),.i_p_full(attn_p_full),.o_p_afu_word(attn_p_afu_word),
+        .o_p_commit(attn_p_commit),.o_p_release(attn_p_release),.i_p_full(attn_p_full),.o_p_afu_word(attn_p_afu_word),
         .o_p_afu_read(attn_p_afu_read),.o_p_row(attn_p_row),.i_p_afu_valid(attn_p_afu_valid),.i_p_afu_data(attn_p_afu_data),
         .o_p_max_row(attn_p_max_row),.o_p_maximum(attn_p_maximum),.o_p_max_index(attn_p_max_index),
         .o_p_max_first(attn_p_max_first),.o_p_max_last(attn_p_max_last),.o_p_max_words(attn_p_max_words),
@@ -1276,6 +1612,364 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         .i_afu_valid(afu_result_valid),.o_afu_ready(attn_afu_result_ready),.i_afu_data(afu_result_data),.i_afu_meta(afu_result_meta),.i_afu_last(afu_result_last),
         .i_afu_mask(afu_result_mask),.i_afu_busy(afu_busy),.i_afu_error(afu_error)
     );
+    // =========================================================================
+    // [STAGE5] INT8 KV producer chains.
+    //
+    // kv8_k_write_chain owns the scale RAM (its per-(head,token) append, the
+    // per-(head,256-token block) exponent publish and the bank ownership state),
+    // so the attention's K-scale read port is exposed by the chain and the
+    // stage-3 "walk the bank by hand" stub is gone.
+    //
+    // kv8_v_write_chain turns the same 16 BF16 beats per token into the
+    // token-major INT8 V image and locks the layer's per-head V scale; its 256 B
+    // image is written to DDR here and bulk-loaded back into the same V table
+    // before the layer's first attention (that is what makes the scale visible
+    // to kv8_context_scale on the context write-back).
+    // =========================================================================
+    wire        attn_scale_rd_en;
+    wire [11:0] attn_scale_rd_word;
+    wire        attn_scale_rd_valid;
+    wire [135:0] attn_scale_rd_data;        // [M16-SCALE] {eb_tab, 8 x m16}
+
+    // [M16-SCALE] MARGIN 4 -> 8 and the 16-bit mantissa are ONE change.
+    // MARGIN=9 was measured unsafe by the software regression: the d field reaches
+    // 15 on a 300-token prompt and M8=255 at d=15 gives ceil(255*2^(5+9)/127) =
+    // 65 796 > 65 535.  Zero saturation was seen only because d=15 and M8=255 never
+    // coincided -- luck, not margin.  MARGIN=8 gives worst case
+    // ceil(255*2^(5+8)/127) = 16 449 = 3.98x headroom, and costs nothing measurable:
+    // scale error 0.013% -> ~0.026% while the 12-bit code's own error is 0.070%.
+    // =========================================================================
+    // [16K-ONE-LAYER] layer-start scale-image sequencer: DUMP then LOAD.
+    //
+    // The on-chip tables are one layer deep and 16384 tokens deep, so layer L's
+    // per-token scales have to be persisted into, and restored from, the DDR
+    // image every time L is visited:
+    //   DUMP  [vis_lo, T) of the PREVIOUS layer visit  (T = this visit's first
+    //         token), i.e. the words that visit produced, plus the block-exponent
+    //         table when a 256-token block boundary fell inside that span;
+    //   LOAD  [0, T) of THIS layer, plus its V 2^ word and its etab words.
+    // Both run before the visit's first append, so a load can never clobber a
+    // token the visit has just produced.  With T = 0 (the first prefill pass)
+    // nothing is moved at all, which is what keeps the /max 1 prefill path
+    // cycle-identical to the pre-16K build.
+    //
+    // The shared DMA engines are borrowed for the whole window: the main/fetch
+    // command hold register is blocked while kv8_ls_state!=LS_IDLE, so image
+    // read beats can never be mistaken for a weight fetch's payload.  The MMU
+    // transport admits ONE write descriptor at a time (flag_write_active in
+    // qwen25_mmu_dma), so every dump descriptor is followed to wr_done before
+    // the next command is issued.
+    // =========================================================================
+    // A pass (one layer sweep over `rows` tokens) starts at task_cfg[52:37]; every
+    // layer of the pass produces the SAME token range, so the range a visit will
+    // produce is [pass_lo, pass_lo+rows) and the range ALREADY in the cache (which
+    // this visit must load) is [0, pass_lo).
+    // [16K-ONE-LAYER] the image is HEAD-STRIDED: K/V m16 put head 1 at +0x8000 and
+    // the etab puts head 1 at +128, so a load descriptor never spans both heads.
+    // 7 regions: K h0/h1, V h0/h1, V 2^, etab h0/h1.
+    wire        kv8_rgn_k    = (kv8_ls_rgn<=4'd1);
+    wire        kv8_rgn_v    = (kv8_ls_rgn==4'd2)||(kv8_ls_rgn==4'd3);
+    wire        kv8_rgn_v2   = (kv8_ls_rgn==4'd4);
+    wire        kv8_rgn_eb   = (kv8_ls_rgn>=4'd5);
+    wire        kv8_rgn_head = kv8_ls_rgn[0];
+    wire [12:0] kv8_rgn_beats= kv8_rgn_v2 ? 13'd16
+                             : kv8_rgn_eb ? {9'd0,kv8_ld_nb}
+                             :              {1'b0,kv8_ld_nw};
+    // the NEXT region's descriptor, set up while the current one streams
+    wire [3:0]  kv8_rgn_n    = kv8_ls_rgn+4'd1;
+    wire        kv8_n_k      = (kv8_rgn_n<=4'd1);
+    wire        kv8_n_v      = (kv8_rgn_n==4'd2)||(kv8_rgn_n==4'd3);
+    wire        kv8_n_v2     = (kv8_rgn_n==4'd4);
+    wire        kv8_n_eb     = (kv8_rgn_n>=4'd5);
+    wire        kv8_n_head   = kv8_rgn_n[0];
+    wire [63:0] kv8_n_addr   = kv8_n_k  ? (kv8_img_k_base+(kv8_n_head ? 64'h0000_8000 : 64'd0))
+                             : kv8_n_v  ? (kv8_img_v_base+(kv8_n_head ? 64'h0000_8000 : 64'd0))
+                             : kv8_n_v2 ? kv8_img_v2_base
+                             :            (kv8_img_eb_base+(kv8_n_head ? 64'd128 : 64'd0));
+    wire [23:0] kv8_n_bytes  = kv8_n_v2 ? 24'd256
+                             : kv8_n_eb ? {15'd0,kv8_ld_nb,4'd0}
+                             :            {7'd0,kv8_ld_nw,4'd0};
+    // the ownership hand-off pulse: pre-16K timing when there is nothing to move
+    assign      kv8_ls_own_go = (kv8_ls_state==LS_OWN) ||
+                                ((kv8_ls_state==LS_IDLE)&&kv8_ls_start&&!(kv8_dp_any||kv8_ld_any));
+    // ---- cells the sequencer reads back ------------------------------------
+    wire [127:0] kv8_etab_rd_data;                 // 16 block exponents of one word
+    wire [127:0] kv8_dp_k_word = attn_scale_rd_data[127:0];   // K m16 word
+    wire [127:0] kv8_dp_v_word = kv8_vm_rd_data;              // V m16 word
+    wire [63:0]  kv8_eb_b0 = kv8_etab_rd_data[63:0];
+    wire [63:0]  kv8_eb_b1 = kv8_etab_rd_data[127:64];
+    // [16K-FIX4] the image beat is a byte stream: entry n (image offset 2n..2n+1,
+    // low byte first) is block n, and kv8_eb_pk below unpacks it in exactly that
+    // order.  The concatenation used to run the other way, so block 0 was written
+    // at image offset 14 and the load mapped block 7 into on-chip block 0 -- the
+    // measured symptom was "decode layer 0 head 0 reads eb=0x00 instead of 0x73".
+    wire [127:0] kv8_eb_lo = {{8'h00,kv8_eb_b0[63:56]},{8'h00,kv8_eb_b0[55:48]},{8'h00,kv8_eb_b0[47:40]},{8'h00,kv8_eb_b0[39:32]},
+                              {8'h00,kv8_eb_b0[31:24]},{8'h00,kv8_eb_b0[23:16]},{8'h00,kv8_eb_b0[15:8]},{8'h00,kv8_eb_b0[7:0]}};
+    wire [127:0] kv8_eb_hi = {{8'h00,kv8_eb_b1[63:56]},{8'h00,kv8_eb_b1[55:48]},{8'h00,kv8_eb_b1[47:40]},{8'h00,kv8_eb_b1[39:32]},
+                              {8'h00,kv8_eb_b1[31:24]},{8'h00,kv8_eb_b1[23:16]},{8'h00,kv8_eb_b1[15:8]},{8'h00,kv8_eb_b1[7:0]}};
+    // DDR etab image beat = 8 x 16-bit entries {8'h00, eb}: keep the low bytes
+    wire [63:0]  kv8_eb_pk = {rd_data[112+:8],rd_data[96+:8],rd_data[80+:8],rd_data[64+:8],
+                              rd_data[48+:8],rd_data[32+:8],rd_data[16+:8],rd_data[0+:8]};
+    // ---- sequencer command fields (own mux, so kv8_cmd_* stay untouched) ----
+    assign       kv8_ls_cmd_sel = (kv8_ls_state==LS_D_CMD)||(kv8_ls_state==LS_D_EBC)||(kv8_ls_state==LS_L_CMD);
+    // dump item (K0,K1,V0,V1) address, and the address of the next item.
+    // [16K-ONE-LAYER] the DUMP targets the layer that PRODUCED the range
+    // (kv8_vis_layer), the LOAD targets the layer being visited -- using one base
+    // for both would write layer 23's slice into layer 0's image.
+    wire [1:0]   kv8_ls_item_n  = kv8_ls_item+2'd1;
+    wire [63:0]  kv8_dp_lbase   = KV8_IMG_BASE+{39'd0,kv8_vis_layer,20'd0};
+    wire [63:0]  kv8_dp_k_base  = kv8_dp_lbase+KV8_IMG_K;
+    wire [63:0]  kv8_dp_v_base  = kv8_dp_lbase+KV8_IMG_V;
+    wire [63:0]  kv8_dp_eb_base = kv8_dp_lbase+KV8_IMG_EB;
+    wire [63:0]  kv8_dp_nxt_addr= ((kv8_ls_item_n[1]==1'b0) ? kv8_dp_k_base : kv8_dp_v_base)
+                                  + (kv8_ls_item_n[0] ? 64'h0000_8000 : 64'd0)
+                                  + {52'd0,kv8_ls_w,4'd0};
+    // ---- load-port beat pointers ------------------------------------------
+    wire         kv8_img_ld_valid = (kv8_ls_state==LS_L_RD)&&kv8_rgn_k&&rd_valid;
+    wire [11:0]  kv8_img_ld_word  = {kv8_rgn_head,kv8_ls_cnt[10:0]};
+    wire [127:0] kv8_img_ld_data  = rd_data;
+    wire         kv8_img_vld_valid= (kv8_ls_state==LS_L_RD)&&kv8_rgn_v&&rd_valid;
+    wire [11:0]  kv8_img_vld_word = {kv8_rgn_head,kv8_ls_cnt[10:0]};
+    wire [127:0] kv8_img_vld_data = rd_data;
+    wire         kv8_img_v2_we    = (kv8_ls_state==LS_L_RD)&&kv8_rgn_v2&&rd_valid;
+    wire [3:0]   kv8_img_v2_word  = kv8_ls_cnt[3:0];
+    wire         kv8_img_eb_valid = (kv8_ls_state==LS_L_RD)&&kv8_rgn_eb&&rd_valid;
+    // [16K-FIX2] on-chip etab word = {head, block[5:4]}: 4 words per head, so the
+    // word index is {head, cnt[2:1]}.  It used to be {head, cnt[3:1]}, a FOUR-bit
+    // concatenation truncated into the 3-bit port -- the head bit was dropped, so
+    // the head-1 etab image beat was written over head 0's word 0 and head 1's
+    // word 4 kept the previous layer's exponent (measured: head 0 read back 0x00,
+    // head 1 0x6e = layer 23's value, instead of 0x73/0x72).
+    wire [2:0]   kv8_img_eb_word  = {kv8_rgn_head,kv8_ls_cnt[2:1]};
+    wire [15:0]  kv8_img_eb_be    = kv8_ls_cnt[0] ? 16'hff00 : 16'h00ff;
+    wire [127:0] kv8_img_eb_data  = {2{kv8_eb_pk}};
+    wire         kv8_img_rd_en    = (kv8_ls_state==LS_D_CMD)&&(kv8_ls_item[1]==1'b0);
+    wire [11:0]  kv8_img_rd_word  = {kv8_ls_item[0],kv8_ls_w};
+    wire         kv8_img_vrd_en   = (kv8_ls_state==LS_D_CMD)&&(kv8_ls_item[1]==1'b1);
+    wire [11:0]  kv8_img_vrd_word = {kv8_ls_item[0],kv8_ls_w};
+    // [16K-FIX] The dump read ADDRESS must stay selected until the write beat has
+    // taken its data, not only for the single cycle the read is issued.
+    // kv8_scale_ram's read data ports are shift registers that follow the address
+    // input EVERY cycle (rd_addr_1 for K m16/etab, vmq for V m16); only the valid
+    // is gated by the read enable.  That is correct for the attention because
+    // kv8_i_scale_fifo issues its 16 words back-to-back, but it means a one-cycle
+    // select hands the beat whatever address the ATTENTION left behind -- for a
+    // 1-token prompt that is head 1's word 0, i.e. head 0 was dumped with head 1's
+    // value.  Holding the select over CMD+WAIT+BEAT keeps the port pointing at the
+    // dump word for the whole 3-cycle read latency.
+    wire         kv8_img_win      = (kv8_ls_state==LS_D_CMD)||(kv8_ls_state==LS_D_WAIT)||
+                                    (kv8_ls_state==LS_D_BEAT);
+    wire         kv8_img_k_sel    = kv8_img_win && (kv8_ls_item[1]==1'b0);
+    wire         kv8_img_v_sel    = kv8_img_win && (kv8_ls_item[1]==1'b1);
+    wire [2:0]   kv8_img_ebrd_word= kv8_ls_i[2:0];
+    // ---- write side: one 16 B beat per dump item, 16 beats for the etab -----
+    assign       kv8_img_wr       = (kv8_ls_state==LS_D_BEAT) ||
+                                    ((kv8_ls_state==LS_D_EBB)&&((kv8_ls_phase==2'd1)||(kv8_ls_phase==2'd2)));
+    assign       kv8_img_wr_data  = (kv8_ls_state==LS_D_EBB)
+                                    ? ((kv8_ls_phase==2'd1) ? kv8_eb_lo : kv8_eb_hi)
+                                    : (kv8_ls_item[1] ? kv8_dp_v_word : kv8_dp_k_word);
+    assign       kv8_img_wr_last  = (kv8_ls_state==LS_D_BEAT) ||
+                                    ((kv8_ls_state==LS_D_EBB)&&(kv8_ls_phase==2'd2)&&(kv8_ls_i==4'd7));
+
+    always @(posedge clk)begin
+        if(!rst_n)begin
+            kv8_ls_state<=LS_IDLE; kv8_ls_rgn<=4'd0; kv8_ls_item<=2'd0; kv8_ls_phase<=2'd0;
+            kv8_ls_cnt<=13'd0; kv8_ls_w<=11'd0; kv8_ls_i<=4'd0;
+            kv8_ls_eb_dirty<=1'b0;
+            kv8_ls_cmd_addr<=64'd0; kv8_ls_cmd_bytes<=24'd0; kv8_ls_cmd_wr<=1'b1;
+        end else begin
+            case(kv8_ls_state)
+                // ------------------------------------------------ start
+                LS_IDLE:begin
+                    if(kv8_ls_armed)begin
+                        kv8_ls_item<=2'd0; kv8_ls_phase<=2'd0; kv8_ls_i<=4'd0;
+                        kv8_ls_eb_dirty<=kv8_dp_eb;
+                        if(kv8_dp_any)begin
+                            kv8_ls_w<=kv8_dp_wlo;
+                            kv8_ls_cmd_addr<=kv8_dp_k_base+{52'd0,kv8_dp_wlo,4'd0};
+                            kv8_ls_cmd_bytes<=24'd16; kv8_ls_cmd_wr<=1'b1;
+                            kv8_ls_state<=LS_D_CMD;
+                        end else begin
+                            kv8_ls_state<=LS_OWN;
+                        end
+                    end
+                end
+                // ---- DUMP: 4 single-beat items: K h0/h1 then V h0/h1 ------
+                LS_D_CMD:begin
+                    if(kv8_cmd_fire)begin
+                        kv8_ls_cnt<=13'd0;
+                        kv8_ls_state<=LS_D_WAIT;
+                    end
+                end
+                LS_D_WAIT:begin
+                    kv8_ls_cnt<=kv8_ls_cnt+13'd1;
+                    if(kv8_ls_cnt==13'd2) kv8_ls_state<=LS_D_BEAT;
+                end
+                LS_D_BEAT:begin
+                    if(wr_ready) kv8_ls_state<=LS_D_WR;   // beat taken; wait for B
+                end
+                LS_D_WR:begin
+                    // one write descriptor at a time: the transport refuses a new
+                    // write command while flag_write_active is set.
+                    if(wr_done)begin
+                        if(kv8_ls_item==2'd3)begin
+                            if(kv8_ls_w<kv8_dp_whi)begin
+                                kv8_ls_w<=kv8_ls_w+11'd1;
+                                kv8_ls_item<=2'd0; kv8_ls_phase<=2'd0;
+                                kv8_ls_cmd_addr<=kv8_dp_k_base+{52'd0,kv8_ls_w+11'd1,4'd0};
+                                kv8_ls_cmd_bytes<=24'd16; kv8_ls_cmd_wr<=1'b1;
+                                kv8_ls_state<=LS_D_CMD;
+                            end else begin
+                                kv8_ls_phase<=2'd0; kv8_ls_i<=4'd0;
+                                if(kv8_ls_eb_dirty)begin
+                                    kv8_ls_cmd_addr<=kv8_dp_eb_base;
+                                    kv8_ls_cmd_bytes<=24'd256; kv8_ls_cmd_wr<=1'b1;
+                                    kv8_ls_state<=LS_D_EBC;
+                                end else begin
+                                    kv8_ls_state<=LS_OWN;
+                                end
+                            end
+                        end else begin
+                            kv8_ls_item<=kv8_ls_item+2'd1;
+                            kv8_ls_cmd_addr<=kv8_dp_nxt_addr;
+                            kv8_ls_cmd_bytes<=24'd16; kv8_ls_cmd_wr<=1'b1;
+                            kv8_ls_state<=LS_D_CMD;
+                        end
+                    end
+                end
+                // ---- DUMP the block-exponent table: one 256 B descriptor ---
+                LS_D_EBC:begin
+                    if(kv8_cmd_fire)begin
+                        kv8_ls_phase<=2'd0; kv8_ls_i<=4'd0;
+                        kv8_ls_state<=LS_D_EBB;
+                    end
+                end
+                LS_D_EBB:begin
+                    // 2 beats per on-chip word; every beat must be ACCEPTED
+                    // (wr_ready) or the 256 B descriptor would owe a beat forever
+                    if(kv8_ls_phase==2'd0) kv8_ls_phase<=2'd1;
+                    else if(kv8_ls_phase==2'd1) begin
+                        if(wr_ready) kv8_ls_phase<=2'd2;
+                    end else begin
+                        if(wr_ready) begin
+                            kv8_ls_phase<=2'd0;
+                            if(kv8_ls_i==4'd7) kv8_ls_state<=LS_D_EBW;
+                            else kv8_ls_i<=kv8_ls_i+4'd1;
+                        end
+                    end
+                end
+                LS_D_EBW:begin
+                    if(wr_done) kv8_ls_state<=LS_OWN;
+                end
+                // ---- ownership hand-off (release old bank, acquire new) ---
+                LS_OWN:begin
+                    if(kv8_ls_phase==2'd0)begin
+                        kv8_ls_phase<=2'd1;
+                    end else if(!kv8_ld_any)begin
+                        kv8_ls_phase<=2'd0;
+                        kv8_ls_state<=LS_FIN;
+                    end else if(kv8_ld_quiet)begin
+                        kv8_ls_phase<=2'd0; kv8_ls_cnt<=13'd0; kv8_ls_rgn<=4'd0;
+                        kv8_ls_cmd_addr<=kv8_img_k_base;
+                        kv8_ls_cmd_bytes<={7'd0,kv8_ld_nw,4'd0};
+                        kv8_ls_cmd_wr<=1'b0;
+                        kv8_ls_state<=LS_L_CMD;
+                    end
+                    // else: stay here until the read stream is free
+                end
+                // ---- LOAD: 4 read descriptors (K m16, V m16, V 2^, etab) --
+                LS_L_CMD:begin
+                    if(kv8_cmd_fire)begin
+                        kv8_ls_cnt<=13'd0;
+                        kv8_ls_state<=LS_L_RD;
+                    end
+                end
+                LS_L_RD:begin
+                    if(rd_valid)begin
+                        kv8_ls_cnt<=kv8_ls_cnt+13'd1;
+                        if(kv8_ls_cnt+13'd1==kv8_rgn_beats) kv8_ls_state<=LS_L_NEXT;
+                    end
+                end
+                LS_L_NEXT:begin
+                    kv8_ls_rgn<=kv8_ls_rgn+4'd1;
+                    kv8_ls_cmd_addr<=kv8_n_addr;
+                    kv8_ls_cmd_bytes<=kv8_n_bytes;
+                    kv8_ls_cmd_wr<=1'b0;
+                    if(kv8_ls_rgn>=4'd6) kv8_ls_state<=LS_FIN;
+                    else kv8_ls_state<=LS_L_CMD;
+                end
+                LS_FIN:begin
+                    kv8_ls_state<=LS_IDLE;
+                end
+                default:kv8_ls_state<=LS_IDLE;
+            endcase
+        end
+    end
+    kv8_k_write_chain #(.CONTEXT_LOG2(14),.LAYERS(24),.MARGIN(8),.BLOCK_LOG2(8),.TOKEN_MAJOR(1))
+    kv8_k_chain_Inst (
+        .clk(clk),.rst_n(rst_n),
+        .i_start(kv8_k_start),.i_layer(kv8_k_layer),.i_token(kv8_k_token),
+        .i_k_base(task_cfg[383:320]+{36'd0,layer,23'd0}),
+        .i_k_scale_base(kv8_scale_base),.i_v_scale_base(kv8_scale_base),
+        .o_ready(kv8_k_ready),
+        .i_k_valid(kv8_k_valid),.o_k_ready(kv8_k_vready),.i_k_data(kv8_k_data),
+        .o_busy(kv8_k_busy),.o_done(),
+        .i_flush(kv8_k_flush),.o_flush_done(kv8_k_flush_done),
+        .o_beat_valid(kv8_k_beat_valid),.i_beat_ready(kv8_k_beat_ready),
+        .o_beat_address(kv8_k_beat_addr),.o_beat_data(kv8_k_beat_data),
+        .o_beat_tag(),.o_beat_desc(),
+        .o_beat_len(kv8_k_beat_len),.o_beat_token(),
+        .i_bank_wr(1'b0),.i_bank_rd(1'b0),
+        .i_wr_acquire(kv8_wr_acquire),.i_wr_release(kv8_wr_release),.i_rd_release(kv8_rd_release),
+        .o_wr_grant(),.o_rd_grant(kv8_rd_grant),.o_owner_error(),
+        .i_etab_valid(kv8_img_eb_valid),.i_etab_word(kv8_img_eb_word),.i_etab_data(kv8_img_eb_data),.i_etab_be(kv8_img_eb_be),
+        .i_etab_rd_word(kv8_img_ebrd_word),.o_etab_rd_data(kv8_etab_rd_data),
+        .i_load_valid(kv8_img_ld_valid),.i_load_word(kv8_img_ld_word),.i_load_mant(kv8_img_ld_data),
+        .i_vload_valid(kv8_img_vld_valid),.i_vload_word(kv8_img_vld_word),.i_vload_data(kv8_img_vld_data),
+        .i_rd_en(attn_scale_rd_en|kv8_img_rd_en),.i_rd_word(kv8_img_k_sel ? kv8_img_rd_word : attn_scale_rd_word),
+        .o_rd_valid(attn_scale_rd_valid),.o_rd_scale(attn_scale_rd_data),
+        .i_v_we(kv8_img_v2_we | kv8_v_we_chain | kv8_v_scale_we),
+        .i_v_word(kv8_img_v2_we ? kv8_img_v2_word : (kv8_v_we_chain ? kv8_v_word_chain : kv8_v_scale_word)),
+        .i_v_data(kv8_img_v2_we ? rd_data : (kv8_v_we_chain ? kv8_v_data_chain : kv8_v_scale_data)),
+        .i_v_rd_word(kv8_v_rd_word),.o_v_rd_data(kv8_v_rd_data),
+        // [V-PERTOK-M] V per-token mantissa table: the V producer appends one
+        // entry per (token, head), the PV stage reads 8 tokens at a time.
+        .i_vt_app_valid(kv8_v_m_app_valid),.o_vt_app_ready(kv8_v_m_app_ready),
+        .i_vt_app_token(kv8_v_m_app_token),.i_vt_app_head(kv8_v_m_app_head),
+        .i_vt_app_mant(kv8_v_m_app_mant),.o_vt_app_taken(),
+        .i_vt_rd_en(kv8_vm_rd_en|kv8_img_vrd_en),.i_vt_rd_word(kv8_img_v_sel ? kv8_img_vrd_word : kv8_vm_rd_word),
+        .o_vt_rd_mant(kv8_vm_rd_data),.o_vt_rd_valid(),
+        .o_app_conflict(),.o_clip_sticky(kv8_k_clip_sticky),
+        .o_stat_beat(),.o_stat_app(),.o_dbg_state(),.o_dbg_lock_v(),
+        .o_clip_count(kv8_k_clip_count),.o_blk_tok(kv8_k_blk_tok),.o_token_beats(kv8_k_token_beats),
+        .o_err_seq()
+    );
+
+    assign kv8_k_layer = layer;
+    assign kv8_k_token = kv8_token_now;
+
+    kv8_v_write_chain #(.MARGIN(2))
+    kv8_v_chain_Inst (
+        .clk(clk),.rst_n(rst_n),
+        .i_start(kv8_v_start),.i_layer(layer),.i_token(kv8_token_now),
+        .i_v_base(kv8_v_layer_base),.o_ready(kv8_v_ready),
+        .i_v_valid(kv8_v_valid),.o_v_ready(kv8_v_vready),.i_v_data(kv8_v_data),
+        .o_busy(),.o_done(),
+        .o_beat_valid(kv8_v_beat_valid),.i_beat_ready(kv8_v_beat_ready),
+        .o_beat_address(kv8_v_beat_addr),.o_beat_data(kv8_v_beat_data),
+        .o_beat_last(),
+        .o_scale_valid(kv8_v_scale_valid),.o_scale_bf16(kv8_v_scale_bf16),
+        .i_scale_clear(kv8_v_scale_clear),
+        .o_v_we(kv8_v_we_chain),.o_v_word(kv8_v_word_chain),.o_v_data(kv8_v_data_chain),
+        // [V-PERTOK-M] per-token mantissa append into the scale RAM's V table
+        .o_m_app_valid(kv8_v_m_app_valid),.i_m_app_ready(kv8_v_m_app_ready),
+        .o_m_app_token(kv8_v_m_app_token),.o_m_app_head(kv8_v_m_app_head),
+        .o_m_app_mant(kv8_v_m_app_mant),
+        .o_clip_sticky(kv8_v_clip_sticky),.o_clip_count(kv8_v_clip_count),
+        .o_clip_codes(kv8_v_clip_codes),.o_m_max(kv8_v_m_max),
+        .o_token_beats(kv8_v_token_beats),.o_dbg_state()
+    );
+
     qwen25_attention_dma attention_dma_Inst (
         .i_clk(clk),.i_rstn(rst_n),.i_clear(1'b0),.i_abort(1'b0),
         .i_identity(attn_identity),.i_burst_limit(task_cfg[103:96]),.i_context_base(task_cfg[255:192]),
@@ -1312,21 +2006,20 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         .write_done(wr_done && ffn_active),.write_busy(wr_busy)
     );
 
-    // 元数据仅用于DMA/算子身份绑定，RAM无需每拍metadata比较。
+    // 鍏冩暟鎹粎鐢ㄤ簬DMA/绠楀瓙韬唤缁戝畾锛孯AM鏃犻渶姣忔媿metadata姣旇緝銆?
     always @(*) begin
         gemm_command=0;gemm_command[3:0]=compute_opcode;
         gemm_command[15:4]=global_k;gemm_command[16]=global_k==0;gemm_command[17]=global_k==last_k;
         gemm_command[21:18]=compute_rows;gemm_command[29:22]=128;gemm_command[33:30]=8;
         afu_metadata=0;afu_metadata[15:0]=task_id;afu_metadata[20:16]=layer;
         afu_metadata[56:53]=rows;afu_metadata[60:57]=8;
-        if(post_state==S_ROPE_SEND) begin
-            afu_metadata[52:37]={12'd0,rope_first_word};afu_metadata[83:80]=12;
-            afu_metadata[104:89]=task_cfg[52:37]+post_row;
-            afu_metadata[118:109]={3'd0,post_output_tile,rope_first_word};
-        end else begin
-            afu_metadata[52:37]={9'd0,norm_word};afu_metadata[83:80]=(output_phase || down_phase) && state_before_hidden ? 14 : 11;
-            afu_metadata[104:89]=task_cfg[52:37]+norm_row_visible;
-        end
+        afu_metadata[52:37]={9'd0,norm_word};afu_metadata[83:80]=(output_phase || down_phase) && state_before_hidden ? 14 : 11;
+        afu_metadata[104:89]=task_cfg[52:37]+norm_row_visible;
+        rope_metadata=0;rope_metadata[15:0]=task_id;rope_metadata[20:16]=layer;
+        rope_metadata[56:53]=rows;rope_metadata[60:57]=8;
+        rope_metadata[52:37]={12'd0,rope_first_word};rope_metadata[83:80]=12;
+        rope_metadata[104:89]=task_cfg[52:37]+post_row;
+        rope_metadata[118:109]={3'd0,post_output_tile,rope_first_word};
         bias_input_metadata=post_identity;
         bias_input_metadata[115:109]=bias_input_address[bias_input_read];
         selected_bias=0;
@@ -1370,7 +2063,7 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     end
 
 
-    // 各阶段只等待真实DMA/AFU/GEMM valid、done和B响应。
+    // 鍚勯樁娈靛彧绛夊緟鐪熷疄DMA/AFU/GEMM valid銆乨one鍜孊鍝嶅簲銆?
     always @(*) begin
         state_next=state_current;
         (* parallel_case *) case(1'b1)
@@ -1436,7 +2129,9 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
                         (attn_enabled ? HOT_S_ATTN_BEGIN : HOT_S_DONE);
                 end
             end
-            state_current[S_ATTN_BEGIN]:begin state_next=HOT_S_ATTN_RUN;end
+            // [STAGE5-FIX] a handshake, not a timing assumption: S_ATTN_BEGIN is
+            // held until kv8_scale_ram reports READY (kv8_rd_grant).
+            state_current[S_ATTN_BEGIN]:begin state_next=kv8_scale_wait ? HOT_S_ATTN_BEGIN : HOT_S_ATTN_RUN;end
             state_current[S_ATTN_RUN]:begin
                 // The last Context acceptance is earlier than its DDR write response.
                 if(attn_done && !attn_memory_busy && !wr_busy)state_next=output_enabled ? HOT_S_O_RESTORE : HOT_S_DONE;
@@ -1504,7 +2199,9 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     end
     integer r,l;
     always @(posedge clk)begin
-        if(!rst_n || state_current[S_IDLE])begin
+        if(!rst_n)begin
+            weight_chunks_ready[0]<=0;weight_chunks_ready[1]<=0;
+        end else if(state_current[S_IDLE])begin
             weight_chunks_ready[0]<=0;weight_chunks_ready[1]<=0;
         end else begin
             if(gemm_release_pending)
@@ -1517,7 +2214,9 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     integer chunk_lane;
     always @(posedge clk)begin
         for(chunk_lane=0;chunk_lane<4;chunk_lane=chunk_lane+1)begin
-            if(!rst_n || state_current[S_IDLE] || state_current[S_O_RESTORE] || state_current[S_FFN_BEGIN] || state_current[S_DOWN_BEGIN] || state_current[S_LM_BEGIN])begin
+            if(!rst_n)begin
+                weight_chunk_mask[0][chunk_lane]<=0;weight_chunk_mask[1][chunk_lane]<=0;
+            end else if(state_current[S_IDLE] || state_current[S_O_RESTORE] || state_current[S_FFN_BEGIN] || state_current[S_DOWN_BEGIN] || state_current[S_LM_BEGIN])begin
                 weight_chunk_mask[0][chunk_lane]<=0;weight_chunk_mask[1][chunk_lane]<=0;
             end else begin
                 if(attn_active && attn_weight_release)weight_chunk_mask[attn_weight_bank][chunk_lane]<=0;
@@ -1545,7 +2244,7 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         if(act_norm_result || residual_result || normalized_result)
             norm_results_count<=norm_results+8'd1;
     end
-    // Controller中所有地址计数依据真实传输接受事件推进。
+    // Controller涓墍鏈夊湴鍧€璁℃暟渚濇嵁鐪熷疄浼犺緭鎺ュ彈浜嬩欢鎺ㄨ繘銆?
     always @(posedge clk)begin
         if(!rst_n)begin
             task_cfg<=0;layer<=0;rows<=0;rows_last_reg<=4'hf;activation_row_mask<=0;task_id<=0;operation<=0;output_tile<=0;input_tile<=0;inner_k<=0;
@@ -1760,8 +2459,8 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
             if(post_launch)begin post_word<=0;post_row<=0;row_index<=0;rope_pair<=0;rope_write_half<=0;end
             if(post_state==S_ROPE_FIRST_WAIT && p1_valid)begin rope_x<=p1_q;end
             if(post_state==S_ROPE_SECOND_WAIT && p1_valid)begin rope_y<=p1_q;end
-            if(post_state==S_ROPE_WAIT && afu_result_valid)begin
-                rope_first<=afu_result_data;rope_second<=afu_result_aux;rope_write_half<=0;
+            if(post_state==S_ROPE_WAIT && rope_res_valid)begin
+                rope_first<=rope_res_data;rope_second<=rope_res_aux;rope_write_half<=0;
             end
             if(post_state==S_ROPE_WRITE)begin
                 rope_write_half<=!rope_write_half;
@@ -1778,8 +2477,11 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
                 else begin write_command_reg[63:0]<=task_cfg[511:448]+row_index*64'd1792+post_output_tile*64'd256;end
             end
             if(post_state==S_WR_WAIT_DATA && p1_valid)begin write_hold<=p1_q;end
-            if(post_state==S_WR_SEND && wr_ready && write_word!=15)begin write_word<=write_word+5'd1;end
-            if(post_state==S_WR_FINISH && wr_done)begin row_index<=row_index==rows_last ? 0 : row_index+3'd1;end
+            // [STAGE5-FIX3] op 0 and 1 both push into a producer (kv8_push_ready is muxed)
+            if(post_state==S_WR_SEND && (post_operation<=1 ? kv8_push_ready : wr_ready) && write_word!=15)begin write_word<=write_word+5'd1;end
+            // [STAGE5-FIX3] op 1 has no DDR write response either (its beats go to the
+            // V producer), so the row walk must not wait for one.
+            if(post_state==S_WR_FINISH && (wr_done || post_operation<=1))begin row_index<=row_index==rows_last ? 0 : row_index+3'd1;end
             if(state_current[S_O_RESTORE])begin
                 operation<=3;output_tile<=0;input_tile<=0;inner_k<=0;row_index<=0;
                 norm_apply<=0;
@@ -1903,7 +2605,8 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     end
 
     always @(posedge clk)begin
-        if(!rst_n || state_current[S_FINAL_BEGIN])lm_finished<=0;
+        if(!rst_n)lm_finished<=0;
+        else if(state_current[S_FINAL_BEGIN])lm_finished<=0;
         else if(lm_complete)lm_finished<=1;
     end
 
@@ -1913,7 +2616,7 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
             command_hold_valid<=0;command_hold_write<=0;command_hold<=0;metadata_hold<=0;
         end else begin
             if(command_hold_valid)begin
-                if(dma_cmd_ready)begin command_hold_valid<=0;end
+                if(command_hold_taken)begin command_hold_valid<=0;end
             end else if(read_request)begin
                 command_hold_valid<=1;command_hold_write<=0;command_hold<=command_reg;metadata_hold<=metadata_reg;
             end else if(write_request)begin
@@ -1961,7 +2664,9 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
         end
     end
     always @(posedge clk)begin
-        if(!rst_n || state_current[S_IDLE] || state_current[S_LAYER_DONE] || state_current[S_BATCH_NEXT] || (state_current[S_DONE] && start))begin
+        if(!rst_n)begin
+            fetch_tile<=0;fetch_enabled<=0;fetch_bank<=0;fetch_half<=0;fetch_operation<=0;fetch_output_tile<=0;fetch_scale_word<=0;fetch_scale_ready<=0;
+        end else if(state_current[S_IDLE] || state_current[S_LAYER_DONE] || state_current[S_BATCH_NEXT] || (state_current[S_DONE] && start))begin
             fetch_tile<=0;fetch_enabled<=0;fetch_bank<=0;fetch_half<=0;fetch_operation<=0;fetch_output_tile<=0;fetch_scale_word<=0;fetch_scale_ready<=0;
         end
         else begin
@@ -2013,20 +2718,81 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
             S_ROPE_FIRST_WAIT:begin if(p1_valid)begin post_next=S_ROPE_SECOND;end end
             S_ROPE_SECOND:begin post_next=S_ROPE_SECOND_WAIT;end
             S_ROPE_SECOND_WAIT:begin if(p1_valid)begin post_next=S_ROPE_SEND;end end
-            S_ROPE_SEND:begin if(afu_ready)begin post_next=S_ROPE_WAIT;end end
-            S_ROPE_WAIT:begin if(afu_result_valid)begin post_next=S_ROPE_WRITE;end end
+            S_ROPE_SEND:begin if(rope_req_ready)begin post_next=S_ROPE_WAIT;end end
+            S_ROPE_WAIT:begin if(rope_res_valid)begin post_next=S_ROPE_WRITE;end end
             S_ROPE_WRITE:begin
                 if(rope_write_half)begin
                     if(rope_pair==7 && post_row==rows_last)begin post_next=S_WRITE;end
                     else begin post_next=S_ROPE_FIRST;end
                 end
             end
-            S_WRITE:begin post_next=S_WR_CMD;end
+            S_WRITE:begin
+                // [STAGE5] op 0/1 no longer write DDR from here: the token's 16 BF16
+                // beats are pushed into the INT8 producer and the producer's own
+                // beats are written later (PS_KV8_*).  Wait for it to be idle first.
+                // [STAGE5-FIX3] wait for the producer that will consume this token
+                // [16K-ONE-LAYER] at a layer's first K token the scale-image
+                // sequencer (dump previous layer + load this layer) runs first and
+                // holds the producer off; with nothing to move it is idle on the
+                // same cycle, so the /max 1 prefill path keeps its exact cycle count.
+                if(post_operation==0)begin post_next=(kv8_k_ready && kv8_ls_idle) ? S_WR_READ : S_WRITE; end
+                else if(post_operation==1)begin post_next=kv8_v_ready ? S_WR_READ : S_WRITE; end
+                else begin post_next=S_WR_CMD; end
+            end
             S_WR_CMD:begin if(write_command_fire)begin post_next=S_WR_READ;end end
             S_WR_READ:begin post_next=S_WR_WAIT_DATA;end
             S_WR_WAIT_DATA:begin if(p1_valid)begin post_next=S_WR_SEND;end end
-            S_WR_SEND:begin if(wr_ready)begin post_next=write_word==15 ? S_WR_FINISH : S_WR_READ;end end
-            S_WR_FINISH:begin if(wr_done)begin post_next=row_index==rows_last ? S_NEXT : S_WRITE;end end
+            S_WR_SEND:begin
+                // [STAGE5-FIX3] op 0 and op 1 both feed a producer: 16 beats/token
+                if(post_operation<=1)begin
+                    if(kv8_push_ready)begin post_next = write_word==15 ? PS_KV8_TAIL : S_WR_READ; end
+                end else if(wr_ready)begin post_next=write_word==15 ? S_WR_FINISH : S_WR_READ;end
+            end
+            S_WR_FINISH:begin
+                if(post_operation==0)begin
+                    // the token's 128 B run is already on the bus (one command/token)
+                    post_next = row_index==rows_last ? S_NEXT : S_WRITE;
+                end else if(post_operation==1)begin
+                    // [STAGE5-FIX3] same shape as K: the V run is already on the bus
+                    post_next = row_index==rows_last ? S_NEXT : S_WRITE;
+                end else if(wr_done)begin
+                    if(row_index!=rows_last)begin post_next=S_WRITE; end
+                    else begin post_next=S_NEXT; end
+                end
+            end
+            // ---------------- [STAGE5] INT8 producer drain ----------------------
+            PS_KV8_TAIL:begin
+                if(post_operation==0)begin
+                    if(kv8_k_beat_valid)begin post_next=PS_KV8_VCMD; end
+                end else begin
+                    if(kv8_v_scale_valid && !kv8_v_scale_written)begin post_next=PS_KV8_SCALE; end
+                    else if(kv8_v_beat_valid)begin post_next=PS_KV8_VCMD; end
+                end
+            end
+            PS_KV8_EMIT:begin
+                if(kv8_k_beat_valid)begin post_next=PS_KV8_CMD; end
+                // do not leave the producer while the write engine still owns a
+                // descriptor: the next client (weight prefetch / tensor write) shares it
+                else if(kv8_k_busy || kv8_flush_pending || wr_busy)begin post_next=PS_KV8_EMIT; end
+                else begin post_next=S_WR_FINISH; end
+            end
+            PS_KV8_CMD:begin if(kv8_cmd_fire)begin post_next=PS_KV8_SEND; end end
+            PS_KV8_SEND:begin
+                if(wr_done || (kv8_stream_valid && wr_ready && kv8_desc_left==5'd1))begin post_next=PS_KV8_EMIT; end
+            end
+            PS_KV8_FLUSH:begin post_next=PS_KV8_EMIT; end
+            PS_KV8_SCALE:begin if(kv8_cmd_fire)begin post_next=PS_KV8_SCALE_SEND; end end
+            PS_KV8_SCALE_SEND:begin
+                if(wr_ready && kv8_img_word==4'd15)begin post_next=PS_KV8_TAIL; end
+            end
+            PS_KV8_VCMD:begin if(kv8_cmd_fire)begin post_next=PS_KV8_VSEND; end end
+            PS_KV8_VSEND:begin
+                // owed-beat exit, plus wr_done: a mismatch must never wedge the whole run
+                if(wr_done || (kv8_stream_valid && wr_ready && (kv8_vbyte_cnt+4'd1==kv8_beat_lim)))begin post_next=S_WR_FINISH; end
+            end
+            PS_KV8_VLOAD:begin post_next=PS_KV8_VLOAD_CMD; end
+            PS_KV8_VLOAD_CMD:begin if(kv8_cmd_fire)begin post_next=PS_KV8_VRD; end end
+            PS_KV8_VRD:begin if(rd_done)begin post_next=S_WR_FINISH; end end
             S_NEXT:begin post_next=S_IDLE;end
             default:begin post_next=S_IDLE;end
         endcase
@@ -2034,6 +2800,126 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
     always @(posedge clk)begin
         if(!rst_n)begin post_state<=S_IDLE;end else begin post_state<=post_next;end
     end
+
+    // =========================================================================
+    // [STAGE5] INT8 KV producer sequencing: start pulses, descriptor latch,
+    // beat counters, per-layer V scale image / bulk load, scale-RAM ownership.
+    //
+    // The producers keep the DDR layout the attention already reads:
+    //   K : k_base + layer*8MiB + token*256 + head*128 + dg*16   (K16, 16 beats/token)
+    //   V : v_base + layer*8MiB + token*128 + head*64 + dg*16
+    // The V scale image lives inside the layer's own 64 KiB window at +0x8000
+    // (the E2E DDR map gives exactly 64 KiB per layer at an 8 MiB stride).
+    // =========================================================================
+    always @(posedge clk)begin
+        if(!rst_n)begin
+            kv8_cmd_addr<=64'd0;kv8_cmd_bytes<=24'd0;kv8_cmd_is_write<=1'b1;
+            kv8_desc_left<=5'd0;kv8_img_word<=4'd0;kv8_vbyte_cnt<=5'd0;kv8_vrd_count<=4'd0;
+            kv8_flush_pending<=1'b0;kv8_bank_state<=2'd0;kv8_acq_pending<=1'b0;
+            kv8_wr_acquire<=1'b0;kv8_wr_release<=1'b0;kv8_rd_release<=1'b0;
+            kv8_own_layer_valid<=1'b0;kv8_own_layer<=5'd0;
+            kv8_vis_lo<=16'd0;kv8_own_lo<=16'd0;
+            kv8_v_scale_written<=1'b0;kv8_v_table_loaded<=1'b0;kv8_v_scale_clear<=1'b0;
+            kv8_v_scale_we<=1'b0;kv8_v_scale_word<=4'd0;kv8_v_scale_data<=128'd0;
+            kv8_dma_conflict<=1'b0;kv8_vone_cnt<=5'd0;
+        end else begin
+            kv8_wr_acquire<=1'b0;kv8_wr_release<=1'b0;kv8_rd_release<=1'b0;
+            kv8_v_scale_we<=1'b0;kv8_v_scale_clear<=1'b0;
+            // ---- scale-RAM ownership ------------------------------------
+            // A new layer owns the (single) bank from its first K token and the
+            // bank is handed to the attention (READY) only after the V table has
+            // been populated.  The next layer first drops the old one to EMPTY.
+            // [16K-ONE-LAYER] the hand-off is driven by the image sequencer:
+            // kv8_ls_own_go is the no-work fast path (identical timing to the
+            // pre-16K build) or the sequenced path after the image dump.
+            if(kv8_ls_own_go)begin
+                kv8_vone_cnt<=5'd16;
+                kv8_own_layer<=layer;kv8_own_layer_valid<=1'b1;
+                kv8_v_scale_written<=1'b0;kv8_v_table_loaded<=1'b0;
+                if(kv8_bank_state==2'd2)begin
+                    kv8_rd_release<=1'b1;kv8_bank_state<=2'd0;kv8_acq_pending<=1'b1;
+                end else if(kv8_bank_state==2'd0)begin
+                    kv8_wr_acquire<=1'b1;kv8_bank_state<=2'd1;
+                end
+                kv8_vis_lo<=kv8_pass_lo;
+                kv8_vis_hi<=kv8_pass_hi;
+                kv8_vis_layer<=layer;
+                kv8_own_lo<=kv8_pass_lo;
+            end
+            if(kv8_acq_pending)begin kv8_wr_acquire<=1'b1;kv8_acq_pending<=1'b0;kv8_bank_state<=2'd1; end
+            // [STAGE5-FIX] the layer's K/V production is over and the attention is
+            // asking for the scale table: hand the bank over (LOADING -> READY).
+            // One pulse per layer; the state bit makes it self-terminating.
+            if(kv8_bank_state==2'd1 && state_current[S_ATTN_BEGIN])begin
+                kv8_wr_release<=1'b1;kv8_bank_state<=2'd2;
+            end
+            // ---- K descriptor latch: one 256 B (or shorter) descriptor/command
+            if(post_state==PS_KV8_EMIT && kv8_k_beat_valid)begin
+                kv8_cmd_addr<=kv8_k_beat_addr;
+                kv8_cmd_bytes<={kv8_k_beat_len,4'b0000};
+                kv8_cmd_is_write<=1'b1;
+                kv8_desc_left<=kv8_k_beat_len;
+            end
+            if(post_state==PS_KV8_SEND && kv8_stream_valid && wr_ready)
+                kv8_desc_left<=kv8_desc_left-5'd1;
+            // ---- K flush bookkeeping
+            if(post_state==PS_KV8_FLUSH && kv8_k_blk_tok!=5'd0) kv8_flush_pending<=1'b1;
+            if(kv8_k_flush_done) kv8_flush_pending<=1'b0;
+            // ---- V scale image (256 B) write, once per layer
+            if(post_state==PS_KV8_TAIL && post_operation==1 && kv8_v_scale_valid && !kv8_v_scale_written)begin
+                kv8_cmd_addr<=kv8_scale_base;
+                kv8_cmd_bytes<=24'd256;
+                kv8_cmd_is_write<=1'b1;
+                kv8_img_word<=4'd0;
+            end
+            if(post_state==PS_KV8_SCALE_SEND && wr_ready)begin
+                if(kv8_img_word==4'd15)begin
+                    kv8_v_scale_written<=1'b1;
+                    kv8_v_scale_clear<=1'b1;
+                end else begin
+                    kv8_img_word<=kv8_img_word+4'd1;
+                end
+            end
+            // ---- one 128 B command per V token
+            // one 128 B command per token: K (token-major) and V use the same shape
+            if(post_state==PS_KV8_TAIL &&
+               ((post_operation==0 && kv8_k_beat_valid) ||
+                (post_operation==1 && !(kv8_v_scale_valid && !kv8_v_scale_written) && kv8_v_beat_valid)))begin
+                // the length comes from the producer's own beat count, never from a constant
+                kv8_cmd_addr<=(post_operation==0) ? kv8_k_beat_addr : kv8_v_beat_addr;
+                kv8_cmd_bytes<=(post_operation==0)
+                               ? {15'd0,(kv8_k_token_beats[4:0]),4'b0000}
+                               : {16'd0,(kv8_v_token_beats),4'b0000};
+                kv8_cmd_is_write<=1'b1;
+                kv8_vbyte_cnt<=5'd0;
+                kv8_beat_lim<=(post_operation==0) ? kv8_k_token_beats[4:0] : kv8_v_token_beats;
+            end
+            if(post_state==PS_KV8_VSEND && kv8_stream_valid && wr_ready)
+                kv8_vbyte_cnt<=kv8_vbyte_cnt+5'd1;
+            // ---- V table bulk load: DDR -> vmem, then the bank becomes READY
+            if(post_state==PS_KV8_VLOAD)begin
+                kv8_cmd_addr<=kv8_scale_base;
+                kv8_cmd_bytes<=24'd256;
+                kv8_cmd_is_write<=1'b0;
+                kv8_vrd_count<=4'd0;
+            end
+            if(post_state==PS_KV8_VRD && rd_valid && rd_ready)begin
+                kv8_v_scale_we<=1'b1;
+                kv8_v_scale_word<=kv8_vrd_count;
+                kv8_v_scale_data<=rd_data;
+                kv8_vrd_count<=kv8_vrd_count+4'd1;
+                if(kv8_vrd_count==4'd15) kv8_v_table_loaded<=1'b1;
+            end
+            if(post_state==PS_KV8_VRD && rd_done)begin
+                kv8_wr_release<=1'b1;
+                kv8_bank_state<=2'd2;
+            end
+            // ---- diagnostics
+            if(kv8_cmd_valid && attn_dma_owner) kv8_dma_conflict<=1'b1;
+        end
+    end
+
+
     always @(posedge clk)begin
         if(!rst_n)begin
             compute_bank<=0;post_bank<=0;post_operation<=0;post_output_tile<=0;post_identity<=0;rope_outstanding<=0;
@@ -2041,14 +2927,17 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
             if(state_current[S_IDLE] || state_current[S_O_RESTORE] || state_current[S_FFN_BEGIN] || state_current[S_DOWN_BEGIN] || state_current[S_LM_BEGIN] || state_current[S_LAYER_DONE] || state_current[S_BATCH_NEXT] || ((state_current[S_DONE]) && start))begin compute_bank<=0;end
             if(state_current[S_NEXT] || state_current[S_FFN_NEXT] || state_current[S_LM_NEXT])begin compute_bank<=!compute_bank;end
             if(post_launch)begin post_bank<=compute_bank;post_operation<=operation;post_output_tile<=output_tile;post_identity<=compute_identity;post_biases<=biases;end
-            if(afu_fire && post_state==S_ROPE_SEND)begin rope_outstanding<=1;end
-            if(afu_result_valid && afu_result_ready && rope_outstanding)begin rope_outstanding<=0;end
+            if(rope_fire)begin rope_outstanding<=1;end
+            if(rope_return && rope_outstanding)begin rope_outstanding<=0;end
         end
     end
 
     // Reserve response space before issuing a synchronous RAM read; carry the address with data.
     always @(posedge clk)begin
-        if(!rst_n || post_launch)begin
+        if(!rst_n)begin
+            bias_issued<=0;bias_retired<=0;bias_input_credit<=0;bias_input_count<=0;
+            bias_input_write<=0;bias_input_read<=0;bias_read_address<=0;
+        end else if(post_launch)begin
             bias_issued<=0;bias_retired<=0;bias_input_credit<=0;bias_input_count<=0;
             bias_input_write<=0;bias_input_read<=0;bias_read_address<=0;
         end else begin
@@ -2069,6 +2958,25 @@ module qwen25_qkv_controller #(parameter EXTERNAL_GEMM=0,parameter DIRECT_WEIGHT
             end
             if(bias_input_fire)begin bias_input_read<=bias_input_read+1'b1;end
             if(bias_output_fire)begin bias_retired<=bias_retired+1'b1;end
+        end
+    end
+    // ---- KV8 clip report (display only, one line per layer) ------------------
+    // [V-PERTOK-M] v_tok / v_codes are THIS layer's numbers, not running totals:
+    // the V chain clears both at the first token of a layer, so the line can be
+    // read directly (the old cumulative count had to be differenced by hand and
+    // was reported on the wrong layer).  v_codes counts V codes that actually hit
+    // |code| = 127, which is what "17.7% of the codes saturated" was measuring;
+    // v_mmax is the largest per-token mantissa the layer published (255 = the
+    // quantiser's MTOP, i.e. the only way a code can still clip).
+    reg kv8_sld_d;
+    always @(posedge clk) begin
+        if(!rst_n) kv8_sld_d<=1'b0;
+        else begin
+            kv8_sld_d<=state_current[S_LAYER_DONE];
+            if(state_current[S_LAYER_DONE] && !kv8_sld_d)
+                $display("KV8_CLIP layer=%0d k=%0d v_tok=%0d v_codes=%0d v_mmax=%0d sticky=%b vsticky=%b wrerr=%b wrcode=%02h",
+                         layer,kv8_k_clip_count,kv8_v_clip_count,kv8_v_clip_codes,kv8_v_m_max,
+                         kv8_k_clip_sticky,kv8_v_clip_sticky,wr_error,wr_error_code);
         end
     end
 endmodule

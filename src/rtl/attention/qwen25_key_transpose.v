@@ -20,8 +20,8 @@ module qwen25_key_transpose (
     reg [2:0] cnt_dimension;
     reg flag_output;
     genvar token;
-    assign o_ready=i_rstn && !i_flush && !flag_output;
-    assign o_valid=i_rstn && !i_flush && flag_output;
+    assign o_ready=!i_flush && !flag_output;
+    assign o_valid=!i_flush && flag_output;
     assign o_dimension=cnt_dimension;
     assign o_busy=flag_output || cnt_token!=0;
     generate
@@ -30,7 +30,9 @@ module qwen25_key_transpose (
         end
     endgenerate
     always @(posedge i_clk)begin
-        if(!i_rstn || i_flush)begin
+        if(!i_rstn)begin
+            cnt_token<=0;cnt_dimension<=0;flag_output<=0;
+        end else if(i_flush)begin
             cnt_token<=0;cnt_dimension<=0;flag_output<=0;
         end else begin
             if(i_valid && o_ready)begin

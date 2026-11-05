@@ -103,8 +103,7 @@ module qwen25_afu (
     integer bit_index, lane_index;
     genvar lane;
 
-    assign o_ready = i_rstn &&
-        (state_current == ST_IDLE || (state_current == ST_STREAM && !flag_last_seen &&
+    assign o_ready = (state_current == ST_IDLE || (state_current == ST_STREAM && !flag_last_seen &&
         cnt_credit < 64 && (!flag_exp_statistics || cnt_block_accept < 32)));
     assign o_valid = flag_statistics ? state_current == ST_RESPONSE : cnt_output != 0;
     assign o_data = flag_statistics ? reg_statistics_data : reg_results[cnt_pop];
@@ -276,7 +275,7 @@ module qwen25_afu (
     );
     qwen25_afu_fp_rsqrt root_Inst (
         .aclk(i_clk),
-        .s_axis_a_tvalid(i_rstn && state_current == ST_ROOT_SEND), .s_axis_a_tdata(reg_root_input),
+        .s_axis_a_tvalid(state_current == ST_ROOT_SEND), .s_axis_a_tdata(reg_root_input),
         .m_axis_result_tvalid(wire_root_valid_raw), .m_axis_result_tdata(wire_root_result)
     );
 

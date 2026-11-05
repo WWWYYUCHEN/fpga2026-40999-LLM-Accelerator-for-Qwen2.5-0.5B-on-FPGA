@@ -57,7 +57,7 @@ module qwen25_axi_lite_regs #(
 	input wire s_axil_rready, // 主机接受读响应
 	output wire cfg_valid, // 快照输出单拍
 	output wire [575:0] cfg_snapshot, // 架构定义的完整原子配置快照
-	input wire [255:0] status, // 低位运行状态、95:64 错误码、99:96 IRQ 事件
+	input wire [255:0] status, // 低位运行状态与 95:64 错误码
 	input wire hw_result_commit, // Controller 提交单拍
 	input wire [17:0] hw_best_token_id, // 提交时稳定的硬件 token
 	output wire [17:0] best_token_id, // 硬件捕获的结果存储
@@ -66,10 +66,9 @@ module qwen25_axi_lite_regs #(
 	output wire abort_req, // 要求停止新请求并排空在途事务
 	output wire soft_reset_req, // 软件复位事件，优先于 START/ABORT
 	output wire error_clear_req, // 软件清除错误事件
-	output wire irq, // IRQ_EN 与 mask/status 的组合中断电平
 	output wire protocol_error
 );
-	wire csr_write_valid, csr_read_valid;
+	wire csr_write_valid;
 	wire [AXIL_AW-1:0] csr_write_addr, csr_read_addr;
 	wire [63:0] csr_write_data, csr_read_data;
 	wire [7:0] csr_write_strb;
@@ -99,7 +98,7 @@ module qwen25_axi_lite_regs #(
 		.s_axil_rvalid(s_axil_rvalid), .s_axil_rready(s_axil_rready),
 		.csr_write_valid(csr_write_valid), .csr_write_addr(csr_write_addr),
 		.csr_write_data(csr_write_data), .csr_write_strb(csr_write_strb), .csr_write_resp(csr_write_resp),
-		.csr_read_valid(csr_read_valid), .csr_read_addr(csr_read_addr),
+		.csr_read_valid(), .csr_read_addr(csr_read_addr),
 		.csr_read_data(csr_read_data), .csr_read_resp(csr_read_resp), .protocol_error(protocol_error)
 	);
 
@@ -118,7 +117,7 @@ module qwen25_axi_lite_regs #(
 		.status(status), .hw_result_commit(hw_result_commit), .hw_best_token_id(hw_best_token_id),
 		.best_token_id(best_token_id), .result_done(result_done), .task_start(task_start),
 		.result_clear(result_clear), .abort_req(abort_req), .soft_reset_req(soft_reset_req),
-		.error_clear_req(error_clear_req), .irq(irq)
+		.error_clear_req(error_clear_req)
 	);
 endmodule
 

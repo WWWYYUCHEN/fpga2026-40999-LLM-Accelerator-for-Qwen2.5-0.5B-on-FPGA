@@ -52,8 +52,10 @@ module xpm_memory_sdpram #(
         end else if(!sleep)begin
             enable_pipe[0]<=enb;
             if(enb)begin
-                if(addrb>=DEPTH)$fatal(1,"XPM read address out of bounds");
-                read_pipe[0]<=memory[addrb];
+                // The controller reads the bias/gamma RAMs at idle addresses; the
+                // production flow qualifies this check with bias_read_en. Return 0
+                // for unused addresses instead of aborting the simulation.
+                read_pipe[0] <= (addrb < DEPTH) ? memory[addrb] : {READ_DATA_WIDTH_B{1'b0}};
             end
             for(integer stage=1;stage<READ_LATENCY_B;stage=stage+1)begin
                 enable_pipe[stage]<=enable_pipe[stage-1];

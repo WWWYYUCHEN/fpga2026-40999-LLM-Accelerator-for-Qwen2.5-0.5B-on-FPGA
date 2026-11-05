@@ -57,8 +57,8 @@ module qwen25_fixed_output (
             afu_bank<=afu_wr_bank;afu_row<=afu_wr_row;afu_word<=afu_wr_word;afu_data<=afu_wr_data;
         end
         if(rd_en)begin read_pair<=rd_pair;read_row<=rd_row;read_word<=rd_word;end
-        pair_done_pending<=rst_n && pair_done;
-        release_pending<=rst_n && release_en;
+        pair_done_pending<=pair_done;
+        release_pending<=release_en;
         if(pair_done)fill_pair_pending<=fill_pair;
         if(release_en)release_pair_pending<=release_pair;
         if(!rst_n) begin full_bits<=0; end

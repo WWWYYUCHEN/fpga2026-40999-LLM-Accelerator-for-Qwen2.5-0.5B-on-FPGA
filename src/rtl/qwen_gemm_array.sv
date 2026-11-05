@@ -98,7 +98,7 @@ module qwen_gemm_array #(parameter integer DISTRIBUTED_COMPUTE_BANK=0) (
 
     // 数值流水无ready，通过先预留FIFO credit处理任意长输出停顿。
     always_ff @(posedge clk) begin
-        if (!rst_n || clear) begin
+        if (!rst_n ) begin
             identity_write_pointer <= 0; identity_read_pointer <= 0; pending_count <= 0;
             read_pointer <= 0; write_pointer <= 0;
             occupancy <= 0; credits <= 0;

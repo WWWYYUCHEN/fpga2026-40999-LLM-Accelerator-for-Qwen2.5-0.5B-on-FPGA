@@ -74,9 +74,9 @@ module qwen25_fixed_weight # (parameter DIRECT_PORTS=0) (
             for(lane=0; lane<4; lane=lane+1) begin: weight_slice
                 (* ram_style="block" *) reg [255:0] memory [0:127];
                 reg [255:0] read_q;
-                wire legacy_write = rst_n && load_valid && load_ready &&
+                wire legacy_write = load_valid && load_ready &&
                     load_word[2]==half && load_word[1:0]==lane;
-                wire direct_write = rst_n && DIRECT_PORTS!=0 &&
+                wire direct_write = DIRECT_PORTS!=0 &&
                     direct_valid[lane] && direct_ready[lane] && direct_word[lane*8]==half;
                 wire write_enable = legacy_write || direct_write;
                 wire [6:0] write_address = direct_write ?

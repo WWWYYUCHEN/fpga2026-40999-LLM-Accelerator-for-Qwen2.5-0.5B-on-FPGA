@@ -28,7 +28,7 @@ module qwen25_fixed_scale (
     wire accept=load_valid && load_ready;
     wire write_pair=accept && pending_valid;
     wire [63:0] read0,read1,read2,read3;
-    assign load_ready=rst_n && !loaded_reg && !reg_write_last && !load_start;
+    assign load_ready=!loaded_reg && !reg_write_last && !load_start;
     assign load_done=done_reg;
     assign loaded=loaded_reg;
     assign read_valid=reg_read_valid[3];

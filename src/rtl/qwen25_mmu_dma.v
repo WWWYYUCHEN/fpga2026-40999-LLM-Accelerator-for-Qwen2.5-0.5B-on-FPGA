@@ -33,7 +33,7 @@ module qwen25_mmu_dma #(parameter RS_LV=0, parameter DIRECT_BUFFER_READ=0)(
     output wire [3:0] m_axi_awvalid,input wire [3:0] m_axi_awready,
     output wire [511:0] m_axi_wdata,output wire [63:0] m_axi_wstrb,
     output wire [3:0] m_axi_wlast,output wire [3:0] m_axi_wvalid,
-    input wire [3:0] m_axi_wready,input wire [7:0] m_axi_bresp,
+    input wire [3:0] m_axi_wready,input wire [7:0] m_axi_bresp,input wire [15:0] m_axi_bid,
     input wire [3:0] m_axi_bvalid,output wire [3:0] m_axi_bready,
     output wire wr_busy,output wire wr_done,output wire wr_error,output wire wr_aborted,
     output wire [7:0] wr_error_code,output wire [15:0] wr_completion_tag,
@@ -50,8 +50,14 @@ module qwen25_mmu_dma #(parameter RS_LV=0, parameter DIRECT_BUFFER_READ=0)(
     wire [15:0] write_strobe;
     reg [1:0] reg_write_port,reg_write_next;
     reg flag_write_active;
-    wire write_command_fire=s_cmd_valid && s_cmd_ready && s_cmd[118];
-    assign s_cmd_ready=s_cmd[118] ? (!flag_write_active && wr_cmd_ready) : rd_cmd_ready;
+    // A write command is only in flight if the writer will queue it: qwen25_dma_wr
+    // drops 0-byte / non-16B-aligned commands (sticky 0x21) and queues nothing, so
+    // asserting flag_write_active on that handshake would latch the write port off
+    // forever (wr_done never comes, every later write is refused).  The writer keeps
+    // 0x21 as the alarm; refusing the handshake here can never lose the port.
+    wire wr_cmd_ok = (s_cmd[87:64] != 24'd0) && (s_cmd[3:0] == 4'd0);
+    wire write_command_fire=s_cmd_valid && s_cmd_ready && s_cmd[118] && wr_cmd_ok;
+    assign s_cmd_ready=s_cmd[118] ? (!flag_write_active && wr_cmd_ready && wr_cmd_ok) : rd_cmd_ready;
     assign s_stream_ready=flag_write_active && wr_stream_ready;
     assign wr_busy=flag_write_active || wr_engine_busy;
     always @(posedge clk)begin
@@ -109,7 +115,7 @@ module qwen25_mmu_dma #(parameter RS_LV=0, parameter DIRECT_BUFFER_READ=0)(
             .m_axi_awvalid(write_address_valid),.m_axi_awready(m_axi_awready[reg_write_port]),
             .m_axi_wdata(write_data),.m_axi_wstrb(write_strobe),
             .m_axi_wlast(write_data_last),.m_axi_wvalid(write_data_valid),.m_axi_wready(m_axi_wready[reg_write_port]),
-            .m_axi_bresp(m_axi_bresp[reg_write_port*2+:2]),.m_axi_bvalid(m_axi_bvalid[reg_write_port]),.m_axi_bready(write_response_ready),
+            .m_axi_bid(m_axi_bid[reg_write_port*4+:4]),.m_axi_bresp(m_axi_bresp[reg_write_port*2+:2]),.m_axi_bvalid(m_axi_bvalid[reg_write_port]),.m_axi_bready(write_response_ready),
             .busy(wr_engine_busy),.done(wr_done),.error(wr_error),
             .aborted(wr_aborted),.error_code(wr_error_code),
             .completion_tag(wr_completion_tag),.completion_meta(wr_completion_meta));

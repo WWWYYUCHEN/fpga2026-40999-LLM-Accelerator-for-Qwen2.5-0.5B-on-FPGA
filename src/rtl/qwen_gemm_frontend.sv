@@ -64,12 +64,18 @@ module qwen_gemm_frontend (
         endcase
     end
     always_ff @(posedge clk)begin
-        if(!rst_n || flush)weight_state<=W_WAIT;
+        if(!rst_n)weight_state<=W_WAIT;
+        else if(flush)weight_state<=W_WAIT;
         else weight_state<=weight_next;
     end
 
     always_ff @(posedge clk)begin
-        if(!rst_n||flush)begin
+        if(!rst_n)begin
+            reg_available<=0;
+            cmd_present<=0;act_present<=0;weight_present<=0;active<=0;
+            reg_weight_row[0]<=0;reg_weight_row[1]<=0;
+            write_bank<=0;read_bank<=0;queued<=0;
+        end else if(flush)begin
             reg_available<=0;
             cmd_present<=0;act_present<=0;weight_present<=0;active<=0;
             reg_weight_row[0]<=0;reg_weight_row[1]<=0;

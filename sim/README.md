@@ -1,21 +1,25 @@
 # 仿真与验证
 
-系统默认入口为加速器 RTL 逐周期仿真。PS 软件负责聊天模板、分词、embedding 和 AXI-Lite 调度，PL 执行 Transformer 推理。
-
 | 目录 | 内容 |
 | --- | --- |
-| `simulator/` | RTL 逐周期仿真器和 PS 动态库 |
-| `reports/system_regression/final_*` | 6 类最终场景的输入、结果、UART 日志和 token 数据 |
-| `reports/parameter_fixed/` | 参数 RAM 验证摘要 |
-| `reports/rtl_current_acceptance/` | 当前 RTL 数值验收摘要 |
-| `reports/regression_status.json` | 总体验证状态 |
-| `reports/source_lineage.json` | 源码与构建产物溯源 |
+| `tb/` | 18 个自检测试平台：GEMM 列/阵列流水、KV8 量化各阶段（`tb_kv8_*`）、EXP/ADD 对照（`tb_exp_compare.vhd`、`tb_add_compare.vhd`）、结果通路无 IRQ 版本 |
+| `scripts/` | `build.ps1`、`run.ps1`、`run_custom.ps1`、`preflight.ps1` 驱动单元 TB；`verify_ab.py` 做 A/B 数值比对；`srcs_B.txt`、`segments.tsv` 为源清单与地址段 |
+| `candidate9_chat_result/` | 已完成的一次 6 token chat 回归的完整证据 |
+| `simulator/` | `qwen_candidate9.exe`，已构建好的端到端仿真程序 |
 
-| 指标 | 结果 |
-| --- | ---: |
-| 单 token prefill 逐层最大相对 L2 | 0.00044046511 |
-| 最终归一化 896 元素相对 L2 | 0 |
-| LM Head 151936 logits 相对 L2 | 3.3777615e-05 |
-| 已测试 token ID | 全部一致 |
+## candidate9_chat_result
 
-完整场景汇总见 [测试结果汇总.csv](../data/测试结果汇总.csv)。
+| 文件 | 说明 |
+| --- | --- |
+| `hardware_tokens.csv` | 6 个 token 的 id 与周期数 |
+| `hardware_logits_*.bin` | 每个 iteration 的 151936 维 logits（BF16 原始位，303,872 B/个） |
+| `run.out` | 仿真完整控制台输出，含 `RTL_TOKEN_VERIFIED` |
+| `in.txt`、`segments.tsv`、`timing.txt` | 输入、地址段映射、计时 |
+
+token 序列：`9707, 0, 2585, 646, 358, 7789`；首轮 logits SHA-256 为
+`BBA14D322C6F33940DBCEC531E7F0B3A97C38E650A0212880581A664AA39DE95`。
+
+## 注意
+
+这些结果产生于交付目录复制之前，**不代表重新构建后的新验证**。重跑请按根目录 README 的两条命令，
+并使用新的 `-Tag` 与新的运行目录（脚本拒绝覆盖已存在的对象目录）。

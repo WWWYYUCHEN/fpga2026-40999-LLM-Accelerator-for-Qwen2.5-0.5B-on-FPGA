@@ -122,7 +122,15 @@ module qwen25_afu_add_bank (
     end
     integer partial_index;
     always @(posedge i_clk) begin
-        if (!i_rstn || i_start) begin
+        if (!i_rstn) begin
+            cnt_slot <= 0;
+            cnt_reduce_pending <= 0;
+            cnt_vector_pending <= 0;
+            for (partial_index = 0; partial_index < 8; partial_index = partial_index + 1) begin
+                reg_partial[partial_index] <= 0;
+                reg_slot_pipe[partial_index] <= 0;
+            end
+        end else if (i_start) begin
             cnt_slot <= 0;
             cnt_reduce_pending <= 0;
             cnt_vector_pending <= 0;

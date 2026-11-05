@@ -107,27 +107,23 @@ module qwen25_tensor_buffers #(parameter DIRECT_WEIGHT_PORTS=0) (
     input wire [3:0] proj1_rd_word, // 消费列字
     output wire proj1_rd_valid, // 同步读有效
     output wire [127:0] proj1_rd_data, // 八lane输出
+    // [P16K] P单块八行，深度保持4096字；logits流只做统计不落盘
     input wire attention_fill_done, // Controller确认全部写入完成
-    input wire attention_fill_bank, // 完成填充的bank
-    input wire attention_release_bank, // Controller确认消费完成的bank
-    input wire attention_release_en, // 消费结束清full
-    output wire [1:0] attention_full, // 两bank独立full状态
+    input wire attention_release_en, // 消费结束交还GEMM
+    output wire attention_full, // P块归AFU所有
     input wire attention_wr_en, // Softmax或spill reload写
-    input wire attention_wr_bank, // 写目标P bank
-    input wire [14:0] attention_wr_address, // P或logits线性128bit地址
+    input wire [14:0] attention_wr_address, // P行字地址：行[2:0]+行内128bit字[11:0]
     input wire [127:0] attention_wr_data, // 八lane BF16
+    input wire attention_stat_only, // 1：logits统计流，只喂argmax不写RAM
     output wire attention_wr_ready, // GEMM score写口是否接受
     input wire attention_afu_wr_en, // AFU Softmax独立写请求
-    input wire attention_afu_wr_bank, // Softmax所属bank
-    input wire [14:0] attention_afu_wr_address, // Softmax八lane字地址
+    input wire [14:0] attention_afu_wr_address, // Softmax行和八元素字地址
     input wire [127:0] attention_afu_wr_data, // Softmax P写数据
-    input wire attention_rd_en, // P乘V或spill消费
-    input wire attention_rd_bank, // 消费bank
+    input wire attention_rd_en, // P乘V消费
     input wire [11:0] attention_rd_word, // context八元素字
     output wire attention_rd_valid, // 同步P tile读有效
     output wire [1023:0] attention_rd_tile, // 八query行同context列字
     input wire attention_afu_rd_en, // Softmax单行读取使能
-    input wire attention_afu_rd_bank, // Softmax当前物理bank
     input wire [2:0] attention_afu_rd_row, // Softmax query行选择
     input wire [11:0] attention_afu_rd_word, // 行内八元素字地址
     output wire attention_afu_rd_valid, // 实际同步读取有效
@@ -285,27 +281,24 @@ module qwen25_tensor_buffers #(parameter DIRECT_WEIGHT_PORTS=0) (
         .rd_data(proj1_rd_data) // 八lane输出
     );
 
-    // P两bank八乘32768 BF16，Softmax固定写P乘V固定读，logits复用物理地址
+    // [P16K] P单块八行乘16384 token，Softmax固定写P乘V固定读，logits复用统计通路
     qwen25_fixed_attention attention_Inst (
         .clk(clk), // buffer时钟
         .rst_n(rst_n), // 仅复位full状态
         .fill_done(attention_fill_done), // Controller确认全部写入完成
-        .fill_bank(attention_fill_bank), // 完成填充的bank
-        .release_bank(attention_release_bank), // Controller确认消费完成的bank
-        .release_en(attention_release_en), // 消费结束清full
-        .full(attention_full), // 两bank独立full状态
+        .release_en(attention_release_en), // 消费结束交还GEMM
+        .full(attention_full), // P块归AFU所有
         .wr_en(attention_wr_en), // Softmax或spill reload写
-        .wr_bank(attention_wr_bank), // 写目标P bank
-        .wr_address(attention_wr_address), // P或logits线性128bit地址
+        .wr_address(attention_wr_address), // P行字地址
         .wr_data(attention_wr_data), // 八lane BF16
-        .wr_ready(attention_wr_ready),.afu_wr_en(attention_afu_wr_en),.afu_wr_bank(attention_afu_wr_bank),
+        .stat_only(attention_stat_only), // logits统计流不落盘
+        .wr_ready(attention_wr_ready),.afu_wr_en(attention_afu_wr_en),
         .afu_wr_address(attention_afu_wr_address),.afu_wr_data(attention_afu_wr_data),
-        .rd_en(attention_rd_en), // P乘V或spill消费
-        .rd_bank(attention_rd_bank), // 消费bank
+        .rd_en(attention_rd_en), // P乘V消费
         .rd_word(attention_rd_word), // context八元素字
         .rd_valid(attention_rd_valid), // 同步P tile读有效
         .rd_tile(attention_rd_tile), // 八query行同context列字
-        .afu_rd_en(attention_afu_rd_en),.afu_rd_bank(attention_afu_rd_bank),
+        .afu_rd_en(attention_afu_rd_en),
         .afu_rd_row(attention_afu_rd_row),.afu_rd_word(attention_afu_rd_word),
         .afu_rd_valid(attention_afu_rd_valid),.afu_rd_data(attention_afu_rd_data),
         .max_wr_en(attention_max_wr_en),.max_wr_row(attention_max_wr_row),

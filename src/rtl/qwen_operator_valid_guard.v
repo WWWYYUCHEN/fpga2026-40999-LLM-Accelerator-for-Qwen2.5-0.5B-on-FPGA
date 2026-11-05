@@ -12,7 +12,7 @@ module qwen_operator_valid_guard #(
     output wire o_valid
 );
     reg [C_LATENCY-1:0] reg_token;
-    assign o_valid = i_rstn && i_operator_valid && reg_token[C_LATENCY-1];
+    assign o_valid = i_operator_valid && reg_token[C_LATENCY-1];
     always @(posedge i_clk) begin
         if (!i_rstn) reg_token <= {C_LATENCY{1'b0}};
         else reg_token <= (reg_token << 1) | i_issue;

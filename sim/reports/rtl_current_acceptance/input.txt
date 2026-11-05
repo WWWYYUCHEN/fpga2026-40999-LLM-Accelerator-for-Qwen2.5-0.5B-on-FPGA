@@ -1,3 +1,0 @@
-/mode events
-/max 2
-你好

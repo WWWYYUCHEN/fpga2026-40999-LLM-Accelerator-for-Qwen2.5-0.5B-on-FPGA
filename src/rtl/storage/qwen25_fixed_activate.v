@@ -25,11 +25,7 @@ module qwen25_fixed_activate (
 );
 
     // 窄布局中，Z占地址0..895，Context占896..1023；M阶段复用整块RAM。
-    wire vector_context = !wide_layout && (vec_word[9:4] == 6'd7);
     wire tile_context = !wide_layout && (tile_word[9:4] == 6'd7);
-    wire [12:0] tile_base = wide_layout ? tile_row * 13'd608 :
-        (tile_context ? 13'd896 + {6'd0,tile_row,4'd0} : tile_row * 13'd112);
-    wire [12:0] tile_offset = tile_context ? {9'd0,tile_word[3:0]} : {3'd0,tile_word};
     wire vector_write = vec_en && vec_wr;
     wire context_write = tile_en && tile_wr;
 
@@ -103,8 +99,8 @@ module qwen25_fixed_activate (
     reg [2:0] issue_row;
     reg [2:0] response_row;
     reg response_last;
-    wire read_start = rst_n && tile_en && !tile_wr && !read_busy && !read_request_pending;
-    wire read_launch = rst_n && read_request_pending && !read_busy;
+    wire read_start = tile_en && !tile_wr && !read_busy && !read_request_pending;
+    wire read_launch = read_request_pending && !read_busy;
     wire memory_read_valid;
     wire [127:0] memory_read_data;
     reg tile_valid_o;

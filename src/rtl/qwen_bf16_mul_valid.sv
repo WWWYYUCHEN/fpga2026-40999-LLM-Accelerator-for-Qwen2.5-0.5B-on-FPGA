@@ -22,7 +22,7 @@ module qwen_bf16_mul_valid (
     assign result = {exact_product[24:16], exact_product[14:0], 8'b0};
     assign output_valid = operator_valid && reset_token[2];
     always_ff @(posedge clk) begin
-        if (!rst_n || clear) reset_token <= '0;
+        if (!rst_n ) reset_token <= '0;
         else reset_token <= {reset_token[1:0], input_valid};
     end
 endmodule

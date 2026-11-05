@@ -1,0 +1,637 @@
+SIMULATION: real PS C and compiled accelerator RTL; virtual UART/SD; vendor math simulation models.
+
+Qwen25 KV260 100 MHz UART interactive inference
+PL numerical model signoff pending. No CPU inference fallback.
+CSR_ID=515732354b563236 VERSION=0000000000010000
+TOKENIZER_SELFTEST_OK 40 tokens
+Loading 0:/QWEN25/DESC.BIN (6144 bytes)
+Loading 0:/QWEN25/SCALE.BIN (912128 bytes)
+Loading 0:/QWEN25/BIAS.BIN (55296 bytes)
+Loading 0:/QWEN25/GAMMA.BIN (87808 bytes)
+Loading 0:/QWEN25/WEIGHTS.BIN (357826560 bytes)
+Loading 0:/QWEN25/LMW.BIN (136134656 bytes)
+Loading 0:/QWEN25/EMBED.BIN (272269312 bytes)
+Enter UTF-8 prompt and press Enter. Each request starts a fresh context.
+/max N (1..255), /mode text|ids|events, /template chat|raw, /encode TEXT, /selftest, /reset, /help
+KV capacity 256 including chat template and output reserve. Default /max 20.
+
+READY
+prompt> /template chat
+TEMPLATE=chat
+
+READY
+prompt> /max 6
+MAX_NEW=6
+
+READY
+prompt> hi
+@BEGIN 1 prompt_tokens=30 max_new=6
+answer> PROGRESS cycle=1000000 state=000000000004000000000 op=2 output_tile=7
+KV8_CLIP layer=0 k=0 v_tok=0 v_codes=0 v_mmax=10 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=0 cycle=1728633
+PROGRESS cycle=2000000 state=000000000000000010000 op=4 output_tile=6
+KV8_CLIP layer=0 k=0 v_tok=0 v_codes=0 v_mmax=10 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=0 cycle=2451494
+PROGRESS cycle=3000000 state=000000000000000010000 op=5 output_tile=0
+KV8_CLIP layer=0 k=0 v_tok=0 v_codes=0 v_mmax=10 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=0 cycle=3174349
+KV8_CLIP layer=0 k=0 v_tok=0 v_codes=0 v_mmax=10 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=0 cycle=3760564
+PROGRESS cycle=4000000 state=000000000004000000000 op=2 output_tile=7
+PROGRESS cycle=5000000 state=000000000000000010000 op=4 output_tile=1
+KV8_CLIP layer=1 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=1 cycle=5416176
+PROGRESS cycle=6000000 state=000000000000000010000 op=6 output_tile=0
+KV8_CLIP layer=1 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=1 cycle=6139080
+KV8_CLIP layer=1 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=1 cycle=6861982
+PROGRESS cycle=7000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=1 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=1 cycle=7448206
+PROGRESS cycle=8000000 state=000000000000000010000 op=2 output_tile=0
+PROGRESS cycle=9000000 state=000000000000000010000 op=6 output_tile=2
+KV8_CLIP layer=2 k=0 v_tok=0 v_codes=0 v_mmax=16 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=2 cycle=9103832
+KV8_CLIP layer=2 k=0 v_tok=0 v_codes=0 v_mmax=16 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=2 cycle=9826708
+PROGRESS cycle=10000000 state=000000000000000000008 op=3 output_tile=0
+KV8_CLIP layer=2 k=0 v_tok=0 v_codes=0 v_mmax=16 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=2 cycle=10549612
+PROGRESS cycle=11000000 state=000000000000000010000 op=5 output_tile=0
+KV8_CLIP layer=2 k=0 v_tok=0 v_codes=0 v_mmax=16 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=2 cycle=11135797
+PROGRESS cycle=12000000 state=000000000000000010000 op=2 output_tile=4
+KV8_CLIP layer=3 k=0 v_tok=0 v_codes=0 v_mmax=58 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=3 cycle=12791432
+PROGRESS cycle=13000000 state=000000000000000004000 op=3 output_tile=5
+KV8_CLIP layer=3 k=0 v_tok=0 v_codes=0 v_mmax=58 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=3 cycle=13514320
+PROGRESS cycle=14000000 state=000000000000000010000 op=4 output_tile=2
+KV8_CLIP layer=3 k=0 v_tok=0 v_codes=0 v_mmax=58 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=3 cycle=14237196
+KV8_CLIP layer=3 k=0 v_tok=0 v_codes=0 v_mmax=58 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=3 cycle=14823456
+PROGRESS cycle=15000000 state=000000000000000010000 op=2 output_tile=5
+PROGRESS cycle=16000000 state=000000400000000000000 op=3 output_tile=7
+KV8_CLIP layer=4 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=4 cycle=16479123
+PROGRESS cycle=17000000 state=000000000000000010000 op=5 output_tile=4
+KV8_CLIP layer=4 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=4 cycle=17202034
+KV8_CLIP layer=4 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=4 cycle=17924910
+PROGRESS cycle=18000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=4 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=4 cycle=18511081
+PROGRESS cycle=19000000 state=000000000004000000000 op=2 output_tile=7
+PROGRESS cycle=20000000 state=000000000000000010000 op=5 output_tile=2
+KV8_CLIP layer=5 k=0 v_tok=0 v_codes=0 v_mmax=19 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=5 cycle=20166717
+KV8_CLIP layer=5 k=0 v_tok=0 v_codes=0 v_mmax=19 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=5 cycle=20889621
+PROGRESS cycle=21000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=5 k=0 v_tok=0 v_codes=0 v_mmax=19 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=5 cycle=21612534
+PROGRESS cycle=22000000 state=000000000000000010000 op=5 output_tile=4
+KV8_CLIP layer=5 k=0 v_tok=0 v_codes=0 v_mmax=19 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=5 cycle=22198739
+PROGRESS cycle=23000000 state=000000000000000010000 op=2 output_tile=1
+KV8_CLIP layer=6 k=0 v_tok=0 v_codes=0 v_mmax=9 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=6 cycle=23854372
+PROGRESS cycle=24000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=6 k=0 v_tok=0 v_codes=0 v_mmax=9 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=6 cycle=24577248
+PROGRESS cycle=25000000 state=000000000000000010000 op=4 output_tile=1
+KV8_CLIP layer=6 k=0 v_tok=0 v_codes=0 v_mmax=9 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=6 cycle=25300145
+KV8_CLIP layer=6 k=0 v_tok=0 v_codes=0 v_mmax=9 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=6 cycle=25886346
+PROGRESS cycle=26000000 state=000000000000000010000 op=2 output_tile=3
+PROGRESS cycle=27000000 state=000000000000000000008 op=3 output_tile=1
+KV8_CLIP layer=7 k=0 v_tok=0 v_codes=0 v_mmax=26 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=7 cycle=27541979
+PROGRESS cycle=28000000 state=000000000000000010000 op=5 output_tile=2
+KV8_CLIP layer=7 k=0 v_tok=0 v_codes=0 v_mmax=26 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=7 cycle=28264835
+KV8_CLIP layer=7 k=0 v_tok=0 v_codes=0 v_mmax=26 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=7 cycle=28987711
+PROGRESS cycle=29000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=7 k=0 v_tok=0 v_codes=0 v_mmax=26 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=7 cycle=29573932
+PROGRESS cycle=30000000 state=000000000000000010000 op=2 output_tile=5
+PROGRESS cycle=31000000 state=000000000000000010000 op=4 output_tile=4
+KV8_CLIP layer=8 k=0 v_tok=0 v_codes=0 v_mmax=27 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=8 cycle=31229579
+KV8_CLIP layer=8 k=0 v_tok=0 v_codes=0 v_mmax=27 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=8 cycle=31952455
+PROGRESS cycle=32000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=8 k=0 v_tok=0 v_codes=0 v_mmax=27 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=8 cycle=32675296
+PROGRESS cycle=33000000 state=000000000000000004000 op=4 output_tile=5
+KV8_CLIP layer=8 k=0 v_tok=0 v_codes=0 v_mmax=27 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=8 cycle=33261504
+PROGRESS cycle=34000000 state=000000000004000000000 op=2 output_tile=7
+KV8_CLIP layer=9 k=0 v_tok=0 v_codes=0 v_mmax=32 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=9 cycle=34917137
+PROGRESS cycle=35000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=9 k=0 v_tok=0 v_codes=0 v_mmax=32 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=9 cycle=35640039
+PROGRESS cycle=36000000 state=000000000000000010000 op=4 output_tile=0
+KV8_CLIP layer=9 k=0 v_tok=0 v_codes=0 v_mmax=32 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=9 cycle=36362915
+KV8_CLIP layer=9 k=0 v_tok=0 v_codes=0 v_mmax=32 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=9 cycle=36949163
+PROGRESS cycle=37000000 state=000000000000000010000 op=1 output_tile=0
+PROGRESS cycle=38000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=10 k=0 v_tok=0 v_codes=0 v_mmax=11 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=10 cycle=38604829
+PROGRESS cycle=39000000 state=000000000000000010000 op=5 output_tile=1
+KV8_CLIP layer=10 k=0 v_tok=0 v_codes=0 v_mmax=11 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=10 cycle=39327705
+PROGRESS cycle=40000000 state=000000000000000010000 op=6 output_tile=5
+KV8_CLIP layer=10 k=0 v_tok=0 v_codes=0 v_mmax=11 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=10 cycle=40050594
+KV8_CLIP layer=10 k=0 v_tok=0 v_codes=0 v_mmax=11 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=10 cycle=40636823
+PROGRESS cycle=41000000 state=000000000000000010000 op=2 output_tile=3
+PROGRESS cycle=42000000 state=000000000000000010000 op=4 output_tile=3
+KV8_CLIP layer=11 k=0 v_tok=0 v_codes=0 v_mmax=176 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=11 cycle=42292454
+PROGRESS cycle=43000000 state=000000000000000010000 op=6 output_tile=6
+KV8_CLIP layer=11 k=0 v_tok=0 v_codes=0 v_mmax=176 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=11 cycle=43015325
+KV8_CLIP layer=11 k=0 v_tok=0 v_codes=0 v_mmax=176 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=11 cycle=43738201
+PROGRESS cycle=44000000 state=000000000000000010000 op=5 output_tile=6
+KV8_CLIP layer=11 k=0 v_tok=0 v_codes=0 v_mmax=176 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=11 cycle=44324424
+PROGRESS cycle=45000000 state=000000000000000010000 op=2 output_tile=5
+KV8_CLIP layer=12 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=12 cycle=45980071
+PROGRESS cycle=46000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=12 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=12 cycle=46702932
+PROGRESS cycle=47000000 state=000000000000000010000 op=5 output_tile=5
+KV8_CLIP layer=12 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=12 cycle=47425787
+PROGRESS cycle=48000000 state=000000000000000010000 op=6 output_tile=6
+KV8_CLIP layer=12 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=12 cycle=48012014
+PROGRESS cycle=49000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=13 k=0 v_tok=0 v_codes=0 v_mmax=32 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=13 cycle=49667626
+PROGRESS cycle=50000000 state=000000000000000010000 op=5 output_tile=0
+KV8_CLIP layer=13 k=0 v_tok=0 v_codes=0 v_mmax=32 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=13 cycle=50390539
+PROGRESS cycle=51000000 state=000000000000000010000 op=6 output_tile=2
+KV8_CLIP layer=13 k=0 v_tok=0 v_codes=0 v_mmax=32 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=13 cycle=51113394
+KV8_CLIP layer=13 k=0 v_tok=0 v_codes=0 v_mmax=32 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=13 cycle=51699616
+PROGRESS cycle=52000000 state=000000000000000010000 op=2 output_tile=0
+PROGRESS cycle=53000000 state=000000000000000010000 op=4 output_tile=1
+KV8_CLIP layer=14 k=0 v_tok=0 v_codes=0 v_mmax=58 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=14 cycle=53355221
+PROGRESS cycle=54000000 state=000000000000000010000 op=6 output_tile=3
+KV8_CLIP layer=14 k=0 v_tok=0 v_codes=0 v_mmax=58 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=14 cycle=54078074
+KV8_CLIP layer=14 k=0 v_tok=0 v_codes=0 v_mmax=58 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=14 cycle=54800985
+PROGRESS cycle=55000000 state=000000000000000010000 op=3 output_tile=6
+KV8_CLIP layer=14 k=0 v_tok=0 v_codes=0 v_mmax=58 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=14 cycle=55387198
+PROGRESS cycle=56000000 state=000000000000000010000 op=2 output_tile=3
+PROGRESS cycle=57000000 state=000000000000000010000 op=6 output_tile=5
+KV8_CLIP layer=15 k=0 v_tok=0 v_codes=0 v_mmax=42 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=15 cycle=57042856
+KV8_CLIP layer=15 k=0 v_tok=0 v_codes=0 v_mmax=42 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=15 cycle=57765716
+PROGRESS cycle=58000000 state=000000008000000000000 op=3 output_tile=7
+KV8_CLIP layer=15 k=0 v_tok=0 v_codes=0 v_mmax=42 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=15 cycle=58488592
+PROGRESS cycle=59000000 state=000000000000000010000 op=6 output_tile=2
+KV8_CLIP layer=15 k=0 v_tok=0 v_codes=0 v_mmax=42 sticky=0 vsticky=0 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=15 cycle=59074835
+PROGRESS cycle=60000000 state=000000000004000000000 op=2 output_tile=7
+KV8_CLIP layer=16 k=0 v_tok=3 v_codes=3 v_mmax=255 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=16 cycle=60730463
+PROGRESS cycle=61000000 state=000000000000000010000 op=4 output_tile=6
+KV8_CLIP layer=16 k=0 v_tok=3 v_codes=3 v_mmax=255 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=16 cycle=61453323
+PROGRESS cycle=62000000 state=000000000000000010000 op=5 output_tile=0
+KV8_CLIP layer=16 k=0 v_tok=3 v_codes=3 v_mmax=255 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=16 cycle=62176181
+KV8_CLIP layer=16 k=0 v_tok=3 v_codes=3 v_mmax=255 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=16 cycle=62762403
+PROGRESS cycle=63000000 state=000000000004000000000 op=2 output_tile=7
+PROGRESS cycle=64000000 state=000000000000000010000 op=4 output_tile=0
+KV8_CLIP layer=17 k=0 v_tok=0 v_codes=0 v_mmax=71 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=17 cycle=64418007
+PROGRESS cycle=65000000 state=000000000000000010000 op=6 output_tile=0
+KV8_CLIP layer=17 k=0 v_tok=0 v_codes=0 v_mmax=71 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=17 cycle=65140895
+KV8_CLIP layer=17 k=0 v_tok=0 v_codes=0 v_mmax=71 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=17 cycle=65863753
+PROGRESS cycle=66000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=17 k=0 v_tok=0 v_codes=0 v_mmax=71 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=17 cycle=66449942
+PROGRESS cycle=67000000 state=000000000000000010000 op=2 output_tile=0
+PROGRESS cycle=68000000 state=000000000000000010000 op=6 output_tile=2
+KV8_CLIP layer=18 k=0 v_tok=0 v_codes=0 v_mmax=44 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=18 cycle=68105596
+KV8_CLIP layer=18 k=0 v_tok=0 v_codes=0 v_mmax=44 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=18 cycle=68828484
+PROGRESS cycle=69000000 state=000000000000000004000 op=3 output_tile=0
+KV8_CLIP layer=18 k=0 v_tok=0 v_codes=0 v_mmax=44 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=18 cycle=69551388
+PROGRESS cycle=70000000 state=000000000000000010000 op=4 output_tile=2
+KV8_CLIP layer=18 k=0 v_tok=0 v_codes=0 v_mmax=44 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=18 cycle=70137614
+PROGRESS cycle=71000000 state=000000000000000010000 op=2 output_tile=4
+KV8_CLIP layer=19 k=0 v_tok=0 v_codes=0 v_mmax=71 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=19 cycle=71793284
+PROGRESS cycle=72000000 state=000000000000000010000 op=3 output_tile=4
+KV8_CLIP layer=19 k=0 v_tok=0 v_codes=0 v_mmax=71 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=19 cycle=72516144
+PROGRESS cycle=73000000 state=000000000000000004000 op=4 output_tile=2
+KV8_CLIP layer=19 k=0 v_tok=0 v_codes=0 v_mmax=71 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=19 cycle=73239015
+KV8_CLIP layer=19 k=0 v_tok=0 v_codes=0 v_mmax=71 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=19 cycle=73825258
+PROGRESS cycle=74000000 state=000000000000000010000 op=2 output_tile=5
+PROGRESS cycle=75000000 state=000001000000000000000 op=3 output_tile=7
+KV8_CLIP layer=20 k=0 v_tok=0 v_codes=0 v_mmax=30 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=20 cycle=75480940
+PROGRESS cycle=76000000 state=000000000000000010000 op=5 output_tile=3
+KV8_CLIP layer=20 k=0 v_tok=0 v_codes=0 v_mmax=30 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=20 cycle=76203793
+KV8_CLIP layer=20 k=0 v_tok=0 v_codes=0 v_mmax=30 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=20 cycle=76926639
+PROGRESS cycle=77000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=20 k=0 v_tok=0 v_codes=0 v_mmax=30 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=20 cycle=77512865
+PROGRESS cycle=78000000 state=000000000004000000000 op=2 output_tile=7
+PROGRESS cycle=79000000 state=000000000000000010000 op=5 output_tile=2
+KV8_CLIP layer=21 k=0 v_tok=0 v_codes=0 v_mmax=118 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=21 cycle=79168519
+KV8_CLIP layer=21 k=0 v_tok=0 v_codes=0 v_mmax=118 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=21 cycle=79891423
+PROGRESS cycle=80000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=21 k=0 v_tok=0 v_codes=0 v_mmax=118 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=21 cycle=80614293
+PROGRESS cycle=81000000 state=000000000000000010000 op=5 output_tile=3
+KV8_CLIP layer=21 k=0 v_tok=0 v_codes=0 v_mmax=118 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=21 cycle=81200549
+PROGRESS cycle=82000000 state=000000000000000010000 op=2 output_tile=1
+KV8_CLIP layer=22 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=22 cycle=82856218
+PROGRESS cycle=83000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=22 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=22 cycle=83579079
+PROGRESS cycle=84000000 state=000000000000000010000 op=4 output_tile=0
+KV8_CLIP layer=22 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=22 cycle=84301995
+KV8_CLIP layer=22 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=22 cycle=84888212
+PROGRESS cycle=85000000 state=000000000000000010000 op=2 output_tile=3
+PROGRESS cycle=86000000 state=000000000000000004000 op=3 output_tile=1
+KV8_CLIP layer=23 k=0 v_tok=0 v_codes=0 v_mmax=8 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=23 cycle=86543880
+PROGRESS cycle=87000000 state=000000000000000010000 op=5 output_tile=2
+KV8_CLIP layer=23 k=0 v_tok=0 v_codes=0 v_mmax=8 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=23 cycle=87266738
+KV8_CLIP layer=23 k=0 v_tok=0 v_codes=0 v_mmax=8 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=23 cycle=87989626
+PROGRESS cycle=88000000 state=000000000010000000000 op=0 output_tile=0
+KV8_CLIP layer=23 k=0 v_tok=0 v_codes=0 v_mmax=8 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=0 layer=23 cycle=88575904
+PROGRESS cycle=89000000 state=000000000000000010000 op=7 output_tile=185
+PROGRESS cycle=90000000 state=000000000000000010000 op=7 output_tile=624
+PROGRESS cycle=91000000 state=000000000000000004000 op=7 output_tile=1063
+
+RTL_TOKEN_VERIFIED iteration=0 id=9707 cycles=91281969 logits=151936 max=23.875 idle_bias_addresses=0
+HARDWARE_TOKEN iteration=0 token=9707 cycles=91281969 position=0 logits=151936
+KV8_CLIP layer=0 k=0 v_tok=0 v_codes=0 v_mmax=6 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=0 cycle=91734543
+PROGRESS cycle=92000000 state=000000000000000010000 op=4 output_tile=3
+KV8_CLIP layer=1 k=0 v_tok=0 v_codes=0 v_mmax=12 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=1 cycle=92186917
+KV8_CLIP layer=2 k=0 v_tok=0 v_codes=0 v_mmax=11 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=2 cycle=92639315
+PROGRESS cycle=93000000 state=000000000000000004000 op=4 output_tile=2
+KV8_CLIP layer=3 k=0 v_tok=0 v_codes=0 v_mmax=39 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=3 cycle=93091706
+KV8_CLIP layer=4 k=0 v_tok=0 v_codes=0 v_mmax=13 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=4 cycle=93544057
+KV8_CLIP layer=5 k=0 v_tok=0 v_codes=0 v_mmax=15 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=5 cycle=93996448
+PROGRESS cycle=94000000 state=000000000000000004000 op=0 output_tile=0
+KV8_CLIP layer=6 k=0 v_tok=0 v_codes=0 v_mmax=7 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=6 cycle=94448827
+KV8_CLIP layer=7 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=7 cycle=94901236
+PROGRESS cycle=95000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=8 k=0 v_tok=0 v_codes=0 v_mmax=12 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=8 cycle=95353638
+KV8_CLIP layer=9 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=9 cycle=95806034
+PROGRESS cycle=96000000 state=000000080000000000000 op=3 output_tile=7
+KV8_CLIP layer=10 k=0 v_tok=0 v_codes=0 v_mmax=8 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=10 cycle=96258409
+KV8_CLIP layer=11 k=0 v_tok=0 v_codes=0 v_mmax=94 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=11 cycle=96710818
+PROGRESS cycle=97000000 state=000000000000000004000 op=5 output_tile=6
+KV8_CLIP layer=12 k=0 v_tok=0 v_codes=0 v_mmax=20 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=12 cycle=97163183
+KV8_CLIP layer=13 k=0 v_tok=0 v_codes=0 v_mmax=14 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=13 cycle=97615578
+PROGRESS cycle=98000000 state=000000000000000010000 op=6 output_tile=1
+KV8_CLIP layer=14 k=0 v_tok=0 v_codes=0 v_mmax=37 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=14 cycle=98067958
+KV8_CLIP layer=15 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=15 cycle=98520334
+KV8_CLIP layer=16 k=0 v_tok=0 v_codes=0 v_mmax=150 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=16 cycle=98972697
+PROGRESS cycle=99000000 state=000000000000000010000 op=2 output_tile=5
+KV8_CLIP layer=17 k=0 v_tok=0 v_codes=0 v_mmax=42 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=17 cycle=99425092
+KV8_CLIP layer=18 k=0 v_tok=0 v_codes=0 v_mmax=25 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=18 cycle=99877469
+PROGRESS cycle=100000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=19 k=0 v_tok=0 v_codes=0 v_mmax=37 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=19 cycle=100329881
+KV8_CLIP layer=20 k=0 v_tok=0 v_codes=0 v_mmax=26 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=20 cycle=100782283
+PROGRESS cycle=101000000 state=000000000000000010000 op=5 output_tile=3
+KV8_CLIP layer=21 k=0 v_tok=0 v_codes=0 v_mmax=71 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=21 cycle=101234658
+KV8_CLIP layer=22 k=0 v_tok=0 v_codes=0 v_mmax=10 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=22 cycle=101687053
+PROGRESS cycle=102000000 state=000000000000000010000 op=5 output_tile=2
+KV8_CLIP layer=23 k=0 v_tok=0 v_codes=0 v_mmax=6 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=1 layer=23 cycle=102139461
+PROGRESS cycle=103000000 state=000000000000000010000 op=7 output_tile=376
+PROGRESS cycle=104000000 state=000000000000000010000 op=7 output_tile=815
+
+RTL_TOKEN_VERIFIED iteration=1 id=0 cycles=13563552 logits=151936 max=22.5 idle_bias_addresses=0
+HARDWARE_TOKEN iteration=1 token=0 cycles=13563552 position=30 logits=151936
+PROGRESS cycle=105000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=0 k=0 v_tok=0 v_codes=0 v_mmax=6 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=0 cycle=105300435
+KV8_CLIP layer=1 k=0 v_tok=0 v_codes=0 v_mmax=10 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=1 cycle=105755215
+PROGRESS cycle=106000000 state=000000000000000010000 op=4 output_tile=6
+KV8_CLIP layer=2 k=0 v_tok=0 v_codes=0 v_mmax=3 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=2 cycle=106210003
+KV8_CLIP layer=3 k=0 v_tok=0 v_codes=0 v_mmax=31 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=3 cycle=106664723
+PROGRESS cycle=107000000 state=000000000000000010000 op=4 output_tile=4
+KV8_CLIP layer=4 k=0 v_tok=0 v_codes=0 v_mmax=12 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=4 cycle=107119437
+KV8_CLIP layer=5 k=0 v_tok=0 v_codes=0 v_mmax=12 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=5 cycle=107574210
+PROGRESS cycle=108000000 state=000000000000000010000 op=6 output_tile=4
+KV8_CLIP layer=6 k=0 v_tok=0 v_codes=0 v_mmax=7 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=6 cycle=108029018
+KV8_CLIP layer=7 k=0 v_tok=0 v_codes=0 v_mmax=15 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=7 cycle=108483756
+KV8_CLIP layer=8 k=0 v_tok=0 v_codes=0 v_mmax=14 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=8 cycle=108938489
+PROGRESS cycle=109000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=9 k=0 v_tok=0 v_codes=0 v_mmax=19 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=9 cycle=109393260
+KV8_CLIP layer=10 k=0 v_tok=0 v_codes=0 v_mmax=7 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=10 cycle=109848069
+PROGRESS cycle=110000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=11 k=0 v_tok=0 v_codes=0 v_mmax=89 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=11 cycle=110302825
+KV8_CLIP layer=12 k=0 v_tok=0 v_codes=0 v_mmax=14 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=12 cycle=110757540
+PROGRESS cycle=111000000 state=000000000000000010000 op=4 output_tile=5
+KV8_CLIP layer=13 k=0 v_tok=0 v_codes=0 v_mmax=19 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=13 cycle=111212315
+KV8_CLIP layer=14 k=0 v_tok=0 v_codes=0 v_mmax=28 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=14 cycle=111667123
+PROGRESS cycle=112000000 state=000000000000000010000 op=4 output_tile=3
+KV8_CLIP layer=15 k=0 v_tok=0 v_codes=0 v_mmax=15 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=15 cycle=112121876
+KV8_CLIP layer=16 k=0 v_tok=0 v_codes=0 v_mmax=134 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=16 cycle=112576590
+PROGRESS cycle=113000000 state=000000000000000004000 op=6 output_tile=4
+KV8_CLIP layer=17 k=0 v_tok=0 v_codes=0 v_mmax=27 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=17 cycle=113031363
+KV8_CLIP layer=18 k=0 v_tok=0 v_codes=0 v_mmax=21 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=18 cycle=113486172
+KV8_CLIP layer=19 k=0 v_tok=0 v_codes=0 v_mmax=29 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=19 cycle=113940908
+PROGRESS cycle=114000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=20 k=0 v_tok=0 v_codes=0 v_mmax=14 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=20 cycle=114395643
+KV8_CLIP layer=21 k=0 v_tok=0 v_codes=0 v_mmax=61 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=21 cycle=114850414
+PROGRESS cycle=115000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=22 k=0 v_tok=0 v_codes=0 v_mmax=8 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=22 cycle=115305222
+KV8_CLIP layer=23 k=0 v_tok=0 v_codes=0 v_mmax=3 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=2 layer=23 cycle=115759977
+PROGRESS cycle=116000000 state=000000000000000010000 op=7 output_tile=104
+PROGRESS cycle=117000000 state=000000000000000010000 op=7 output_tile=543
+PROGRESS cycle=118000000 state=000000000000000004000 op=7 output_tile=982
+
+RTL_TOKEN_VERIFIED iteration=2 id=2585 cycles=13620522 logits=151936 max=22.375 idle_bias_addresses=0
+HARDWARE_TOKEN iteration=2 token=2585 cycles=13620522 position=31 logits=151936
+KV8_CLIP layer=0 k=0 v_tok=0 v_codes=0 v_mmax=6 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=0 cycle=118924218
+PROGRESS cycle=119000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=1 k=0 v_tok=0 v_codes=0 v_mmax=17 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=1 cycle=119382190
+KV8_CLIP layer=2 k=0 v_tok=0 v_codes=0 v_mmax=7 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=2 cycle=119840160
+PROGRESS cycle=120000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=3 k=0 v_tok=0 v_codes=0 v_mmax=34 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=3 cycle=120298114
+KV8_CLIP layer=4 k=0 v_tok=0 v_codes=0 v_mmax=9 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=4 cycle=120756069
+PROGRESS cycle=121000000 state=000000000000000004000 op=4 output_tile=5
+KV8_CLIP layer=5 k=0 v_tok=0 v_codes=0 v_mmax=14 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=5 cycle=121214058
+KV8_CLIP layer=6 k=0 v_tok=0 v_codes=0 v_mmax=8 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=6 cycle=121672028
+PROGRESS cycle=122000000 state=000000000000000004000 op=4 output_tile=0
+KV8_CLIP layer=7 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=7 cycle=122129984
+KV8_CLIP layer=8 k=0 v_tok=0 v_codes=0 v_mmax=13 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=8 cycle=122587939
+PROGRESS cycle=123000000 state=000000000000000010000 op=6 output_tile=3
+KV8_CLIP layer=9 k=0 v_tok=0 v_codes=0 v_mmax=23 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=9 cycle=123045927
+KV8_CLIP layer=10 k=0 v_tok=0 v_codes=0 v_mmax=9 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=10 cycle=123503897
+KV8_CLIP layer=11 k=0 v_tok=0 v_codes=0 v_mmax=68 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=11 cycle=123961853
+PROGRESS cycle=124000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=12 k=0 v_tok=0 v_codes=0 v_mmax=19 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=12 cycle=124419811
+KV8_CLIP layer=13 k=0 v_tok=0 v_codes=0 v_mmax=14 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=13 cycle=124877830
+PROGRESS cycle=125000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=14 k=0 v_tok=0 v_codes=0 v_mmax=27 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=14 cycle=125335804
+KV8_CLIP layer=15 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=15 cycle=125793737
+PROGRESS cycle=126000000 state=000000000000000010000 op=4 output_tile=2
+KV8_CLIP layer=16 k=0 v_tok=0 v_codes=0 v_mmax=110 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=16 cycle=126251676
+KV8_CLIP layer=17 k=0 v_tok=0 v_codes=0 v_mmax=77 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=17 cycle=126709664
+PROGRESS cycle=127000000 state=000000000000000010000 op=5 output_tile=4
+KV8_CLIP layer=18 k=0 v_tok=0 v_codes=0 v_mmax=34 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=18 cycle=127167637
+KV8_CLIP layer=19 k=0 v_tok=0 v_codes=0 v_mmax=42 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=19 cycle=127625590
+PROGRESS cycle=128000000 state=000000000000000004000 op=6 output_tile=0
+KV8_CLIP layer=20 k=0 v_tok=0 v_codes=0 v_mmax=13 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=20 cycle=128083548
+KV8_CLIP layer=21 k=0 v_tok=0 v_codes=0 v_mmax=92 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=21 cycle=128541567
+KV8_CLIP layer=22 k=0 v_tok=0 v_codes=0 v_mmax=11 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=22 cycle=128999541
+PROGRESS cycle=129000000 state=000000000000000000200 op=0 output_tile=0
+KV8_CLIP layer=23 k=0 v_tok=0 v_codes=0 v_mmax=4 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=3 layer=23 cycle=129457476
+PROGRESS cycle=130000000 state=000000000000000008000 op=7 output_tile=237
+PROGRESS cycle=131000000 state=000000000000000010000 op=7 output_tile=676
+PROGRESS cycle=132000000 state=000000000000000004000 op=7 output_tile=1115
+
+RTL_TOKEN_VERIFIED iteration=3 id=646 cycles=13697492 logits=151936 max=22.25 idle_bias_addresses=0
+HARDWARE_TOKEN iteration=3 token=646 cycles=13697492 position=32 logits=151936
+KV8_CLIP layer=0 k=0 v_tok=0 v_codes=0 v_mmax=6 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=0 cycle=132623978
+PROGRESS cycle=133000000 state=000000000000000000008 op=6 output_tile=0
+KV8_CLIP layer=1 k=0 v_tok=0 v_codes=0 v_mmax=10 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=1 cycle=133084189
+KV8_CLIP layer=2 k=0 v_tok=0 v_codes=0 v_mmax=9 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=2 cycle=133544424
+PROGRESS cycle=134000000 state=000000000000000010000 op=6 output_tile=6
+KV8_CLIP layer=3 k=0 v_tok=0 v_codes=0 v_mmax=33 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=3 cycle=134004700
+KV8_CLIP layer=4 k=0 v_tok=0 v_codes=0 v_mmax=7 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=4 cycle=134464906
+KV8_CLIP layer=5 k=0 v_tok=0 v_codes=0 v_mmax=17 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=5 cycle=134925119
+PROGRESS cycle=135000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=6 k=0 v_tok=0 v_codes=0 v_mmax=5 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=6 cycle=135385356
+KV8_CLIP layer=7 k=0 v_tok=0 v_codes=0 v_mmax=17 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=7 cycle=135845632
+PROGRESS cycle=136000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=8 k=0 v_tok=0 v_codes=0 v_mmax=12 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=8 cycle=136305839
+KV8_CLIP layer=9 k=0 v_tok=0 v_codes=0 v_mmax=21 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=9 cycle=136766051
+PROGRESS cycle=137000000 state=000000000000000010000 op=5 output_tile=6
+KV8_CLIP layer=10 k=0 v_tok=0 v_codes=0 v_mmax=7 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=10 cycle=137226284
+KV8_CLIP layer=11 k=0 v_tok=0 v_codes=0 v_mmax=79 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=11 cycle=137686562
+PROGRESS cycle=138000000 state=000000000000000008000 op=4 output_tile=6
+KV8_CLIP layer=12 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=12 cycle=138146769
+KV8_CLIP layer=13 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=13 cycle=138606979
+PROGRESS cycle=139000000 state=000000000000000004000 op=6 output_tile=1
+KV8_CLIP layer=14 k=0 v_tok=0 v_codes=0 v_mmax=35 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=14 cycle=139067214
+KV8_CLIP layer=15 k=0 v_tok=0 v_codes=0 v_mmax=22 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=15 cycle=139527490
+KV8_CLIP layer=16 k=0 v_tok=0 v_codes=0 v_mmax=121 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=16 cycle=139987696
+PROGRESS cycle=140000000 state=000000000000000010000 op=2 output_tile=1
+KV8_CLIP layer=17 k=0 v_tok=0 v_codes=0 v_mmax=78 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=17 cycle=140447909
+KV8_CLIP layer=18 k=0 v_tok=0 v_codes=0 v_mmax=30 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=18 cycle=140908144
+PROGRESS cycle=141000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=19 k=0 v_tok=0 v_codes=0 v_mmax=32 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=19 cycle=141368420
+KV8_CLIP layer=20 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=20 cycle=141828596
+PROGRESS cycle=142000000 state=000000000000000010000 op=3 output_tile=0
+KV8_CLIP layer=21 k=0 v_tok=0 v_codes=0 v_mmax=99 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=21 cycle=142288804
+KV8_CLIP layer=22 k=0 v_tok=0 v_codes=0 v_mmax=10 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=22 cycle=142749056
+PROGRESS cycle=143000000 state=000000000000000010000 op=5 output_tile=0
+KV8_CLIP layer=23 k=0 v_tok=0 v_codes=0 v_mmax=4 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=4 layer=23 cycle=143209317
+PROGRESS cycle=144000000 state=000000000000000010000 op=7 output_tile=346
+PROGRESS cycle=145000000 state=000000000000000010000 op=7 output_tile=785
+
+RTL_TOKEN_VERIFIED iteration=4 id=358 cycles=13751844 logits=151936 max=25.875 idle_bias_addresses=0
+HARDWARE_TOKEN iteration=4 token=358 cycles=13751844 position=33 logits=151936
+PROGRESS cycle=146000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=0 k=0 v_tok=0 v_codes=0 v_mmax=9 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=0 cycle=146378083
+KV8_CLIP layer=1 k=0 v_tok=0 v_codes=0 v_mmax=9 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=1 cycle=146840624
+PROGRESS cycle=147000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=2 k=0 v_tok=0 v_codes=0 v_mmax=8 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=2 cycle=147303167
+KV8_CLIP layer=3 k=0 v_tok=0 v_codes=0 v_mmax=32 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=3 cycle=147765607
+PROGRESS cycle=148000000 state=000000000000000010000 op=5 output_tile=6
+KV8_CLIP layer=4 k=0 v_tok=0 v_codes=0 v_mmax=14 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=4 cycle=148228075
+KV8_CLIP layer=5 k=0 v_tok=0 v_codes=0 v_mmax=19 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=5 cycle=148690495
+PROGRESS cycle=149000000 state=000000000000000010000 op=4 output_tile=3
+KV8_CLIP layer=6 k=0 v_tok=0 v_codes=0 v_mmax=6 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=6 cycle=149152992
+KV8_CLIP layer=7 k=0 v_tok=0 v_codes=0 v_mmax=17 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=7 cycle=149615533
+PROGRESS cycle=150000000 state=000000000000000010000 op=6 output_tile=0
+KV8_CLIP layer=8 k=0 v_tok=0 v_codes=0 v_mmax=12 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=8 cycle=150077975
+KV8_CLIP layer=9 k=0 v_tok=0 v_codes=0 v_mmax=18 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=9 cycle=150540439
+PROGRESS cycle=151000000 state=000000000000000004000 op=6 output_tile=6
+KV8_CLIP layer=10 k=0 v_tok=0 v_codes=0 v_mmax=9 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=10 cycle=151002982
+KV8_CLIP layer=11 k=0 v_tok=0 v_codes=0 v_mmax=80 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=11 cycle=151465523
+KV8_CLIP layer=12 k=0 v_tok=0 v_codes=0 v_mmax=17 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=12 cycle=151928037
+PROGRESS cycle=152000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=13 k=0 v_tok=0 v_codes=0 v_mmax=15 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=13 cycle=152390496
+KV8_CLIP layer=14 k=0 v_tok=0 v_codes=0 v_mmax=36 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=14 cycle=152852972
+PROGRESS cycle=153000000 state=000000000010000000000 op=2 output_tile=7
+KV8_CLIP layer=15 k=0 v_tok=0 v_codes=0 v_mmax=19 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=15 cycle=153315460
+KV8_CLIP layer=16 k=0 v_tok=0 v_codes=0 v_mmax=94 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=16 cycle=153777876
+PROGRESS cycle=154000000 state=000000000000000010000 op=5 output_tile=0
+KV8_CLIP layer=17 k=0 v_tok=0 v_codes=0 v_mmax=54 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=17 cycle=154240368
+KV8_CLIP layer=18 k=0 v_tok=0 v_codes=0 v_mmax=21 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=18 cycle=154702893
+PROGRESS cycle=155000000 state=000000000000000010000 op=5 output_tile=5
+KV8_CLIP layer=19 k=0 v_tok=0 v_codes=0 v_mmax=40 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=19 cycle=155165350
+KV8_CLIP layer=20 k=0 v_tok=0 v_codes=0 v_mmax=17 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=20 cycle=155627852
+PROGRESS cycle=156000000 state=000000000000000010000 op=5 output_tile=0
+KV8_CLIP layer=21 k=0 v_tok=0 v_codes=0 v_mmax=61 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=21 cycle=156090291
+KV8_CLIP layer=22 k=0 v_tok=0 v_codes=0 v_mmax=7 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=22 cycle=156552783
+PROGRESS cycle=157000000 state=000000000000000008000 op=6 output_tile=5
+KV8_CLIP layer=23 k=0 v_tok=0 v_codes=0 v_mmax=4 sticky=0 vsticky=1 wrerr=0 wrcode=00
+LAYER_DONE iteration=5 layer=23 cycle=157015275
+PROGRESS cycle=158000000 state=000000000000000010000 op=7 output_tile=431
+PROGRESS cycle=159000000 state=000000000000000004000 op=7 output_tile=870
+
+RTL_TOKEN_VERIFIED iteration=5 id=7789 cycles=13805955 logits=151936 max=26.375 idle_bias_addresses=0
+RTL_STOP_AFTER reached (6 token(s)); exiting 0

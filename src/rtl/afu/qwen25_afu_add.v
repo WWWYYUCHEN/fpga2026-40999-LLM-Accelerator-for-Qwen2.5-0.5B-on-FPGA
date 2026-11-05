@@ -22,7 +22,9 @@ module qwen25_afu_add (
         .result(wire_result), .output_valid(wire_valid)
     );
     always @(posedge i_clk) begin
-        if (!i_rstn || i_clear) begin
+        if (!i_rstn) begin
+            flag_valid_o <= 1'b0;
+        end else if (i_clear) begin
             flag_valid_o <= 1'b0;
         end else begin
             flag_valid_o <= wire_valid;

@@ -1,6 +1,0 @@
-period_ns=10.000
-setup_uncertainty_ns=0.100
-setup_wns_ns=1.700
-hold_whs_ns=0.010
-baseline_setup_wns_ns=1.356
-source=isolated norm-word alignment candidate

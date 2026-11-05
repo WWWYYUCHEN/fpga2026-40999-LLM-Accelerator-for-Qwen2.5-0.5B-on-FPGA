@@ -62,8 +62,8 @@ module qwen25_afu_lane (
     assign o_mul_finalize = wire_gamma[0];
     qwen25_afu_fp_mul multiply_Inst (
         .aclk(i_clk),
-        .s_axis_a_tvalid(i_rstn && mul_valid_reg), .s_axis_a_tdata(mul_a_reg), .s_axis_a_tuser(mul_user_reg),
-        .s_axis_b_tvalid(i_rstn && mul_valid_reg), .s_axis_b_tdata(mul_b_reg),
+        .s_axis_a_tvalid(mul_valid_reg), .s_axis_a_tdata(mul_a_reg), .s_axis_a_tuser(mul_user_reg),
+        .s_axis_b_tvalid(mul_valid_reg), .s_axis_b_tdata(mul_b_reg),
         .m_axis_result_tvalid(wire_mul_valid_raw), .m_axis_result_tdata(o_mul_result),
         .m_axis_result_tuser(wire_gamma)
     );
@@ -78,12 +78,12 @@ module qwen25_afu_lane (
     );
     qwen25_afu_fp_exp exponential_Inst (
         .aclk(i_clk),
-        .s_axis_a_tvalid(i_rstn && i_exp_valid), .s_axis_a_tdata(i_exp_a),
+        .s_axis_a_tvalid(i_exp_valid), .s_axis_a_tdata(i_exp_a),
         .m_axis_result_tvalid(wire_exp_valid_raw), .m_axis_result_tdata(o_exp_result)
     );
     qwen25_afu_fp_recip reciprocal_Inst (
         .aclk(i_clk),
-        .s_axis_a_tvalid(i_rstn && i_recip_valid), .s_axis_a_tdata(i_recip_a),
+        .s_axis_a_tvalid(i_recip_valid), .s_axis_a_tdata(i_recip_a),
         .m_axis_result_tvalid(wire_recip_valid_raw), .m_axis_result_tdata(o_recip_result)
     );
 endmodule

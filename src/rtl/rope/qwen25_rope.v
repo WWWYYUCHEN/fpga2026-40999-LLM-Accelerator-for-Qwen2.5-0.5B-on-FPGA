@@ -70,8 +70,8 @@ module qwen25_rope (
     reg [31:0] wire_multiply_a,wire_multiply_b;
     wire [31:0] wire_product;
     wire flag_product_valid;
-    wire flag_multiply_issue=i_rstn && state_current==S_MUL_SEND;
-    wire flag_sum_issue=i_rstn && state_current==S_ADD_SEND;
+    wire flag_multiply_issue=state_current==S_MUL_SEND;
+    wire flag_sum_issue=state_current==S_ADD_SEND;
     wire [31:0] wire_sum_a=flag_add_issue ? reg_second_cos : reg_first_cos;
     wire [31:0] wire_sum_b=flag_add_issue ? reg_first_sin : {~reg_second_sin[31],reg_second_sin[30:0]};
     wire [31:0] wire_sum;
@@ -82,14 +82,14 @@ module qwen25_rope (
 
     // 信用约束覆盖角度等待、算术流水与最终输出，输入背压不能产生新事务。
     assign flag_capacity = cnt_credit < C_DEPTH;
-    assign o_ready = i_rstn && flag_capacity && flag_trig_ready;
+    assign o_ready = flag_capacity && flag_trig_ready;
     assign flag_accept = i_valid && o_ready;
-    assign flag_trig_result_ready = i_rstn && cnt_pairs != 0 && state_current==S_IDLE;
+    assign flag_trig_result_ready = cnt_pairs != 0 && state_current==S_IDLE;
     assign flag_trig_accept = flag_trig_valid && flag_trig_result_ready;
-    assign o_valid = i_rstn && cnt_results != 0;
+    assign o_valid = cnt_results != 0;
     assign o_data = reg_results[ptr_result_read];
     assign o_busy = cnt_credit != 0;
-    assign flag_produce = i_rstn && state_current==S_ADD_WAIT && flag_sum_valid && flag_add_return;
+    assign flag_produce = state_current==S_ADD_WAIT && flag_sum_valid && flag_add_return;
     assign flag_pop = o_valid && i_ready;
 
     // Preserve four separately rounded FP32 products before the two sums.

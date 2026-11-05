@@ -30,7 +30,7 @@ module qwen25_rope_sincos (
     reg [31:0] sine;
     wire conversion_valid;
     wire conversion_valid_raw;
-    wire conversion_issue=i_rstn && (cordic_valid || cosine_issue);
+    wire conversion_issue=(cordic_valid || cosine_issue);
     wire cordic_input_valid;
     wire cordic_return_valid;
     // This ownership counter survives system reset so every old serial result
@@ -43,11 +43,11 @@ module qwen25_rope_sincos (
     wire produce=conversion_valid && cosine_result;
     wire pop=o_valid && i_ready;
     wire [64:0] identity=identity_queue[identity_read];
-    assign o_ready=i_rstn && credits<DEPTH;
-    assign o_valid=i_rstn && result_count!=0;
+    assign o_ready=credits<DEPTH;
+    assign o_valid=result_count!=0;
     assign {o_sin,o_cos}=result_queue[result_read];
-    assign cordic_input_valid=i_rstn && !cordic_flushing && phase_count!=0;
-    assign cordic_return_valid=i_rstn && !cordic_flushing && cordic_result_valid;
+    assign cordic_input_valid=!cordic_flushing && phase_count!=0;
+    assign cordic_return_valid=!cordic_flushing && cordic_result_valid;
 
     always @(posedge i_clk)begin
         case({issue,cordic_result_valid})

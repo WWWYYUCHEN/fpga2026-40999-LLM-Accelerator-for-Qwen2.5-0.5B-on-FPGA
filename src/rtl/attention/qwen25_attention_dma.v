@@ -69,8 +69,8 @@ module qwen25_attention_dma (
     reg [32:0] reg_context_address_low;
     wire [31:0] context_address_high=reg_context_base[63:32]+{31'd0,reg_context_address_low[32]};
 
-    assign o_read_ready=i_rstn && state_current==S_IDLE && !i_context_valid;
-    assign o_context_ready=i_rstn && state_current==S_IDLE;
+    assign o_read_ready=state_current==S_IDLE && !i_context_valid;
+    assign o_context_ready=state_current==S_IDLE;
     assign o_data_valid=state_current==S_RESPONSE;
     assign o_data=reg_data;
     assign o_busy=state_current!=S_IDLE;

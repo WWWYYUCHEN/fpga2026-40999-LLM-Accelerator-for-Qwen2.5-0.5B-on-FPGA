@@ -21,7 +21,8 @@ module qwen_fp32_add_valid (
     );
     assign output_valid = operator_valid && reset_token[6];
     always_ff @(posedge clk) begin
-        if (!rst_n || clear) reset_token <= '0;
+        if (!rst_n) reset_token <= '0;
+        else if (clear) reset_token <= '0;
         else reset_token <= {reset_token[5:0], input_valid};
     end
 endmodule

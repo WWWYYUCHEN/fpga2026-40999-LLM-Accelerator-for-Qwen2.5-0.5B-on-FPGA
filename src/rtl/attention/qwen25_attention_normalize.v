@@ -96,7 +96,9 @@ module qwen25_attention_normalize (
     // A phase change keeps the same row; only a row change discards the sample.
     // Its maximum remains stable while the P bank is owned by this worker.
     always @(posedge i_clk)begin
-        if(!i_rstn || (state_current==S_NEXT && reg_phase==2 && !i_busy))
+        if(!i_rstn)
+            row_complete_reg<=1'b0;
+        else if(state_current==S_NEXT && reg_phase==2 && !i_busy)
             row_complete_reg<=1'b0;
         else
             row_complete_reg<=i_row_complete;

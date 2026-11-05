@@ -83,10 +83,6 @@ module qwen25_mmu_read #(parameter RS_LV = 0) (
         reg [8:0] count_written, count_read;
         wire start_chunk=issue_fire && reg_issue_port==lane;
         wire take_word=read_fifo && selected_port==lane;
-        wire [127:0] unused_meta, unused_completion_meta;
-        wire [15:0] unused_tag, unused_completion_tag;
-        wire [3:0] unused_resource;
-        wire unused_last;
         assign lane_fifo_available[lane]=flag_pending[lane] && count_read<count_written;
         assign lane_fifo_data[lane*144+:144]=reg_memory_output;
         assign lane_fifo_last[lane]=count_read==reg_chunk_beats[lane]-1'b1;
@@ -118,11 +114,11 @@ module qwen25_mmu_read #(parameter RS_LV = 0) (
             .m_axi_rvalid(m_axi_rvalid[lane]),.m_axi_rready(m_axi_rready[lane]),
             .m_stream_data(lane_data[lane*128+:128]),.m_stream_keep(lane_keep[lane*16+:16]),
             .m_stream_error(),.m_stream_valid(lane_data_valid[lane]),
-            .m_stream_ready(1'b1),.m_stream_last(unused_last),.m_stream_meta(unused_meta),
-            .m_stream_tag(unused_tag),.m_stream_resource(unused_resource),
+            .m_stream_ready(1'b1),.m_stream_last(),.m_stream_meta(),
+            .m_stream_tag(),.m_stream_resource(),
             .busy(lane_busy[lane]),.done(lane_done[lane]),.error(),
             .aborted(lane_aborted[lane]),.error_code(),
-            .completion_tag(unused_completion_tag),.completion_meta(unused_completion_meta));
+            .completion_tag(),.completion_meta());
     end endgenerate
 
     always @(*)begin

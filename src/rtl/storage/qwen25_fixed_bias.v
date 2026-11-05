@@ -21,7 +21,7 @@ module qwen25_fixed_bias (
     wire [63:0] read0,read1;
     wire write_accept=load_valid && load_ready;
 
-    assign load_ready=rst_n && !loaded_reg && !load_start;
+    assign load_ready=!loaded_reg && !load_start;
     assign load_done=done_reg;
     assign loaded=loaded_reg;
     assign read_valid=read_valid_reg;

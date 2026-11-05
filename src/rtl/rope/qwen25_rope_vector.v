@@ -55,8 +55,8 @@ module qwen25_rope_vector (
     wire flag_result_fire = flag_result_valid && flag_result_ready;
     wire [31:0] wire_result;
 
-    assign o_ready = i_rstn && !flag_active;
-    assign o_valid = i_rstn && flag_active && cnt_pair_return == 8;
+    assign o_ready = !flag_active;
+    assign o_valid = flag_active && cnt_pair_return == 8;
     assign o_data = reg_output_first;
     assign o_aux = reg_output_second;
     assign o_meta = reg_metadata;
@@ -135,8 +135,8 @@ module qwen25_rope_vector (
     );
     qwen25_afu_fp_mul angle_multiply_Inst (
         .aclk(i_clk),
-        .s_axis_a_tvalid(i_rstn && flag_angle_issue),.s_axis_a_tdata(wire_position_float),.s_axis_a_tuser(16'd0),
-        .s_axis_b_tvalid(i_rstn && flag_angle_issue),.s_axis_b_tdata(reg_inverse_frequency),
+        .s_axis_a_tvalid(flag_angle_issue),.s_axis_a_tdata(wire_position_float),.s_axis_a_tuser(16'd0),
+        .s_axis_b_tvalid(flag_angle_issue),.s_axis_b_tdata(reg_inverse_frequency),
         .m_axis_result_tvalid(flag_angle_return_raw),.m_axis_result_tdata(wire_angle),.m_axis_result_tuser()
     );
     qwen25_rope pair_Inst (

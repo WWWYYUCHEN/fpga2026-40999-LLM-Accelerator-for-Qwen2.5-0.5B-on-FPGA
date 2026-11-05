@@ -1,0 +1,211 @@
+﻿{
+    "design":  "kv260_accel_bd",
+    "part":  "xck26-sfvc784-2LV-c",
+    "clock_hz":  99999001,
+    "generated":  "2026-11-03 05:13:42",
+    "bd_addr_segs_csv":  "D:\\ds\\kv260_mmu\\newdma\\work_bd\\reports\\bd_addr_segs.csv",
+    "pl_axi":  {
+                   "control_window":  {
+                                          "name":  "QWEN25_CTRL",
+                                          "base":  "0x80000000",
+                                          "size":  65536,
+                                          "protocol":  "AXI4-Lite",
+                                          "data_width":  64,
+                                          "addr_width":  16,
+                                          "ps_port":  "M_AXI_HPM0_LPD",
+                                          "path":  "M_AXI_HPM0_LPD -\u003e smc_ctrl (1x1 SmartConnect) -\u003e qwen25_accel_0/s_axil"
+                                      },
+                   "datapath":  [
+                                    {
+                                        "master":  "qwen25_accel_0/m_axi0",
+                                        "ps_port":  "S_AXI_HP0_FPD",
+                                        "protocol":  "AXI4",
+                                        "data_width":  128,
+                                        "id_width":  4,
+                                        "ps_id_width":  6,
+                                        "ddr_low_base":  "0x00000000",
+                                        "ddr_low_size":  "0x80000000"
+                                    },
+                                    {
+                                        "master":  "qwen25_accel_0/m_axi1",
+                                        "ps_port":  "S_AXI_HP1_FPD",
+                                        "protocol":  "AXI4",
+                                        "data_width":  128,
+                                        "id_width":  4,
+                                        "ps_id_width":  6,
+                                        "ddr_low_base":  "0x00000000",
+                                        "ddr_low_size":  "0x80000000"
+                                    },
+                                    {
+                                        "master":  "qwen25_accel_0/m_axi2",
+                                        "ps_port":  "S_AXI_HP2_FPD",
+                                        "protocol":  "AXI4",
+                                        "data_width":  128,
+                                        "id_width":  4,
+                                        "ps_id_width":  6,
+                                        "ddr_low_base":  "0x00000000",
+                                        "ddr_low_size":  "0x80000000"
+                                    },
+                                    {
+                                        "master":  "qwen25_accel_0/m_axi3",
+                                        "ps_port":  "S_AXI_HP3_FPD",
+                                        "protocol":  "AXI4",
+                                        "data_width":  128,
+                                        "id_width":  4,
+                                        "ps_id_width":  6,
+                                        "ddr_low_base":  "0x00000000",
+                                        "ddr_low_size":  "0x80000000"
+                                    }
+                                ]
+               },
+    "ddr":  {
+                "aperture_low_base":  "0x00000000",
+                "aperture_low_size":  "0x80000000",
+                "highest_used":  "0x71B6FFFF",
+                "allocated_bytes":  927625728,
+                "fits_low_aperture":  true,
+                "headroom_bytes":  239665152
+            },
+    "regions":  [
+                    {
+                        "name":  "QWEN25_K_CACHE",
+                        "kind":  "array",
+                        "base":  "0x10000000",
+                        "size":  201326592,
+                        "high":  "0x1BFFFFFF",
+                        "stride":  "0x00800000",
+                        "count":  24,
+                        "note":  "K cache, one 8 MiB slot per layer"
+                    },
+                    {
+                        "name":  "QWEN25_V_CACHE",
+                        "kind":  "array",
+                        "base":  "0x20000000",
+                        "size":  201326592,
+                        "high":  "0x2BFFFFFF",
+                        "stride":  "0x00800000",
+                        "count":  24,
+                        "note":  "V cache, one 8 MiB slot per layer"
+                    },
+                    {
+                        "name":  "QWEN25_KV_SCALE",
+                        "kind":  "array",
+                        "base":  "0x30000000",
+                        "size":  25165824,
+                        "high":  "0x317FFFFF",
+                        "stride":  "0x00100000",
+                        "count":  24,
+                        "note":  "KV scale image, one 1 MiB slot per layer"
+                    },
+                    {
+                        "name":  "QWEN25_DESC",
+                        "kind":  "blob",
+                        "base":  "0x40000000",
+                        "size":  6144,
+                        "high":  "0x400017FF",
+                        "file":  "QWEN25/DESC.BIN",
+                        "note":  "tensor descriptor table"
+                    },
+                    {
+                        "name":  "QWEN25_SCALE",
+                        "kind":  "blob",
+                        "base":  "0x40010000",
+                        "size":  912128,
+                        "high":  "0x400EEAFF",
+                        "file":  "QWEN25/SCALE.BIN",
+                        "note":  "per-channel scale table"
+                    },
+                    {
+                        "name":  "QWEN25_BIAS",
+                        "kind":  "blob",
+                        "base":  "0x40100000",
+                        "size":  55296,
+                        "high":  "0x4010D7FF",
+                        "file":  "QWEN25/BIAS.BIN",
+                        "note":  "per-channel bias table"
+                    },
+                    {
+                        "name":  "QWEN25_GAMMA",
+                        "kind":  "blob",
+                        "base":  "0x40110000",
+                        "size":  87808,
+                        "high":  "0x401256FF",
+                        "file":  "QWEN25/GAMMA.BIN",
+                        "note":  "layernorm gamma table"
+                    },
+                    {
+                        "name":  "QWEN25_WEIGHTS",
+                        "kind":  "blob",
+                        "base":  "0x41000000",
+                        "size":  357826560,
+                        "high":  "0x5653FFFF",
+                        "file":  "QWEN25/WEIGHTS.BIN",
+                        "note":  "INT8/INT24 weight image"
+                    },
+                    {
+                        "name":  "QWEN25_LMW",
+                        "kind":  "blob",
+                        "base":  "0x57000000",
+                        "size":  136134656,
+                        "high":  "0x5F1D3FFF",
+                        "file":  "QWEN25/LMW.BIN",
+                        "note":  "LM-head weight image"
+                    },
+                    {
+                        "name":  "QWEN25_SCRATCH0",
+                        "kind":  "scratch",
+                        "base":  "0x71000000",
+                        "size":  458752,
+                        "high":  "0x7106FFFF",
+                        "note":  "scratch (segments.tsv)"
+                    },
+                    {
+                        "name":  "QWEN25_SCRATCH1",
+                        "kind":  "scratch",
+                        "base":  "0x71500000",
+                        "size":  458752,
+                        "high":  "0x7156FFFF",
+                        "note":  "scratch (segments.tsv)"
+                    },
+                    {
+                        "name":  "QWEN25_SCRATCH2",
+                        "kind":  "scratch",
+                        "base":  "0x71600000",
+                        "size":  458752,
+                        "high":  "0x7166FFFF",
+                        "note":  "scratch (segments.tsv)"
+                    },
+                    {
+                        "name":  "QWEN25_SCRATCH3",
+                        "kind":  "scratch",
+                        "base":  "0x71700000",
+                        "size":  458752,
+                        "high":  "0x7176FFFF",
+                        "note":  "scratch (segments.tsv)"
+                    },
+                    {
+                        "name":  "QWEN25_SCRATCH4",
+                        "kind":  "scratch",
+                        "base":  "0x71800000",
+                        "size":  2490368,
+                        "high":  "0x71A5FFFF",
+                        "note":  "scratch (segments.tsv)"
+                    },
+                    {
+                        "name":  "QWEN25_SCRATCH5",
+                        "kind":  "scratch",
+                        "base":  "0x71B00000",
+                        "size":  458752,
+                        "high":  "0x71B6FFFF",
+                        "note":  "scratch (segments.tsv)"
+                    },
+                    {
+                        "name":  "QWEN25_CTRL",
+                        "kind":  "axil",
+                        "base":  "0x80000000",
+                        "size":  65536,
+                        "high":  "0x8000FFFF",
+                        "note":  "AXI4-Lite control window in the PL aperture"
+                    }
+                ]
+}

@@ -1,23 +1,22 @@
-# 仿真运行产物（每次运行生成，不入库）
+# 仿真运行目录（每次 run_candidate 都会新建）
+run_*/
 sim/runs/
 
-# Python
+# 构建中间物
+*.o
+*.d
 __pycache__/
-*.py[cod]
-.venv/
-venv/
+*.pyc
+obj_dir/
 
-# Windows / 编辑器
-Thumbs.db
-desktop.ini
-.vs/
-.vscode/
-*.swp
-
-# Vivado 临时产物（本仓库只保留最终报告、日志与 bit/XSA）
+# Vivado 临时文件
 *.jou
 *.str
-*.dcp
 *.wdb
-*.rpx
 .Xil/
+
+# 编辑器 / 系统
+.vs/
+.vscode/
+Thumbs.db
+desktop.ini

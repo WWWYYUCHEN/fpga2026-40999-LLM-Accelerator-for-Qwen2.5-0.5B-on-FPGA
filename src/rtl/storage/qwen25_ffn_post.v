@@ -191,13 +191,20 @@ module qwen25_ffn_post (
             reg_dma_address[63:32]<=reg_dma_address[63:32]+{30'd0,dma_address_high_increment};
     end
     always @(posedge clk) begin
-        if(!rst_n || start)begin
+        if(!rst_n)begin
             input_row<=0;input_word<=0;output_row<=0;output_word<=0;
             dma_row<=0;dma_word<=0;push_pointer<=0;pop_pointer<=0;occupancy<=0;
             held_x<=0;held_y<=0;response_seen<=0;
-            input_word_last<=!rst_n || words==7'd1;
-            dma_word_last<=!rst_n || words==7'd1;
-            output_word_last<=!rst_n || words==7'd1;
+            input_word_last<=1'b1;
+            dma_word_last<=1'b1;
+            output_word_last<=1'b1;
+        end else if(start)begin
+            input_row<=0;input_word<=0;output_row<=0;output_word<=0;
+            dma_row<=0;dma_word<=0;push_pointer<=0;pop_pointer<=0;occupancy<=0;
+            held_x<=0;held_y<=0;response_seen<=0;
+            input_word_last<=words==7'd1;
+            dma_word_last<=words==7'd1;
+            output_word_last<=words==7'd1;
         end else begin
             if(read_state==R_WAIT && read_valid)begin held_x<=read_x;held_y<=read_y;end
             if(input_fire && !input_word_last)begin

@@ -26,7 +26,7 @@ module qwen_gemm_pe (
     // Loading the idle bank must not suppress active-bank slot advancement.
     for (genvar bank = 0; bank < 2; bank++) begin : gen_bank_index
         always_ff @(posedge clk) begin
-            if (!rst_n || clear) begin
+            if (!rst_n ) begin
                 reg_weight_index[bank] <= 3'd0;
             end else if (weight_write && weight_write_bank == bank) begin
                 reg_weight_index[bank] <= 3'd0;

@@ -38,7 +38,7 @@ module qwen_gemm_acc_column (
     assign write_committed = reg_write_valid;
     // 本列写地址和数据先寄存；下一拍落入RAM，保持原写提交时刻。
     always_ff @(posedge clk) begin
-        if (!rst_n || clear) reg_write_valid <= 1'b0;
+        if (!rst_n ) reg_write_valid <= 1'b0;
         else reg_write_valid <= write_enable;
         if (write_enable) begin
             reg_write_address <= {write_slot, write_row};
@@ -53,7 +53,7 @@ module qwen_gemm_acc_column (
 
     // 只延迟地址，不提前锁存RAM数值；第二拍地址与partial-update数据对齐。
     always_ff @(posedge clk) begin
-        if (!rst_n || clear) reg_select_valid <= 1'b0;
+        if (!rst_n ) reg_select_valid <= 1'b0;
         else reg_select_valid <= select_valid;
         if (select_valid) begin
             reg_select_address <= select_address;

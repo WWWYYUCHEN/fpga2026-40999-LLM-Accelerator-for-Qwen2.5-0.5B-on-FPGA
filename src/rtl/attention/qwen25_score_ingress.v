@@ -1,6 +1,31 @@
 `timescale 1ns / 1ps
 `default_nettype none
-// Score mode scales/masks; logits mode preserves values and reduces into row zero.
+// -----------------------------------------------------------------------------
+// qwen25_score_ingress -- INT8-KV variant (stage 3 of the INT8 attention landing)
+//
+// Difference from rtl/attention/qwen25_score_ingress.v
+//   1) the fixed 1/8 exponent decrement of the score word (:90-94) is DELETED --
+//      the 1/8 now lives inside the KV scale table (kv8_scale_ram stores s_k/8);
+//   2) kv8_score_scale8 is inserted in front of stage 0, so each of the 8 lanes
+//      becomes  score * s_k/8  (the per-(head,token) INT8 K dequantisation);
+//   3) one new input, i_scale[127:0] = 8 x m16 plus i_eb[7:0] (the block exponent),
+//      supplied together with i_data for exactly the same word.  In logits mode
+//      i_scale/i_eb are ignored and
+//      the raw word is passed through (the multiplier is bypassed, exactly like
+//      the original).
+//
+// Alignment contract (this is the thing that silently kills a corr-0.99 run if
+// it is wrong): the 8 scales of i_scale must belong to the 8 tokens of i_data,
+// i.e. both words are indexed by {head, token[14:3]}.  The testbench drives them
+// from the same word index and checks that the value of every lane is
+// score[token] * scale[token] (a swapped/misaligned scale changes the lane
+// value, so it cannot pass).
+//
+// Timing cost: the multiplier is 2 cycles deep with no back-pressure inside, so
+// the input side accepts a word only when the previous one has left it
+// (o_ready = stage_ready[0] && !inflight).  Score words per tile are tens, so a
+// 3x slower ingest is ~100 extra cycles against a GEMM that takes thousands.
+// -----------------------------------------------------------------------------
 module qwen25_score_ingress (
     input wire i_clk,
     input wire i_rstn,
@@ -10,6 +35,8 @@ module qwen25_score_ingress (
     input wire i_bank,
     input wire [14:0] i_address,
     input wire [127:0] i_data,
+    input wire [127:0] i_scale,        // 8 x m16 (MANT_BITS=16); ignored in logits mode
+    input wire [7:0]   i_eb,           // [M16-SCALE] block exponent of that scale word
     input wire [31:0] i_length,
     input wire [15:0] i_position,
     output wire o_valid,
@@ -48,12 +75,37 @@ module qwen25_score_ingress (
     wire [63:0] quad_index;
     wire [15:0] word_result;
     wire [31:0] word_result_index;
-    wire [31:0] input_base=i_logits ? {14'd0,i_address,3'd0} :
-        {17'd0,i_address[11:0],3'd0};
-    wire [31:0] input_words=(i_length+32'd7)>>3;
-    wire [16:0] causal_limit={1'b0,i_position}+{14'd0,i_address[14:12]};
+
+    // ------------------------------------------------------------- input pipe
+    reg         inflight;
+    reg [14:0]  p_address;
+    reg         p_bank, p_logits;
+    reg [2:0]   p_row;
+    reg         p_first, p_last;
+    reg [15:0]  p_words;
+    reg [127:0] p_raw0, p_raw1;      // raw word, delayed to the scaler output
+    reg [14:0]  p_address1;
+    reg         p_bank1, p_logits1;
+    reg [2:0]   p_row1;
+    reg         p_first1, p_last1;
+    reg [15:0]  p_words1;
+
+    wire             mul_valid;
+    wire [127:0]     mul_data;
+    wire             accept = i_valid && o_ready;
+    wire [31:0]      in_base = i_logits ? {14'd0,i_address,3'd0} : {17'd0,i_address[11:0],3'd0};
+    wire [31:0]      input_words = (i_length+32'd7)>>3;
+
+    // [M16-SCALE] the K scale arrives as 8 x m16 + the block exponent, so the
+    // multiply is Sa(8b) x m16(16b) with one rounding, C = 268 (see the module).
+    kv8_score_scale8 #(.MANT_BITS(16), .CEX(268)) scale_Inst (
+        .clk(i_clk), .rst_n(i_rstn),
+        .i_valid(accept), .i_score(i_data), .i_scale(i_scale), .i_eb(i_eb),
+        .o_valid(mul_valid), .o_score(mul_data)
+    );
+
     assign stage_ready[4]=!stage_valid[4] || i_ready;
-    assign o_ready=stage_ready[0];
+    assign o_ready=stage_ready[0] && !inflight;
     assign o_valid=stage_valid[4];
     assign o_bank=stage_bank[4];
     assign o_address=stage_address[4];
@@ -66,7 +118,8 @@ module qwen25_score_ingress (
     // Invert only the indices in logits mode: the existing lowest-index tree
     // then chooses the most recently arriving token on equal BF16 values.
     assign o_index=stage_logits[4] ? ~word_index : word_index;
-    assign o_busy=|stage_valid;
+    assign o_busy=|stage_valid | inflight;
+
     genvar stage,lane,pair,quad;
     generate
         for(stage=0;stage<4;stage=stage+1)begin:gen_ready
@@ -86,20 +139,18 @@ module qwen25_score_ingress (
             end
         end
         for(lane=0;lane<8;lane=lane+1)begin:gen_lane
-            wire [15:0] value=i_data[lane*16 +: 16];
-            wire [7:0] exponent=value[14:7];
-            wire [7:0] scaled_exponent=exponent-8'd3;
-            wire [15:0] scaled_value=exponent==8'hff ?
-                (value[6:0]!=0 ? 16'h7fc0 : value) :
-                (exponent<=3 ? {value[15],15'd0} : {value[15],scaled_exponent,value[6:0]});
-            wire [31:0] column=input_base+lane;
-            // The index is prepared in stage zero, including the logits physical-row bits.
+            // ---- stage 0: INT8-K scale applied, mask/index prepared ----
+            // score mode : y = score * s_k/8   (kv8_score_scale8, 2 cycles)
+            // logits mode: y = score           (multiplier bypassed)
+            wire [15:0] lane_scaled = p_logits1 ? p_raw1[lane*16 +: 16] : mul_data[lane*16 +: 16];
+            wire [31:0] column = (p_logits1 ? {14'd0,p_address1,3'd0} : {17'd0,p_address1[11:0],3'd0}) + lane;
+            wire [16:0] causal_limit = {1'b0,i_position} + {14'd0,p_address1[14:12]};
             reg [31:0] scaled_index;
             always @(posedge i_clk)begin
-                if(stage_ready[0] && i_valid)begin
-                    stage_data[0][lane*16 +: 16]<=i_logits ? value : scaled_value;
-                    scaled_mask[lane]<=column<i_length && (i_logits || column<={15'd0,causal_limit});
-                    scaled_index<=i_logits ? ~column : column;
+                if(mul_valid)begin
+                    stage_data[0][lane*16 +: 16]<=lane_scaled;
+                    scaled_mask[lane]<=column<i_length && (p_logits1 || column<={15'd0,causal_limit});
+                    scaled_index<=p_logits1 ? ~column : column;
                 end
                 if(stage_ready[1] && stage_valid[0])begin
                     stage_data[1][lane*16 +: 16]<=scaled_mask[lane] ? stage_data[0][lane*16 +: 16] : 16'hff80;
@@ -129,19 +180,39 @@ module qwen25_score_ingress (
     );
     integer valid_stage;
     always @(posedge i_clk)begin
-        if(!i_rstn)stage_valid<=0;
-        else begin
-            if(stage_ready[0])stage_valid[0]<=i_valid;
+        if(!i_rstn)begin
+            stage_valid<=0;
+            inflight<=0;
+        end else begin
+            if(stage_ready[0])stage_valid[0]<=mul_valid;
             for(valid_stage=1;valid_stage<5;valid_stage=valid_stage+1)begin
                 if(stage_ready[valid_stage])stage_valid[valid_stage]<=stage_valid[valid_stage-1];
             end
+            if(accept && !mul_valid)inflight<=1'b1;
+            if(mul_valid)inflight<=1'b0;
         end
-        if(stage_ready[0] && i_valid)begin
-            stage_address[0]<=i_address;stage_bank[0]<=i_bank;stage_logits[0]<=i_logits;
-            stage_row[0]<=i_logits ? 3'd0 : i_address[14:12];
-            stage_first[0]<=input_base==0;
-            stage_last[0]<=input_base+32'd8>=i_length;
-            stage_words[0]<=input_words[15:0];
+        // input-side capture (one word in flight, latency matched to the scaler)
+        if(accept)begin
+            p_address<=i_address;p_bank<=i_bank;p_logits<=i_logits;
+            p_row<=i_logits ? 3'd0 : i_address[14:12];
+            p_first<=in_base==0;
+            p_last<=in_base+32'd8>=i_length;
+            p_words<=input_words[15:0];
+            p_raw0<=i_data;
+            p_address1<=i_address;p_bank1<=i_bank;p_logits1<=i_logits;
+            p_row1<=i_logits ? 3'd0 : i_address[14:12];
+            p_first1<=in_base==0;
+            p_last1<=in_base+32'd8>=i_length;
+            p_words1<=input_words[15:0];
+            p_raw1<=i_data;
+        end
+        // stage 0 receives the metadata of the word whose scaled data just arrived
+        if(mul_valid)begin
+            stage_address[0]<=p_address1;stage_bank[0]<=p_bank1;stage_logits[0]<=p_logits1;
+            stage_row[0]<=p_row1;
+            stage_first[0]<=p_first1;
+            stage_last[0]<=p_last1;
+            stage_words[0]<=p_words1;
         end
         if(stage_ready[2] && stage_valid[1])begin
             stage_data[2]<=stage_data[1];pair_values<=pair_result;pair_indices<=pair_index;

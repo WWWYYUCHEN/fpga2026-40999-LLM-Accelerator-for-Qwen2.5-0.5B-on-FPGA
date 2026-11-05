@@ -1,0 +1,3 @@
+/template chat
+/max 6
+hi
