@@ -1,0 +1,26 @@
+# 本仓库按原始字节保存所有文件，不做换行符归一化：
+# RTL/软件源码、bitstream、XSA 与各报告都是实测产物的直接拷贝，
+# 任何 CRLF→LF 转换都会改变文件哈希，破坏"产物与报告可对照"的可追溯性。
+
+# Git LFS：超过 GitHub 100 MB 单文件限制的模型权重资产
+board/deployment/QWEN25/WEIGHTS.BIN filter=lfs diff=lfs merge=lfs -text
+board/deployment/QWEN25/EMBED.BIN   filter=lfs diff=lfs merge=lfs -text
+board/deployment/QWEN25/LMW.BIN     filter=lfs diff=lfs merge=lfs -text
+
+# 二进制
+*.bit      binary
+*.xsa      binary
+*.dcp      binary
+*.bin      binary
+*.BIN      binary
+*.exe      binary
+*.dll      binary
+*.a        binary
+*.elf      binary
+*.ELF      binary
+*.mp4      binary
+*.zip      binary
+*.rar      binary
+*.rpt      binary
+*.log      binary
+*.textproto binary

@@ -1,0 +1,23 @@
+# 仿真运行产物（每次运行生成，不入库）
+sim/runs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Windows / 编辑器
+Thumbs.db
+desktop.ini
+.vs/
+.vscode/
+*.swp
+
+# Vivado 临时产物（本仓库只保留最终报告、日志与 bit/XSA）
+*.jou
+*.str
+*.dcp
+*.wdb
+*.rpx
+.Xil/
