@@ -1,0 +1,575 @@
+SIMULATION: real PS C and compiled accelerator RTL; virtual UART/SD; vendor math simulation models.
+
+Qwen25 KV260 100 MHz UART interactive inference
+PL numerical model signoff pending. No CPU inference fallback.
+CSR_ID=515732354b563236 VERSION=0000000000010000
+TOKENIZER_SELFTEST_OK 40 tokens
+Loading 0:/QWEN25/DESC.BIN (6144 bytes)
+Loading 0:/QWEN25/SCALE.BIN (912128 bytes)
+Loading 0:/QWEN25/BIAS.BIN (55296 bytes)
+Loading 0:/QWEN25/GAMMA.BIN (87808 bytes)
+Loading 0:/QWEN25/WEIGHTS.BIN (357826560 bytes)
+Loading 0:/QWEN25/LMW.BIN (136134656 bytes)
+Loading 0:/QWEN25/EMBED.BIN (272269312 bytes)
+Enter UTF-8 prompt and press Enter. Each request starts a fresh context.
+/max N (1..255), /mode text|ids|events, /template chat|raw, /encode TEXT, /selftest, /reset, /help
+KV capacity 256 including chat template and output reserve. Default /max 20.
+
+READY
+prompt> /mode events
+MODE=events
+
+READY
+prompt> /max 20
+MAX_NEW=20
+
+READY
+prompt> 1+1等于几？
+@BEGIN 1 prompt_tokens=35 max_new=20
+PROGRESS cycle=1000000 state=000000000000000010000 op=2 output_tile=4
+PROGRESS cycle=2000000 state=000000000000000010000 op=4 output_tile=4
+LAYER_DONE iteration=0 layer=0 cycle=2425757
+PROGRESS cycle=3000000 state=000000000000000010000 op=4 output_tile=0
+LAYER_DONE iteration=0 layer=0 cycle=3669003
+PROGRESS cycle=4000000 state=000000000000000010000 op=3 output_tile=6
+LAYER_DONE iteration=0 layer=0 cycle=4912143
+PROGRESS cycle=5000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=6000000 state=000000000000000010000 op=6 output_tile=3
+LAYER_DONE iteration=0 layer=0 cycle=6155334
+LAYER_DONE iteration=0 layer=0 cycle=6782580
+PROGRESS cycle=7000000 state=000000000000000010000 op=2 output_tile=6
+PROGRESS cycle=8000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=9000000 state=000000000000000004000 op=6 output_tile=3
+LAYER_DONE iteration=0 layer=1 cycle=9137205
+PROGRESS cycle=10000000 state=000000000000000010000 op=5 output_tile=2
+LAYER_DONE iteration=0 layer=1 cycle=10380301
+PROGRESS cycle=11000000 state=000000000000000010000 op=4 output_tile=6
+LAYER_DONE iteration=0 layer=1 cycle=11623592
+PROGRESS cycle=12000000 state=000000000000000010000 op=4 output_tile=2
+LAYER_DONE iteration=0 layer=1 cycle=12866681
+PROGRESS cycle=13000000 state=000000000010000000000 op=0 output_tile=0
+LAYER_DONE iteration=0 layer=1 cycle=13494049
+PROGRESS cycle=14000000 state=000000000004000000000 op=2 output_tile=7
+PROGRESS cycle=15000000 state=000000000000000010000 op=4 output_tile=5
+LAYER_DONE iteration=0 layer=2 cycle=15848497
+PROGRESS cycle=16000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=17000000 state=000000000000000010000 op=6 output_tile=5
+LAYER_DONE iteration=0 layer=2 cycle=17091747
+PROGRESS cycle=18000000 state=000000000000000010000 op=4 output_tile=1
+LAYER_DONE iteration=0 layer=2 cycle=18334877
+PROGRESS cycle=19000000 state=000000000000000010000 op=5 output_tile=5
+LAYER_DONE iteration=0 layer=2 cycle=19578126
+PROGRESS cycle=20000000 state=000000000000000010000 op=4 output_tile=6
+LAYER_DONE iteration=0 layer=2 cycle=20205380
+PROGRESS cycle=21000000 state=000000000000000010000 op=1 output_tile=0
+PROGRESS cycle=22000000 state=000000000000000010000 op=4 output_tile=0
+LAYER_DONE iteration=0 layer=3 cycle=22559999
+PROGRESS cycle=23000000 state=000000000000000010000 op=5 output_tile=4
+LAYER_DONE iteration=0 layer=3 cycle=23803087
+PROGRESS cycle=24000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=25000000 state=000000000000000010000 op=6 output_tile=6
+LAYER_DONE iteration=0 layer=3 cycle=25046379
+PROGRESS cycle=26000000 state=000000000000000010000 op=6 output_tile=0
+LAYER_DONE iteration=0 layer=3 cycle=26289424
+LAYER_DONE iteration=0 layer=3 cycle=26916836
+PROGRESS cycle=27000000 state=000000000000000010000 op=2 output_tile=1
+PROGRESS cycle=28000000 state=000000000000000010000 op=2 output_tile=5
+PROGRESS cycle=29000000 state=000000000000000010000 op=6 output_tile=0
+LAYER_DONE iteration=0 layer=4 cycle=29271282
+PROGRESS cycle=30000000 state=000000000000000010000 op=4 output_tile=6
+LAYER_DONE iteration=0 layer=4 cycle=30514488
+PROGRESS cycle=31000000 state=000000000000000010000 op=4 output_tile=3
+LAYER_DONE iteration=0 layer=4 cycle=31757620
+PROGRESS cycle=32000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=33000000 state=000000020000000000000 op=6 output_tile=7
+LAYER_DONE iteration=0 layer=4 cycle=33000851
+LAYER_DONE iteration=0 layer=4 cycle=33628174
+PROGRESS cycle=34000000 state=000000000000000010000 op=2 output_tile=3
+PROGRESS cycle=35000000 state=000000000000000000008 op=3 output_tile=0
+LAYER_DONE iteration=0 layer=5 cycle=35982784
+PROGRESS cycle=36000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=37000000 state=000000000000000010000 op=6 output_tile=1
+LAYER_DONE iteration=0 layer=5 cycle=37225897
+PROGRESS cycle=38000000 state=000000000000000010000 op=5 output_tile=5
+LAYER_DONE iteration=0 layer=5 cycle=38469125
+PROGRESS cycle=39000000 state=000000000000000010000 op=5 output_tile=1
+LAYER_DONE iteration=0 layer=5 cycle=39712214
+PROGRESS cycle=40000000 state=000000000000000008000 op=4 output_tile=5
+LAYER_DONE iteration=0 layer=5 cycle=40339580
+PROGRESS cycle=41000000 state=000000000000000010000 op=2 output_tile=4
+PROGRESS cycle=42000000 state=000000000000000010000 op=5 output_tile=4
+LAYER_DONE iteration=0 layer=6 cycle=42694029
+PROGRESS cycle=43000000 state=000000000000000010000 op=3 output_tile=4
+LAYER_DONE iteration=0 layer=6 cycle=43937278
+PROGRESS cycle=44000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=45000000 state=000000000000000008000 op=6 output_tile=2
+LAYER_DONE iteration=0 layer=6 cycle=45180409
+PROGRESS cycle=46000000 state=000000000000000010000 op=4 output_tile=4
+LAYER_DONE iteration=0 layer=6 cycle=46423699
+PROGRESS cycle=47000000 state=000000000000000008000 op=6 output_tile=4
+LAYER_DONE iteration=0 layer=6 cycle=47050975
+PROGRESS cycle=48000000 state=000000000000000010000 op=2 output_tile=5
+PROGRESS cycle=49000000 state=000000000000000004000 op=4 output_tile=6
+LAYER_DONE iteration=0 layer=7 cycle=49405613
+PROGRESS cycle=50000000 state=000000000000000010000 op=4 output_tile=3
+LAYER_DONE iteration=0 layer=7 cycle=50648675
+PROGRESS cycle=51000000 state=000000080000000000000 op=3 output_tile=7
+LAYER_DONE iteration=0 layer=7 cycle=51891971
+PROGRESS cycle=52000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=53000000 state=000000000000000010000 op=6 output_tile=3
+LAYER_DONE iteration=0 layer=7 cycle=53135061
+LAYER_DONE iteration=0 layer=7 cycle=53762482
+PROGRESS cycle=54000000 state=000000000004000000000 op=2 output_tile=7
+PROGRESS cycle=55000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=56000000 state=000000000000000010000 op=6 output_tile=4
+LAYER_DONE iteration=0 layer=8 cycle=56116933
+PROGRESS cycle=57000000 state=000000000000000010000 op=5 output_tile=5
+LAYER_DONE iteration=0 layer=8 cycle=57360172
+PROGRESS cycle=58000000 state=000000000000000010000 op=5 output_tile=2
+LAYER_DONE iteration=0 layer=8 cycle=58603311
+PROGRESS cycle=59000000 state=000000000000000010000 op=4 output_tile=5
+LAYER_DONE iteration=0 layer=8 cycle=59846579
+PROGRESS cycle=60000000 state=000000000010000000000 op=0 output_tile=0
+LAYER_DONE iteration=0 layer=8 cycle=60473819
+PROGRESS cycle=61000000 state=000000000000000010000 op=0 output_tile=0
+PROGRESS cycle=62000000 state=000000000000000010000 op=5 output_tile=0
+LAYER_DONE iteration=0 layer=9 cycle=62828454
+PROGRESS cycle=63000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=64000000 state=000000000000000010000 op=6 output_tile=5
+LAYER_DONE iteration=0 layer=9 cycle=64071528
+PROGRESS cycle=65000000 state=000000000000000010000 op=5 output_tile=1
+LAYER_DONE iteration=0 layer=9 cycle=65314839
+PROGRESS cycle=66000000 state=000000000000000010000 op=4 output_tile=0
+LAYER_DONE iteration=0 layer=9 cycle=66557913
+PROGRESS cycle=67000000 state=000000000000000010000 op=5 output_tile=6
+LAYER_DONE iteration=0 layer=9 cycle=67185280
+PROGRESS cycle=68000000 state=000000000000000010000 op=2 output_tile=0
+PROGRESS cycle=69000000 state=000000000000000010000 op=4 output_tile=3
+LAYER_DONE iteration=0 layer=10 cycle=69539718
+PROGRESS cycle=70000000 state=000000000000000010000 op=5 output_tile=6
+LAYER_DONE iteration=0 layer=10 cycle=70782866
+PROGRESS cycle=71000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=72000000 state=000000000000000010000 op=6 output_tile=6
+LAYER_DONE iteration=0 layer=10 cycle=72025997
+PROGRESS cycle=73000000 state=000000000000000010000 op=6 output_tile=0
+LAYER_DONE iteration=0 layer=10 cycle=73269278
+LAYER_DONE iteration=0 layer=10 cycle=73896496
+PROGRESS cycle=74000000 state=000000000000000010000 op=2 output_tile=2
+PROGRESS cycle=75000000 state=000000000004000000000 op=2 output_tile=7
+PROGRESS cycle=76000000 state=000000000000000010000 op=6 output_tile=1
+LAYER_DONE iteration=0 layer=11 cycle=76251147
+PROGRESS cycle=77000000 state=000000000000000008000 op=5 output_tile=2
+LAYER_DONE iteration=0 layer=11 cycle=77494207
+PROGRESS cycle=78000000 state=000000000000000010000 op=4 output_tile=5
+LAYER_DONE iteration=0 layer=11 cycle=78737526
+PROGRESS cycle=79000000 state=000000000000000000008 op=3 output_tile=0
+LAYER_DONE iteration=0 layer=11 cycle=79980600
+PROGRESS cycle=80000000 state=000000000010000000000 op=0 output_tile=0
+LAYER_DONE iteration=0 layer=11 cycle=80607986
+PROGRESS cycle=81000000 state=000000000000000010000 op=2 output_tile=3
+PROGRESS cycle=82000000 state=000000000000000004000 op=3 output_tile=1
+LAYER_DONE iteration=0 layer=12 cycle=82962458
+PROGRESS cycle=83000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=84000000 state=000000000000000010000 op=6 output_tile=2
+LAYER_DONE iteration=0 layer=12 cycle=84205704
+PROGRESS cycle=85000000 state=000000000000000010000 op=4 output_tile=1
+LAYER_DONE iteration=0 layer=12 cycle=85448851
+PROGRESS cycle=86000000 state=000000000000000010000 op=5 output_tile=4
+LAYER_DONE iteration=0 layer=12 cycle=86692097
+PROGRESS cycle=87000000 state=000000000000000010000 op=5 output_tile=5
+LAYER_DONE iteration=0 layer=12 cycle=87319404
+PROGRESS cycle=88000000 state=000000000000000010000 op=2 output_tile=5
+PROGRESS cycle=89000000 state=000000000000000010000 op=5 output_tile=6
+LAYER_DONE iteration=0 layer=13 cycle=89674026
+PROGRESS cycle=90000000 state=000000000000000010000 op=3 output_tile=6
+LAYER_DONE iteration=0 layer=13 cycle=90917116
+PROGRESS cycle=91000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=92000000 state=000000000000000010000 op=6 output_tile=3
+LAYER_DONE iteration=0 layer=13 cycle=92160413
+PROGRESS cycle=93000000 state=000000000000000010000 op=4 output_tile=6
+LAYER_DONE iteration=0 layer=13 cycle=93403501
+PROGRESS cycle=94000000 state=000000000000000010000 op=6 output_tile=5
+LAYER_DONE iteration=0 layer=13 cycle=94030868
+PROGRESS cycle=95000000 state=000000000000000010000 op=2 output_tile=6
+PROGRESS cycle=96000000 state=000000000000000010000 op=5 output_tile=2
+LAYER_DONE iteration=0 layer=14 cycle=96385313
+PROGRESS cycle=97000000 state=000000000000000010000 op=4 output_tile=5
+LAYER_DONE iteration=0 layer=14 cycle=97628560
+PROGRESS cycle=98000000 state=000000000000000010000 op=4 output_tile=2
+LAYER_DONE iteration=0 layer=14 cycle=98871699
+PROGRESS cycle=99000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=100000000 state=000000000000000010000 op=6 output_tile=4
+LAYER_DONE iteration=0 layer=14 cycle=100114952
+LAYER_DONE iteration=0 layer=14 cycle=100742201
+PROGRESS cycle=101000000 state=000000000002000000000 op=0 output_tile=0
+PROGRESS cycle=102000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=103000000 state=000000000000000010000 op=6 output_tile=4
+LAYER_DONE iteration=0 layer=15 cycle=103096819
+PROGRESS cycle=104000000 state=000000000000000010000 op=4 output_tile=1
+LAYER_DONE iteration=0 layer=15 cycle=104339906
+PROGRESS cycle=105000000 state=000000000000000010000 op=5 output_tile=4
+LAYER_DONE iteration=0 layer=15 cycle=105583205
+PROGRESS cycle=106000000 state=000000000000000010000 op=5 output_tile=1
+LAYER_DONE iteration=0 layer=15 cycle=106826243
+PROGRESS cycle=107000000 state=000000000010000000000 op=0 output_tile=0
+LAYER_DONE iteration=0 layer=15 cycle=107453656
+PROGRESS cycle=108000000 state=000000000000000010000 op=1 output_tile=0
+PROGRESS cycle=109000000 state=000000000000000010000 op=5 output_tile=3
+LAYER_DONE iteration=0 layer=16 cycle=109808165
+PROGRESS cycle=110000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=111000000 state=000000000000000010000 op=6 output_tile=6
+LAYER_DONE iteration=0 layer=16 cycle=111051411
+PROGRESS cycle=112000000 state=000000000000000000008 op=6 output_tile=0
+LAYER_DONE iteration=0 layer=16 cycle=112294557
+PROGRESS cycle=113000000 state=000000000000000010000 op=4 output_tile=3
+LAYER_DONE iteration=0 layer=16 cycle=113537692
+PROGRESS cycle=114000000 state=000000000000000010000 op=4 output_tile=5
+LAYER_DONE iteration=0 layer=16 cycle=114164995
+PROGRESS cycle=115000000 state=000000000000000010000 op=2 output_tile=1
+PROGRESS cycle=116000000 state=000000000000000010000 op=4 output_tile=5
+LAYER_DONE iteration=0 layer=17 cycle=116519608
+PROGRESS cycle=117000000 state=000000000000000010000 op=4 output_tile=2
+LAYER_DONE iteration=0 layer=17 cycle=117762717
+PROGRESS cycle=118000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=119000000 state=000000000200000000000 op=6 output_tile=7
+LAYER_DONE iteration=0 layer=17 cycle=119005946
+PROGRESS cycle=120000000 state=000000000000000010000 op=6 output_tile=1
+LAYER_DONE iteration=0 layer=17 cycle=120249034
+LAYER_DONE iteration=0 layer=17 cycle=120876343
+PROGRESS cycle=121000000 state=000000000000000010000 op=2 output_tile=3
+PROGRESS cycle=122000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=123000000 state=000000000000000010000 op=6 output_tile=1
+LAYER_DONE iteration=0 layer=18 cycle=123230780
+PROGRESS cycle=124000000 state=000000000000000010000 op=5 output_tile=4
+LAYER_DONE iteration=0 layer=18 cycle=124474056
+PROGRESS cycle=125000000 state=000000000000000010000 op=5 output_tile=1
+LAYER_DONE iteration=0 layer=18 cycle=125717170
+PROGRESS cycle=126000000 state=000000000000000010000 op=3 output_tile=2
+LAYER_DONE iteration=0 layer=18 cycle=126960429
+PROGRESS cycle=127000000 state=000000000010000000000 op=0 output_tile=0
+LAYER_DONE iteration=0 layer=18 cycle=127587678
+PROGRESS cycle=128000000 state=000000000000000010000 op=2 output_tile=4
+PROGRESS cycle=129000000 state=000000000000000010000 op=3 output_tile=3
+LAYER_DONE iteration=0 layer=19 cycle=129942288
+PROGRESS cycle=130000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=131000000 state=000000000000000010000 op=6 output_tile=2
+LAYER_DONE iteration=0 layer=19 cycle=131185383
+PROGRESS cycle=132000000 state=000000000000000010000 op=4 output_tile=3
+LAYER_DONE iteration=0 layer=19 cycle=132428667
+PROGRESS cycle=133000000 state=000000000000000010000 op=4 output_tile=0
+LAYER_DONE iteration=0 layer=19 cycle=133671776
+PROGRESS cycle=134000000 state=000000000000000010000 op=4 output_tile=4
+LAYER_DONE iteration=0 layer=19 cycle=134299176
+PROGRESS cycle=135000000 state=000000000000000010000 op=2 output_tile=5
+PROGRESS cycle=136000000 state=000000000000000010000 op=4 output_tile=2
+LAYER_DONE iteration=0 layer=20 cycle=136653635
+PROGRESS cycle=137000000 state=000000008000000000000 op=3 output_tile=7
+LAYER_DONE iteration=0 layer=20 cycle=137896887
+PROGRESS cycle=138000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=139000000 state=000000000000000010000 op=6 output_tile=3
+LAYER_DONE iteration=0 layer=20 cycle=139140033
+PROGRESS cycle=140000000 state=000000000000000010000 op=5 output_tile=2
+LAYER_DONE iteration=0 layer=20 cycle=140383274
+PROGRESS cycle=141000000 state=000000000000000010000 op=6 output_tile=6
+LAYER_DONE iteration=0 layer=20 cycle=141010589
+PROGRESS cycle=142000000 state=000000000004000000000 op=2 output_tile=7
+PROGRESS cycle=143000000 state=000000000000000008000 op=5 output_tile=4
+LAYER_DONE iteration=0 layer=21 cycle=143365218
+PROGRESS cycle=144000000 state=000000000000000010000 op=5 output_tile=1
+LAYER_DONE iteration=0 layer=21 cycle=144608291
+PROGRESS cycle=145000000 state=000000000000000010000 op=4 output_tile=4
+LAYER_DONE iteration=0 layer=21 cycle=145851571
+PROGRESS cycle=146000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=147000000 state=000000000000000010000 op=6 output_tile=4
+LAYER_DONE iteration=0 layer=21 cycle=147094691
+LAYER_DONE iteration=0 layer=21 cycle=147722096
+PROGRESS cycle=148000000 state=000000000000000010000 op=0 output_tile=0
+PROGRESS cycle=149000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=150000000 state=000000000000000010000 op=6 output_tile=5
+LAYER_DONE iteration=0 layer=22 cycle=150076536
+PROGRESS cycle=151000000 state=000000000000000010000 op=5 output_tile=0
+LAYER_DONE iteration=0 layer=22 cycle=151319630
+PROGRESS cycle=152000000 state=000000000000000010000 op=4 output_tile=0
+LAYER_DONE iteration=0 layer=22 cycle=152562767
+PROGRESS cycle=153000000 state=000000000000000010000 op=5 output_tile=3
+LAYER_DONE iteration=0 layer=22 cycle=153806051
+PROGRESS cycle=154000000 state=000000000010000000000 op=0 output_tile=0
+LAYER_DONE iteration=0 layer=22 cycle=154433315
+PROGRESS cycle=155000000 state=000000000000000010000 op=2 output_tile=0
+PROGRESS cycle=156000000 state=000000000000000010000 op=5 output_tile=6
+LAYER_DONE iteration=0 layer=23 cycle=156787965
+PROGRESS cycle=157000000 state=000000000010000000000 op=0 output_tile=0
+PROGRESS cycle=158000000 state=000000000000000010000 op=6 output_tile=6
+LAYER_DONE iteration=0 layer=23 cycle=158031034
+PROGRESS cycle=159000000 state=000000000000000010000 op=6 output_tile=0
+LAYER_DONE iteration=0 layer=23 cycle=159274344
+PROGRESS cycle=160000000 state=000000000000000010000 op=4 output_tile=6
+LAYER_DONE iteration=0 layer=23 cycle=160517413
+PROGRESS cycle=161000000 state=000000000000000010000 op=5 output_tile=4
+LAYER_DONE iteration=0 layer=23 cycle=161144809
+PROGRESS cycle=162000000 state=000000000000000008000 op=7 output_tile=383
+PROGRESS cycle=163000000 state=000000000000000004000 op=7 output_tile=832
+
+RTL_TOKEN_VERIFIED iteration=0 id=16 cycles=163795505 logits=151936 max=24.25 idle_bias_addresses=445200
+@TOKEN 1 0 16 1637955 31
+PROGRESS cycle=164000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=1 layer=0 cycle=164327304
+LAYER_DONE iteration=1 layer=1 cycle=164858781
+PROGRESS cycle=165000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=1 layer=2 cycle=165390307
+LAYER_DONE iteration=1 layer=3 cycle=165921784
+PROGRESS cycle=166000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=1 layer=4 cycle=166453315
+LAYER_DONE iteration=1 layer=5 cycle=166984793
+PROGRESS cycle=167000000 state=000000000000000004000 op=2 output_tile=2
+LAYER_DONE iteration=1 layer=6 cycle=167516328
+PROGRESS cycle=168000000 state=000000000000000010000 op=6 output_tile=2
+LAYER_DONE iteration=1 layer=7 cycle=168047811
+LAYER_DONE iteration=1 layer=8 cycle=168579335
+PROGRESS cycle=169000000 state=000000000000000010000 op=5 output_tile=0
+LAYER_DONE iteration=1 layer=9 cycle=169110819
+LAYER_DONE iteration=1 layer=10 cycle=169642346
+PROGRESS cycle=170000000 state=000000000000000010000 op=5 output_tile=0
+LAYER_DONE iteration=1 layer=11 cycle=170173830
+LAYER_DONE iteration=1 layer=12 cycle=170705354
+PROGRESS cycle=171000000 state=000000000000000010000 op=5 output_tile=0
+LAYER_DONE iteration=1 layer=13 cycle=171236838
+LAYER_DONE iteration=1 layer=14 cycle=171768371
+PROGRESS cycle=172000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=1 layer=15 cycle=172299854
+LAYER_DONE iteration=1 layer=16 cycle=172831377
+PROGRESS cycle=173000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=1 layer=17 cycle=173362849
+LAYER_DONE iteration=1 layer=18 cycle=173894445
+PROGRESS cycle=174000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=1 layer=19 cycle=174425923
+LAYER_DONE iteration=1 layer=20 cycle=174957511
+PROGRESS cycle=175000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=1 layer=21 cycle=175488983
+PROGRESS cycle=176000000 state=000000000000000008000 op=6 output_tile=5
+LAYER_DONE iteration=1 layer=22 cycle=176020514
+LAYER_DONE iteration=1 layer=23 cycle=176551997
+PROGRESS cycle=177000000 state=000000000000000010000 op=7 output_tile=200
+PROGRESS cycle=178000000 state=000000000000000010000 op=7 output_tile=649
+PROGRESS cycle=179000000 state=000000000000000010000 op=7 output_tile=1098
+
+RTL_TOKEN_VERIFIED iteration=1 id=10 cycles=15406173 logits=151936 max=24.75 idle_bias_addresses=890400
+@TOKEN 1 1 10 154061 2b
+LAYER_DONE iteration=2 layer=0 cycle=179738198
+PROGRESS cycle=180000000 state=000000000000000010000 op=3 output_tile=2
+LAYER_DONE iteration=2 layer=1 cycle=180274379
+LAYER_DONE iteration=2 layer=2 cycle=180810549
+PROGRESS cycle=181000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=2 layer=3 cycle=181346727
+LAYER_DONE iteration=2 layer=4 cycle=181882903
+PROGRESS cycle=182000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=2 layer=5 cycle=182419074
+LAYER_DONE iteration=2 layer=6 cycle=182955303
+PROGRESS cycle=183000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=2 layer=7 cycle=183491474
+PROGRESS cycle=184000000 state=000000000000000010000 op=6 output_tile=4
+LAYER_DONE iteration=2 layer=8 cycle=184027643
+LAYER_DONE iteration=2 layer=9 cycle=184563818
+PROGRESS cycle=185000000 state=000000000000000010000 op=5 output_tile=5
+LAYER_DONE iteration=2 layer=10 cycle=185099999
+LAYER_DONE iteration=2 layer=11 cycle=185636175
+PROGRESS cycle=186000000 state=000000000000000010000 op=5 output_tile=1
+LAYER_DONE iteration=2 layer=12 cycle=186172402
+LAYER_DONE iteration=2 layer=13 cycle=186708567
+PROGRESS cycle=187000000 state=000000000000000010000 op=4 output_tile=3
+LAYER_DONE iteration=2 layer=14 cycle=187244743
+LAYER_DONE iteration=2 layer=15 cycle=187780920
+PROGRESS cycle=188000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=2 layer=16 cycle=188317096
+LAYER_DONE iteration=2 layer=17 cycle=188853268
+PROGRESS cycle=189000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=2 layer=18 cycle=189389496
+LAYER_DONE iteration=2 layer=19 cycle=189925668
+PROGRESS cycle=190000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=2 layer=20 cycle=190461837
+LAYER_DONE iteration=2 layer=21 cycle=190998015
+PROGRESS cycle=191000000 state=000000000000000002000 op=0 output_tile=0
+LAYER_DONE iteration=2 layer=22 cycle=191534192
+PROGRESS cycle=192000000 state=000000000000000010000 op=6 output_tile=1
+LAYER_DONE iteration=2 layer=23 cycle=192070370
+PROGRESS cycle=193000000 state=000000000000000010000 op=7 output_tile=416
+PROGRESS cycle=194000000 state=000000000000000010000 op=7 output_tile=865
+
+RTL_TOKEN_VERIFIED iteration=2 id=16 cycles=15516217 logits=151936 max=30.75 idle_bias_addresses=1335600
+@TOKEN 1 2 16 155162 31
+PROGRESS cycle=195000000 state=000000000000000010000 op=3 output_tile=6
+LAYER_DONE iteration=3 layer=0 cycle=195258287
+LAYER_DONE iteration=3 layer=1 cycle=195798375
+PROGRESS cycle=196000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=3 layer=2 cycle=196338434
+LAYER_DONE iteration=3 layer=3 cycle=196878523
+PROGRESS cycle=197000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=3 layer=4 cycle=197418565
+LAYER_DONE iteration=3 layer=5 cycle=197958548
+PROGRESS cycle=198000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=3 layer=6 cycle=198498653
+PROGRESS cycle=199000000 state=000000000000000010000 op=6 output_tile=3
+LAYER_DONE iteration=3 layer=7 cycle=199038749
+LAYER_DONE iteration=3 layer=8 cycle=199578734
+PROGRESS cycle=200000000 state=000000000000000010000 op=4 output_tile=4
+LAYER_DONE iteration=3 layer=9 cycle=200118772
+LAYER_DONE iteration=3 layer=10 cycle=200658866
+PROGRESS cycle=201000000 state=000000000000000004000 op=5 output_tile=3
+LAYER_DONE iteration=3 layer=11 cycle=201198912
+LAYER_DONE iteration=3 layer=12 cycle=201738949
+PROGRESS cycle=202000000 state=000000000000000004000 op=3 output_tile=1
+LAYER_DONE iteration=3 layer=13 cycle=202278940
+LAYER_DONE iteration=3 layer=14 cycle=202819039
+PROGRESS cycle=203000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=3 layer=15 cycle=203359128
+LAYER_DONE iteration=3 layer=16 cycle=203899225
+PROGRESS cycle=204000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=3 layer=17 cycle=204439324
+LAYER_DONE iteration=3 layer=18 cycle=204979313
+PROGRESS cycle=205000000 state=000000000000000010000 op=2 output_tile=4
+LAYER_DONE iteration=3 layer=19 cycle=205519403
+PROGRESS cycle=206000000 state=000000000000000010000 op=6 output_tile=1
+LAYER_DONE iteration=3 layer=20 cycle=206059441
+LAYER_DONE iteration=3 layer=21 cycle=206599428
+PROGRESS cycle=207000000 state=000000000000000010000 op=5 output_tile=1
+LAYER_DONE iteration=3 layer=22 cycle=207139530
+LAYER_DONE iteration=3 layer=23 cycle=207679563
+PROGRESS cycle=208000000 state=000000000000000010000 op=7 output_tile=143
+PROGRESS cycle=209000000 state=000000000000000010000 op=7 output_tile=592
+PROGRESS cycle=210000000 state=000000000000000010000 op=7 output_tile=1041
+
+RTL_TOKEN_VERIFIED iteration=3 id=107106 cycles=15606253 logits=151936 max=23 idle_bias_addresses=1780800
+@TOKEN 1 3 107106 156063 e7ad89e4ba8e
+LAYER_DONE iteration=4 layer=0 cycle=210869175
+PROGRESS cycle=211000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=4 layer=1 cycle=211413865
+LAYER_DONE iteration=4 layer=2 cycle=211958546
+PROGRESS cycle=212000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=4 layer=3 cycle=212503226
+PROGRESS cycle=213000000 state=000000000000000010000 op=6 output_tile=2
+LAYER_DONE iteration=4 layer=4 cycle=213047969
+LAYER_DONE iteration=4 layer=5 cycle=213592650
+PROGRESS cycle=214000000 state=000000000000000010000 op=5 output_tile=2
+LAYER_DONE iteration=4 layer=6 cycle=214137334
+LAYER_DONE iteration=4 layer=7 cycle=214682018
+PROGRESS cycle=215000000 state=000000000000000010000 op=5 output_tile=5
+LAYER_DONE iteration=4 layer=8 cycle=215226691
+LAYER_DONE iteration=4 layer=9 cycle=215771370
+PROGRESS cycle=216000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=4 layer=10 cycle=216316067
+LAYER_DONE iteration=4 layer=11 cycle=216860740
+PROGRESS cycle=217000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=4 layer=12 cycle=217405417
+LAYER_DONE iteration=4 layer=13 cycle=217950106
+PROGRESS cycle=218000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=4 layer=14 cycle=218494791
+PROGRESS cycle=219000000 state=000000000000000010000 op=6 output_tile=3
+LAYER_DONE iteration=4 layer=15 cycle=219039476
+LAYER_DONE iteration=4 layer=16 cycle=219584148
+PROGRESS cycle=220000000 state=000000000000000010000 op=5 output_tile=6
+LAYER_DONE iteration=4 layer=17 cycle=220128827
+LAYER_DONE iteration=4 layer=18 cycle=220673525
+PROGRESS cycle=221000000 state=000000000000000004000 op=4 output_tile=1
+LAYER_DONE iteration=4 layer=19 cycle=221218205
+LAYER_DONE iteration=4 layer=20 cycle=221762935
+PROGRESS cycle=222000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=4 layer=21 cycle=222307619
+LAYER_DONE iteration=4 layer=22 cycle=222852303
+PROGRESS cycle=223000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=4 layer=23 cycle=223396979
+PROGRESS cycle=224000000 state=000000000000000010000 op=7 output_tile=269
+PROGRESS cycle=225000000 state=000000000000000004000 op=7 output_tile=719
+PROGRESS cycle=226000000 state=000000000000000010000 op=7 output_tile=1168
+
+RTL_TOKEN_VERIFIED iteration=4 id=17 cycles=15726301 logits=151936 max=24.625 idle_bias_addresses=2226000
+@TOKEN 1 4 17 157263 32
+LAYER_DONE iteration=5 layer=0 cycle=226599284
+PROGRESS cycle=227000000 state=000000000000000004000 op=4 output_tile=5
+LAYER_DONE iteration=5 layer=1 cycle=227147783
+LAYER_DONE iteration=5 layer=2 cycle=227696279
+PROGRESS cycle=228000000 state=000000000000000010000 op=4 output_tile=3
+LAYER_DONE iteration=5 layer=3 cycle=228244772
+LAYER_DONE iteration=5 layer=4 cycle=228793265
+PROGRESS cycle=229000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=5 layer=5 cycle=229341752
+LAYER_DONE iteration=5 layer=6 cycle=229890259
+PROGRESS cycle=230000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=5 layer=7 cycle=230438748
+LAYER_DONE iteration=5 layer=8 cycle=230987246
+PROGRESS cycle=231000000 state=000000000000000010000 op=2 output_tile=1
+LAYER_DONE iteration=5 layer=9 cycle=231535738
+PROGRESS cycle=232000000 state=000000000000000010000 op=5 output_tile=2
+LAYER_DONE iteration=5 layer=10 cycle=232084236
+LAYER_DONE iteration=5 layer=11 cycle=232632724
+PROGRESS cycle=233000000 state=000000000000000004000 op=4 output_tile=4
+LAYER_DONE iteration=5 layer=12 cycle=233181220
+LAYER_DONE iteration=5 layer=13 cycle=233729709
+PROGRESS cycle=234000000 state=000000000000000010000 op=3 output_tile=1
+LAYER_DONE iteration=5 layer=14 cycle=234278218
+LAYER_DONE iteration=5 layer=15 cycle=234826711
+PROGRESS cycle=235000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=5 layer=16 cycle=235375206
+LAYER_DONE iteration=5 layer=17 cycle=235923691
+PROGRESS cycle=236000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=5 layer=18 cycle=236472192
+PROGRESS cycle=237000000 state=000000000000000010000 op=6 output_tile=5
+LAYER_DONE iteration=5 layer=19 cycle=237020683
+LAYER_DONE iteration=5 layer=20 cycle=237569173
+PROGRESS cycle=238000000 state=000000000000000010000 op=4 output_tile=4
+LAYER_DONE iteration=5 layer=21 cycle=238117664
+LAYER_DONE iteration=5 layer=22 cycle=238666167
+PROGRESS cycle=239000000 state=000000000000000004000 op=4 output_tile=3
+LAYER_DONE iteration=5 layer=23 cycle=239214662
+PROGRESS cycle=240000000 state=000000000000000010000 op=7 output_tile=351
+PROGRESS cycle=241000000 state=000000000000000010000 op=7 output_tile=801
+
+RTL_TOKEN_VERIFIED iteration=5 id=1773 cycles=15816337 logits=151936 max=23.375 idle_bias_addresses=2671200
+@TOKEN 1 5 1773 158163 e38082
+PROGRESS cycle=242000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=6 layer=0 cycle=242422312
+LAYER_DONE iteration=6 layer=1 cycle=242977486
+PROGRESS cycle=243000000 state=000000000000000010000 op=2 output_tile=4
+LAYER_DONE iteration=6 layer=2 cycle=243532644
+PROGRESS cycle=244000000 state=000000000000000010000 op=5 output_tile=0
+LAYER_DONE iteration=6 layer=3 cycle=244087845
+LAYER_DONE iteration=6 layer=4 cycle=244642994
+PROGRESS cycle=245000000 state=000000000000000004000 op=5 output_tile=3
+LAYER_DONE iteration=6 layer=5 cycle=245198150
+LAYER_DONE iteration=6 layer=6 cycle=245753303
+PROGRESS cycle=246000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=6 layer=7 cycle=246308505
+LAYER_DONE iteration=6 layer=8 cycle=246863688
+PROGRESS cycle=247000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=6 layer=9 cycle=247418864
+LAYER_DONE iteration=6 layer=10 cycle=247974039
+PROGRESS cycle=248000000 state=000000000000000010000 op=2 output_tile=5
+LAYER_DONE iteration=6 layer=11 cycle=248529229
+PROGRESS cycle=249000000 state=000000000000000010000 op=5 output_tile=2
+LAYER_DONE iteration=6 layer=12 cycle=249084400
+LAYER_DONE iteration=6 layer=13 cycle=249639587
+PROGRESS cycle=250000000 state=000000000000000010000 op=5 output_tile=5
+LAYER_DONE iteration=6 layer=14 cycle=250194740
+LAYER_DONE iteration=6 layer=15 cycle=250749942
+PROGRESS cycle=251000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=6 layer=16 cycle=251305125
+LAYER_DONE iteration=6 layer=17 cycle=251860301
+PROGRESS cycle=252000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=6 layer=18 cycle=252415476
+LAYER_DONE iteration=6 layer=19 cycle=252970666
+PROGRESS cycle=253000000 state=000000000000000004000 op=2 output_tile=6
+LAYER_DONE iteration=6 layer=20 cycle=253525837
+PROGRESS cycle=254000000 state=000000000000000004000 op=6 output_tile=0
+LAYER_DONE iteration=6 layer=21 cycle=254081024
+LAYER_DONE iteration=6 layer=22 cycle=254636177
+PROGRESS cycle=255000000 state=000000000000000010000 op=5 output_tile=6
+LAYER_DONE iteration=6 layer=23 cycle=255191379
+PROGRESS cycle=256000000 state=000000000000000010000 op=7 output_tile=362
+PROGRESS cycle=257000000 state=000000000000000010000 op=7 output_tile=811
+
+RTL_TOKEN_VERIFIED iteration=6 id=151645 cycles=15976401 logits=151936 max=19.5 idle_bias_addresses=3116400
+@TOKEN 1 6 151645 159764 3c7c696d5f656e647c3e
+
+@END 1 produced=7 reason=eos status=0
+
+READY
+prompt> 

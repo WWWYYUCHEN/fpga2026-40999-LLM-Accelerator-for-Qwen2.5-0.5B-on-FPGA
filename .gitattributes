@@ -1,9 +1,4 @@
-# 模型权重资产走 Git LFS（单文件 >100 MB，超 GitHub 硬限制）
-board/sd/QWEN25/WEIGHTS.BIN filter=lfs diff=lfs merge=lfs -text
-board/sd/QWEN25/EMBED.BIN   filter=lfs diff=lfs merge=lfs -text
-board/sd/QWEN25/LMW.BIN     filter=lfs diff=lfs merge=lfs -text
-
-# 按原始字节保存，不做换行符归一化：源码与报告需与实测产物对得上
+# 二进制：按原始字节保存，不做换行符归一化
 *.bin   binary
 *.BIN   binary
 *.exe   binary
@@ -11,3 +6,9 @@ board/sd/QWEN25/LMW.BIN     filter=lfs diff=lfs merge=lfs -text
 *.dcp   binary
 *.rpt   binary
 *.log   binary
+*.mp4   binary
+
+# 模型权重走 Git LFS（单文件 >100 MB，超 GitHub 硬限制）
+**/QWEN25/WEIGHTS.BIN filter=lfs diff=lfs merge=lfs -text
+**/QWEN25/EMBED.BIN   filter=lfs diff=lfs merge=lfs -text
+**/QWEN25/LMW.BIN     filter=lfs diff=lfs merge=lfs -text

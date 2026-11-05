@@ -1,0 +1,20 @@
+{
+  "gamma": {
+    "match": true,
+    "bytes": 87808,
+    "actual_sha256": "4ae83c4185094f3b0eada64d046c792e8627de7bb499f0e0491319a199d1003c",
+    "expected_sha256": "4ae83c4185094f3b0eada64d046c792e8627de7bb499f0e0491319a199d1003c"
+  },
+  "bias": {
+    "match": true,
+    "bytes": 55296,
+    "actual_sha256": "de9b4bb7b4a6598596731af79b7be848510fc1ae7b0a518f22759f3af1b8d275",
+    "expected_sha256": "de9b4bb7b4a6598596731af79b7be848510fc1ae7b0a518f22759f3af1b8d275"
+  },
+  "scale": {
+    "match": true,
+    "bytes": 912128,
+    "actual_sha256": "9cc3265dd529dbbdab81986c9fefa179f4172f201c5de5163a9f25229d77690c",
+    "expected_sha256": "9cc3265dd529dbbdab81986c9fefa179f4172f201c5de5163a9f25229d77690c"
+  }
+}

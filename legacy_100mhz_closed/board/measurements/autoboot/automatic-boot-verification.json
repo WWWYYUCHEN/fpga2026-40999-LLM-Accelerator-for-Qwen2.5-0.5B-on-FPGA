@@ -1,0 +1,30 @@
+{
+  "status": "automatic_boot_to_ready_verified",
+  "boot_type": "observed restart; independent full power-cycle repetition not verified",
+  "fsbl": "2020.2",
+  "uboot": "2020.01",
+  "mmc": "1:1",
+  "script": "/boot.scr",
+  "script_bytes": 617,
+  "elf": "QWUART.ELF",
+  "elf_bytes": 999656,
+  "entry": "0x00110400",
+  "csr_id": "515732354b563236",
+  "csr_version": "0000000000010000",
+  "tokenizer_selftest_tokens": 40,
+  "model_asset_bytes": 767291904,
+  "ready": true,
+  "host_tx_bytes": 0,
+  "snapshot_raw_bytes": 2339,
+  "snapshot_raw_sha256": "4ec89fe0260d908536cbe47df1ee041c3d620daff2686f6545e6b8c2a7e861b1",
+  "snapshot_source_raw_start": 2729,
+  "snapshot_source_raw_end": 5068,
+  "receiver": "Win32 CreateFileW/ReadFile",
+  "evidence_heartbeat_at": "2026-10-25T12:05:42.198097+08:00",
+  "limitations": [
+    "Observed UART frame/break flags during startup; application output readable",
+    "Earlier U-Boot 2022.01 path reported unstable SD card detection (-110); one successful boot is not a reliability claim",
+    "Application interactive prompts ready; no additional inference run in this acceptance",
+    "Previous .NET monitor failure cause not proven; progress/process-only checks were insufficient"
+  ]
+}

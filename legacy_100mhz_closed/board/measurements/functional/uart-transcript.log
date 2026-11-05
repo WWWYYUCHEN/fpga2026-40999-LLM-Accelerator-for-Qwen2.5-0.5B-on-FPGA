@@ -1,0 +1,219 @@
+
+[HOST] 2026-10-25T13:00:05.881959+08:00 TX id=cb71141677-001: /help
+/help
+Enter UTF-8 prompt and press Enter. Each request starts a fresh context.
+/max N (1..255), /mode text|ids|events, /template chat|raw, /encode TEXT, /selftest, /reset, /help
+KV capacity 256 including chat template and output reserve. Default /max 20.
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:06.099673+08:00 TX id=cb71141677-002: /selftest
+/selftest
+TOKENIZER_SELFTEST_OK 40 tokens
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:06.318568+08:00 TX id=cb71141677-003: /template raw
+/template raw
+TEMPLATE=raw
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:06.532645+08:00 TX id=cb71141677-004: /mode events
+/mode events
+MODE=events
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:06.747990+08:00 TX id=cb71141677-005: /max 2
+/max 2
+MAX_NEW=2
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:06.966552+08:00 TX id=cb71141677-006: 你好
+你好
+@BEGIN 1 prompt_tokens=1 max_new=2
+@TOKEN 1 0 3837 13457004 efbc8c
+@TOKEN 1 1 35946 13698431 e68891
+
+@END 1 produced=2 reason=limit status=0
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:07.401265+08:00 TX id=cb71141677-007: /template raw
+/template raw
+TEMPLATE=raw
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:07.619236+08:00 TX id=cb71141677-008: /mode events
+/mode events
+MODE=events
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:07.838278+08:00 TX id=cb71141677-009: /max 1
+/max 1
+MAX_NEW=1
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:08.055024+08:00 TX id=cb71141677-010: 你好
+你好
+@BEGIN 2 prompt_tokens=1 max_new=1
+@TOKEN 2 0 3837 13385992 efbc8c
+
+@END 2 produced=1 reason=limit status=0
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:08.381733+08:00 TX id=cb71141677-011: 你好
+你好
+@BEGIN 3 prompt_tokens=1 max_new=1
+@TOKEN 3 0 3837 13386342 efbc8c
+
+@END 3 produced=1 reason=limit status=0
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:08.706617+08:00 TX id=cb71141677-012: /template raw
+/template raw
+TEMPLATE=raw
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:08.924876+08:00 TX id=cb71141677-013: /mode events
+/mode events
+MODE=events
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:09.140447+08:00 TX id=cb71141677-014: /max 1
+/max 1
+MAX_NEW=1
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:09.359316+08:00 TX id=cb71141677-015: 123456789
+123456789
+@BEGIN 4 prompt_tokens=9 max_new=1
+@TOKEN 4 0 16 52289316 31
+
+@END 4 produced=1 reason=limit status=0
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:10.010781+08:00 TX id=cb71141677-016: /template raw
+/template raw
+TEMPLATE=raw
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:10.229463+08:00 TX id=cb71141677-017: /mode events
+/mode events
+MODE=events
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:10.446813+08:00 TX id=cb71141677-018: /max 2
+/max 2
+MAX_NEW=2
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:10.664089+08:00 TX id=cb71141677-019: 你好
+你好
+@BEGIN 5 prompt_tokens=1 max_new=2
+@TOKEN 5 0 3837 13375966 efbc8c
+@TOKEN 5 1 35946 13699505 e68891
+
+@END 5 produced=2 reason=limit status=0
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:11.098537+08:00 TX id=cb71141677-020: /template chat
+/template chat
+TEMPLATE=chat
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:11.315267+08:00 TX id=cb71141677-021: /mode events
+/mode events
+MODE=events
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:11.535132+08:00 TX id=cb71141677-022: /max 8
+/max 8
+MAX_NEW=8
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:11.751713+08:00 TX id=cb71141677-023: 你好
+你好
+@BEGIN 6 prompt_tokens=30 max_new=8
+@TOKEN 6 0 108386 167541617 e4bda0e5a5bd
+@TOKEN 6 1 6313 23055630 efbc81
+@TOKEN 6 2 112169 23368310 e5be88e9ab98e585b4
+@TOKEN 6 3 102804 23742913 e4b8bae682a8
+@TOKEN 6 4 47874 24075354 e69c8de58aa1
+@TOKEN 6 5 1773 24397553 e38082
+@TOKEN 6 6 104139 24719978 e69c89e4bb80e4b988
+@TOKEN 6 7 109944 25052450 e68891e58fafe4bba5
+
+@END 6 produced=8 reason=limit status=0
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:15.338586+08:00 TX id=cb71141677-024: /template chat
+/template chat
+TEMPLATE=chat
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:15.556770+08:00 TX id=cb71141677-025: /mode events
+/mode events
+MODE=events
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:15.774489+08:00 TX id=cb71141677-026: /max 20
+/max 20
+MAX_NEW=20
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:15.992507+08:00 TX id=cb71141677-027: 1+1等于几？
+1+1等于几？
+@BEGIN 7 prompt_tokens=35 max_new=20
+@TOKEN 7 0 16 207449080 31
+@TOKEN 7 1 10 24720828 2b
+@TOKEN 7 2 16 25043744 31
+@TOKEN 7 3 107106 25367172 e7ad89e4ba8e
+@TOKEN 7 4 17 25689758 32
+@TOKEN 7 5 1773 26012597 e38082
+@TOKEN 7 6 151645 26406582 3c7c696d5f656e647c3e
+
+@END 7 produced=7 reason=eos status=0
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:19.813366+08:00 TX id=cb71141677-028: /template chat
+/template chat
+TEMPLATE=chat
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:20.030361+08:00 TX id=cb71141677-029: /mode text
+/mode text
+MODE=text
+
+READY
+prompt> 
+[HOST] 2026-10-25T13:00:20.248336+08:00 TX id=cb71141677-030: /max 20
+/max 20
+MAX_NEW=20
+
+READY
+prompt> 

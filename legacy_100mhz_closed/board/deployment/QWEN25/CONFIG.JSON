@@ -1,0 +1,519 @@
+{
+  "board": "KV260 Rev B / K26 commercial SOM",
+  "part": "xck26-sfvc784-2LV-c",
+  "clock_hz": 100000000,
+  "csr_base": "0xa0000000",
+  "csr_size": 65536,
+  "ddr_low": {
+    "base": "0x00000000",
+    "size": "0x80000000"
+  },
+  "cpu_elf_region": {
+    "base": "0x00100000",
+    "size": "0x03f00000"
+  },
+  "model_assets": [
+    {
+      "file": "QWEN25/DESC.BIN",
+      "base": "0x40000000",
+      "size": 6144,
+      "sha256": "95799e0042258133a2d27b090bc2bed1f36fdf35cbb11d080c9d1f5e91761f54"
+    },
+    {
+      "file": "QWEN25/SCALE.BIN",
+      "base": "0x40010000",
+      "size": 912128,
+      "sha256": "9cc3265dd529dbbdab81986c9fefa179f4172f201c5de5163a9f25229d77690c"
+    },
+    {
+      "file": "QWEN25/BIAS.BIN",
+      "base": "0x40100000",
+      "size": 55296,
+      "sha256": "de9b4bb7b4a6598596731af79b7be848510fc1ae7b0a518f22759f3af1b8d275"
+    },
+    {
+      "file": "QWEN25/GAMMA.BIN",
+      "base": "0x40110000",
+      "size": 87808,
+      "sha256": "4ae83c4185094f3b0eada64d046c792e8627de7bb499f0e0491319a199d1003c"
+    },
+    {
+      "file": "QWEN25/WEIGHTS.BIN",
+      "base": "0x41000000",
+      "size": 357826560,
+      "sha256": "974dff3b1d12ceccc47eed438ca4e719d136bb9140f52ee9e54a0082a06b8439"
+    },
+    {
+      "file": "QWEN25/LMW.BIN",
+      "base": "0x57000000",
+      "size": 136134656,
+      "sha256": "6a4dabeca6bdf1114392d7eaa0c5685a4e9f23ee04f019c805665ddcd9cd5731"
+    },
+    {
+      "file": "QWEN25/EMBED.BIN",
+      "base": "0x60000000",
+      "size": 272269312,
+      "sha256": "4e96b0df6d274768cbb7e72404011853d23349999b658dc2f4dfb3c431ea223f"
+    }
+  ],
+  "dma_regions": [
+    {
+      "base": "0x40000000",
+      "size": 6144,
+      "file": "descriptors.bin",
+      "simulation_base": "0x100000000",
+      "sd_file": "DESC.BIN"
+    },
+    {
+      "base": "0x40010000",
+      "size": 912128,
+      "file": "scale.bin",
+      "simulation_base": "0x100010000",
+      "sd_file": "SCALE.BIN"
+    },
+    {
+      "base": "0x40100000",
+      "size": 55296,
+      "file": "bias.bin",
+      "simulation_base": "0x100110000",
+      "sd_file": "BIAS.BIN"
+    },
+    {
+      "base": "0x40110000",
+      "size": 87808,
+      "file": "gamma.bin",
+      "simulation_base": "0x100120000",
+      "sd_file": "GAMMA.BIN"
+    },
+    {
+      "base": "0x41000000",
+      "size": 357826560,
+      "file": "weights.bin",
+      "simulation_base": "0x110000000",
+      "sd_file": "WEIGHTS.BIN"
+    },
+    {
+      "base": "0x57000000",
+      "size": 136134656,
+      "file": "lm_weight.bin",
+      "simulation_base": "0x140000000",
+      "sd_file": "LMW.BIN"
+    },
+    {
+      "base": "0x71000000",
+      "size": 458752,
+      "file": "-",
+      "simulation_base": "0x180000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x10000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x200000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x10800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x200800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x11000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x201000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x11800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x201800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x12000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x202000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x12800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x202800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x13000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x203000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x13800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x203800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x14000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x204000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x14800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x204800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x15000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x205000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x15800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x205800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x16000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x206000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x16800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x206800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x17000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x207000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x17800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x207800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x18000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x208000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x18800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x208800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x19000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x209000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x19800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x209800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x1a000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x20a000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x1a800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x20a800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x1b000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x20b000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x1b800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x20b800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x20000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x300000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x20800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x300800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x21000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x301000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x21800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x301800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x22000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x302000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x22800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x302800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x23000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x303000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x23800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x303800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x24000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x304000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x24800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x304800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x25000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x305000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x25800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x305800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x26000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x306000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x26800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x306800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x27000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x307000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x27800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x307800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x28000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x308000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x28800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x308800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x29000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x309000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x29800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x309800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x2a000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x30a000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x2a800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x30a800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x2b000000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x30b000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x2b800000",
+      "size": 65536,
+      "file": "-",
+      "simulation_base": "0x30b800f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x71500000",
+      "size": 458752,
+      "file": "-",
+      "simulation_base": "0x400000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x71600000",
+      "size": 458752,
+      "file": "-",
+      "simulation_base": "0x500000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x71700000",
+      "size": 458752,
+      "file": "-",
+      "simulation_base": "0x600000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x71800000",
+      "size": 2490368,
+      "file": "-",
+      "simulation_base": "0x700000f80",
+      "sd_file": null
+    },
+    {
+      "base": "0x71b00000",
+      "size": 458752,
+      "file": "-",
+      "simulation_base": "0x800000f80",
+      "sd_file": null
+    }
+  ],
+  "embedding_base": "0x60000000",
+  "descriptor_base": "0x40000000",
+  "input_base": "0x71000000",
+  "k_base": "0x10000000",
+  "v_base": "0x20000000",
+  "q_base": "0x71500000",
+  "context_base": "0x71600000",
+  "layers": 24,
+  "hidden": 896,
+  "ffn": 4864,
+  "vocab": 151936,
+  "q_heads": 14,
+  "kv_heads": 2,
+  "head_dimension": 64,
+  "kv_capacity": 256,
+  "kv_layer_stride_bytes": 8388608,
+  "rms_epsilon_bf16": "0x3586",
+  "axi_max_burst_len_minus_one": 255,
+  "decoding": "greedy latest-token-index on ties",
+  "cache_policy": "A53 D-cache disabled; noncoherent HP0..HP3 DMA",
+  "validation_status": {
+    "prior_hold_whs_ns": -0.004,
+    "generated_text": "RTL regression vectors passed",
+    "board_tested": false,
+    "setup_wns_ns": 1.7,
+    "route_errors": 0,
+    "hold_whs_ns": 0.01
+  },
+  "ps_generated_clock_hz": 99999001,
+  "hardware_xsa": "build/hardware/qwen25_system_100mhz.xsa",
+  "hardware_bitstream": "board/deployment/QWEN25.BIN",
+    "software_elf": "board/deployment/QWUART.ELF",
+  "board_tested": false,
+  "prompt_source": "UART UTF-8 input",
+  "tokenizer": "QWEN25/TOKEN.BIN",
+  "application": "interactive; each request clears KV context",
+  "generate_tokens_default": 20,
+  "validated_rtl": "source fixes from 2026-10-20 system regression"
+}

@@ -5,9 +5,11 @@
 在 AMD Kria KV260 上加速 Qwen2.5-0.5B-Instruct：PS（Cortex-A53 裸机）负责聊天模板、分词、
 Embedding 查表与 AXI-Lite 调度，PL 执行 24 层 Transformer 的 GEMM、RoPE、Attention、FFN 与 LM Head。
 
-本仓库收录 **candidate9** 分支的完整交付：在 INT8 权重 / BF16 激活的基础上引入 **KV8 KV-cache 量化**
+本仓库根目录收录 **candidate9** 分支的完整交付：在 INT8 权重 / BF16 激活的基础上引入 **KV8 KV-cache 量化**
 （`kv8_*` 模块族），并用 Xilinx 浮点 IP（`floating_point`、`cordic_sincos`、`fp_exp/mul/recip/rsqrt`、
 `fixed_to_float`）替代部分自研浮点路径。
+
+上一版已闭合上板的交付完整保留在 [`legacy_100mhz_closed/`](legacy_100mhz_closed/README_PROVENANCE.md)。
 
 ## 状态与限制
 
@@ -20,7 +22,7 @@ Embedding 查表与 AXI-Lite 调度，PL 执行 24 层 Transformer 的 GEMM、Ro
 | bitstream / 上板实测 | **本分支没有** |
 | 顶层 IRQ | 已移除，上板软件与系统接口需与此变更匹配 |
 
-一句话：**这个分支仿真能跑通，但时序没有闭合，也没有上板数据。** 请勿把本仓库当作已上板的成果引用。
+一句话：**这个分支仿真能跑通，但时序没有闭合，也没有上板数据。** 已闭合上板的版本见 `legacy_100mhz_closed/`。
 
 ## 目录
 
@@ -33,7 +35,8 @@ Embedding 查表与 AXI-Lite 调度，PL 执行 24 层 Transformer 的 GEMM、Ro
 ├── board/             # SD 卡模型资源与 PS 固件
 ├── data/              # 本分支可用数据说明
 ├── skill/             # 技能包
-└── report/            # 早期交付的设计报告（100 MHz 闭合版本，供对照）
+├── report/            # 设计报告（对应 legacy 版本）
+└── legacy_100mhz_closed/  # 上一版已闭合上板的完整交付
 ```
 
 各子目录的详细说明见其内部 `README.md`。
@@ -47,6 +50,7 @@ Embedding 查表与 AXI-Lite 调度，PL 执行 24 层 Transformer 的 GEMM、Ro
 | RTL 综合 / 实现 | Vivado 2026.1，器件 `xck26-sfvc784-2LV-c` |
 | 端到端仿真 | oss-cad-suite（iverilog / verilator）+ zig（充当 C++ 编译器） |
 | PS 固件编译 | Vitis 2020.2 及以上（aarch64-none-elf 工具链） |
+| 模型权重 | Git LFS（克隆后必须 `git lfs pull`） |
 
 构建脚本里默认引用了本机的 `C:\Users\ZKHC\tools\oss-cad-suite` 与
 `C:\Users\ZKHC\tools\ziglang_verilator\ziglang\zig.exe`，**换机器必须改这两个路径**。
@@ -92,8 +96,15 @@ KV260 board preset 路径，且本次交付的 BD 未生成、未验证。
 - `sim/candidate9_chat_result/`：6 个 token 的完整证据——每个 iteration 的 151936 维 logits、
   token 序列、周期数、`run.out` 与 `timing.txt`。
 - `build/reports/`：`timing_summary.rpt`（含 −5.238 ns 违规路径）、`utilization.rpt`。
-- `report/`：**早期交付的设计报告**，描述的是 100 MHz 闭合的那版设计，与本分支 RTL 不是同一套，
-  仅作对照参考。
+- `report/`：设计报告，对应 `legacy_100mhz_closed/` 那一版（100 MHz 闭合、有上板数据）。
+
+## 历史交付
+
+[`legacy_100mhz_closed/`](legacy_100mhz_closed/README_PROVENANCE.md) 存放上一版**已完整闭合、已上板**的交付：
+100 MHz 时序收敛（Setup WNS +1.700 ns、Hold WHS +0.010 ns）、bitstream 与 XSA、KV260 上板
+6 场景 22 token 实测记录、演示视频与数据汇总。它用自研浮点路径（无 `kv8_*`），与根目录分支不是同一套设计。
+
+`report/` 下的设计报告描述的就是这一版，两份材料配套阅读；根目录内容不作为该报告的成果来源。
 
 ## 许可
 

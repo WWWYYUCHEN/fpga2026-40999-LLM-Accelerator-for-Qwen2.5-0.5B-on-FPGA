@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "returncode": 0,
+  "prompt": "你好",
+  "template": "raw",
+  "requests": 1,
+  "requested_tokens": 2,
+  "generated": [
+    {
+      "iteration": "0",
+      "token_id": "3837",
+      "cycles": "11724701"
+    },
+    {
+      "iteration": "1",
+      "token_id": "35946",
+      "cycles": "11754713"
+    }
+  ],
+  "end_events": [
+    "@END 1 produced=2 reason=limit status=0"
+  ],
+  "seconds": 432.42,
+  "expected_layer_completions": 48,
+  "observed_layer_completions": 48,
+  "independent_logit_verifications": 2,
+  "exe_sha256": "a9461948cb5c9bd123d21bca7ed93953603905e7ecf5546ac815640c7e7e951f",
+  "real_ps_c": true,
+  "actual_rtl_computation": true,
+  "cpu_model_substitution": false,
+  "board_tested": false
+}

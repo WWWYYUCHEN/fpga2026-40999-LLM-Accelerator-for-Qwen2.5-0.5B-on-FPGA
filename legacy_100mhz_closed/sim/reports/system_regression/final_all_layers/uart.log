@@ -1,0 +1,114 @@
+SIMULATION: real PS C and compiled accelerator RTL; virtual UART/SD; vendor math simulation models.
+
+Qwen25 KV260 100 MHz UART interactive inference
+PL numerical model signoff pending. No CPU inference fallback.
+CSR_ID=515732354b563236 VERSION=0000000000010000
+TOKENIZER_SELFTEST_OK 40 tokens
+Loading 0:/QWEN25/DESC.BIN (6144 bytes)
+Loading 0:/QWEN25/SCALE.BIN (912128 bytes)
+Loading 0:/QWEN25/BIAS.BIN (55296 bytes)
+Loading 0:/QWEN25/GAMMA.BIN (87808 bytes)
+Loading 0:/QWEN25/WEIGHTS.BIN (357826560 bytes)
+Loading 0:/QWEN25/LMW.BIN (136134656 bytes)
+Loading 0:/QWEN25/EMBED.BIN (272269312 bytes)
+Enter UTF-8 prompt and press Enter. Each request starts a fresh context.
+/max N (1..255), /mode text|ids|events, /template chat|raw, /encode TEXT, /selftest, /reset, /help
+KV capacity 256 including chat template and output reserve. Default /max 20.
+
+READY
+prompt> /template raw
+TEMPLATE=raw
+
+READY
+prompt> /mode events
+MODE=events
+
+READY
+prompt> /max 2
+MAX_NEW=2
+
+READY
+prompt> 你好
+@BEGIN 1 prompt_tokens=1 max_new=2
+LAYER_DONE iteration=0 layer=0 cycle=446783
+LAYER_DONE iteration=0 layer=1 cycle=822141
+PROGRESS cycle=1000000 state=000000000000000004000 op=5 output_tile=4
+LAYER_DONE iteration=0 layer=2 cycle=1197504
+LAYER_DONE iteration=0 layer=3 cycle=1572864
+LAYER_DONE iteration=0 layer=4 cycle=1948222
+PROGRESS cycle=2000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=0 layer=5 cycle=2323562
+LAYER_DONE iteration=0 layer=6 cycle=2698932
+PROGRESS cycle=3000000 state=000000000000000004000 op=6 output_tile=0
+LAYER_DONE iteration=0 layer=7 cycle=3074288
+LAYER_DONE iteration=0 layer=8 cycle=3449629
+LAYER_DONE iteration=0 layer=9 cycle=3824965
+PROGRESS cycle=4000000 state=000000000000000004000 op=5 output_tile=2
+LAYER_DONE iteration=0 layer=10 cycle=4200320
+LAYER_DONE iteration=0 layer=11 cycle=4575680
+LAYER_DONE iteration=0 layer=12 cycle=4951038
+PROGRESS cycle=5000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=0 layer=13 cycle=5326400
+LAYER_DONE iteration=0 layer=14 cycle=5701756
+PROGRESS cycle=6000000 state=000000000000000004000 op=6 output_tile=0
+LAYER_DONE iteration=0 layer=15 cycle=6077127
+LAYER_DONE iteration=0 layer=16 cycle=6452496
+LAYER_DONE iteration=0 layer=17 cycle=6827856
+PROGRESS cycle=7000000 state=000000000000000010000 op=5 output_tile=1
+LAYER_DONE iteration=0 layer=18 cycle=7203201
+LAYER_DONE iteration=0 layer=19 cycle=7578566
+LAYER_DONE iteration=0 layer=20 cycle=7953919
+PROGRESS cycle=8000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=0 layer=21 cycle=8329265
+LAYER_DONE iteration=0 layer=22 cycle=8704607
+PROGRESS cycle=9000000 state=000000000000000004000 op=6 output_tile=0
+LAYER_DONE iteration=0 layer=23 cycle=9079986
+PROGRESS cycle=10000000 state=000000000000000010000 op=7 output_tile=412
+PROGRESS cycle=11000000 state=000000000000000004000 op=7 output_tile=861
+
+RTL_TOKEN_VERIFIED iteration=0 id=3837 cycles=11724701 logits=151936 max=13.8125 idle_bias_addresses=445200
+@TOKEN 1 0 3837 117247 efbc8c
+PROGRESS cycle=12000000 state=000000000000000004000 op=5 output_tile=3
+LAYER_DONE iteration=1 layer=0 cycle=12104534
+LAYER_DONE iteration=1 layer=1 cycle=12484111
+LAYER_DONE iteration=1 layer=2 cycle=12863669
+PROGRESS cycle=13000000 state=000000000000000010000 op=4 output_tile=4
+LAYER_DONE iteration=1 layer=3 cycle=13243236
+LAYER_DONE iteration=1 layer=4 cycle=13622771
+PROGRESS cycle=14000000 state=000000000000000010000 op=6 output_tile=6
+LAYER_DONE iteration=1 layer=5 cycle=14002354
+LAYER_DONE iteration=1 layer=6 cycle=14381911
+LAYER_DONE iteration=1 layer=7 cycle=14761503
+PROGRESS cycle=15000000 state=000000000000000004000 op=5 output_tile=1
+LAYER_DONE iteration=1 layer=8 cycle=15141072
+LAYER_DONE iteration=1 layer=9 cycle=15520649
+LAYER_DONE iteration=1 layer=10 cycle=15900211
+PROGRESS cycle=16000000 state=000000000000000010000 op=3 output_tile=1
+LAYER_DONE iteration=1 layer=11 cycle=16279796
+LAYER_DONE iteration=1 layer=12 cycle=16659343
+PROGRESS cycle=17000000 state=000000000000000010000 op=6 output_tile=3
+LAYER_DONE iteration=1 layer=13 cycle=17038933
+LAYER_DONE iteration=1 layer=14 cycle=17418511
+LAYER_DONE iteration=1 layer=15 cycle=17798110
+PROGRESS cycle=18000000 state=000000000000000010000 op=4 output_tile=5
+LAYER_DONE iteration=1 layer=16 cycle=18177669
+LAYER_DONE iteration=1 layer=17 cycle=18557259
+LAYER_DONE iteration=1 layer=18 cycle=18936823
+PROGRESS cycle=19000000 state=000000000010000000000 op=2 output_tile=7
+LAYER_DONE iteration=1 layer=19 cycle=19316395
+LAYER_DONE iteration=1 layer=20 cycle=19695966
+PROGRESS cycle=20000000 state=000000000000000010000 op=6 output_tile=0
+LAYER_DONE iteration=1 layer=21 cycle=20075529
+LAYER_DONE iteration=1 layer=22 cycle=20455090
+LAYER_DONE iteration=1 layer=23 cycle=20834681
+PROGRESS cycle=21000000 state=000000000000000010000 op=7 output_tile=73
+PROGRESS cycle=22000000 state=000000000000000010000 op=7 output_tile=522
+PROGRESS cycle=23000000 state=000000000000000010000 op=7 output_tile=971
+
+RTL_TOKEN_VERIFIED iteration=1 id=35946 cycles=11754713 logits=151936 max=17.375 idle_bias_addresses=890400
+@TOKEN 1 1 35946 117547 e68891
+
+@END 1 produced=2 reason=limit status=0
+
+READY
+prompt> 

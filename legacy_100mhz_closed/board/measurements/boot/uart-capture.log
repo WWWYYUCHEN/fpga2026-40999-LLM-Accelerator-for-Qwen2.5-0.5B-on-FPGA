@@ -1,0 +1,293 @@
+Xilinx Zynq MP First Stage Boot Loader 
+Release 2020.2   Apr 22 2021  -  17:48:34
+MultiBootOffset: 0x40
+Reset Mode	:	System Reset
+Platform: Silicon (4.0), Running on A53-0 (64-bit) Processor, Device Name: XCZUUNKNEG
+QSPI 32 bit Boot Mode 
+FlashID=0x20 0xBB 0x20
+8\xea\x8aUjT\x94'$HP\xaa\xa3 running on XCK26/silicon v4/RTL5.1 at 0xfffea000
+NOTICE:  BL31: v2.2(release):xilinx-v2020.2.2-k26
+NOTICE:  BL31: Built : 17:45:02, Apr 22 2021
+
+[HOST] 2026-10-25T12:58:53.129905+08:00 UART_ERROR mask=0x8 (RXOVER=1, OVERRUN=2, PARITY=4, FRAME=8, BREAK=16)
+
+
+U-Boot 2020.01 (Apr 22 2021 - 17:47:18 +0000)
+
+Model: ZynqMP SMK-K26 Rev1/B/A
+Board: Xilinx ZynqMP
+DRAM:  4 GiB
+PMUFW:	v1.1
+Xilinx I2C FRU format at nvmem0:
+ Manufacturer Name: XILINX
+ Product Name: SMK-K26-XCL2G-ED
+ Serial No: XFL1YFGPOE1Z
+ Part Number: 5057-01ED
+ File ID: 0x0
+ Revision Number: 1
+Xilinx I2C FRU format at nvmem1:
+ Manufacturer Name: XILINX
+ Product Name: SCK-KV-G        
+ Serial No: XFL11WQDLAGH
+ Part Number: 5066-01ED
+ File ID: 0x0
+ Revision Number: 1
+EL Level:	EL2
+Chip ID:	xck26
+NAND:  0 MiB
+MMC:   mmc@ff170000: 1
+In:    serial@ff010000
+Out:   serial@ff010000
+Err:   serial@ff010000
+Bootmode: QSPI_MODE
+Reset reason:	SOFT 
+Net:   No ethernet found.
+Hit any key to stop autoboot:  2 
+[HOST] 2026-10-25T12:58:56.173229+08:00 TX id=clock-b690ce54ef-1:  
+ 0 
+ZynqMP> 
+ZynqMP> 
+[HOST] 2026-10-25T12:58:56.392836+08:00 TX id=clock-b690ce54ef-2: version
+version
+U-Boot 2020.01 (Apr 22 2021 - 17:47:18 +0000)
+
+aarch64-xilinx-linux-gcc (GCC) 9.2.0
+GNU ld (GNU Binutils) 2.32.0.20190204
+ZynqMP> 
+[HOST] 2026-10-25T12:58:56.613019+08:00 TX id=clock-b690ce54ef-3: printenv bootcmd
+printenv bootcmd
+bootcmd=run som
+ZynqMP> 
+[HOST] 2026-10-25T12:58:56.830717+08:00 TX id=clock-b690ce54ef-4: bdinfo
+bdinfo
+arch_number = 0x0000000000000000
+boot_params = 0x0000000000000000
+DRAM bank   = 0x0000000000000000
+-> start    = 0x0000000000000000
+-> size     = 0x000000007ff00000
+DRAM bank   = 0x0000000000000001
+-> start    = 0x0000000800000000
+-> size     = 0x0000000080000000
+baudrate    = 115200 bps
+TLB addr    = 0x000000007fee0000
+relocaddr   = 0x000000007fdb2000
+reloc off   = 0x000000006fd32000
+irq_sp      = 0x000000007dd99610
+sp start    = 0x000000007dd99610
+ARM frequency = 99 MHz
+DSP frequency = 0 MHz
+DDR frequency = 0 MHz
+Early malloc usage: f30 / 8000
+fdt_blob    = 0x000000007dd99628
+ZynqMP> 
+[HOST] 2026-10-25T12:58:57.048552+08:00 TX id=clock-b690ce54ef-5: help clk
+help clk
+clk - CLK sub-system
+
+Usage:
+clk dump - Print clock frequencies
+ZynqMP> 
+[HOST] 2026-10-25T12:58:57.268369+08:00 TX id=clock-b690ce54ef-6: clk dump
+clk dump
+clk		frequency
+     iopll          1499999985
+      rpll          1066666656
+      apll          1333333320
+      dpll          1066666656
+      vpll          1499999985
+iopll_to_fpd             unknown
+rpll_to_fpd             unknown
+apll_to_lpd             unknown
+dpll_to_lpd             unknown
+vpll_to_lpd             unknown
+      acpu          1333333320
+ acpu_half             unknown
+   dbf_fpd             unknown
+   dbf_lpd             unknown
+ dbg_trace             unknown
+ dbg_tstmp             unknown
+dp_video_ref             unknown
+dp_audio_ref             unknown
+dp_stc_ref             unknown
+  gdma_ref             unknown
+ dpdma_ref             unknown
+   ddr_ref           533333328
+  sata_ref             unknown
+  pcie_ref             unknown
+   gpu_ref             unknown
+gpu_pp0_ref             unknown
+gpu_pp1_ref             unknown
+topsw_main             unknown
+topsw_lsbus             unknown
+gtgref0_ref             unknown
+lpd_switch             unknown
+ lpd_lsbus             unknown
+usb0_bus_ref             unknown
+usb1_bus_ref             unknown
+usb3_dual_ref             unknown
+      usb0             unknown
+      usb1             unknown
+    cpu_r5             unknown
+cpu_r5_core             unknown
+   csu_spb             unknown
+   csu_pll             unknown
+      pcap             unknown
+iou_switch             unknown
+gem_tsu_ref             unknown
+   gem_tsu             unknown
+  gem0_ref            62499999
+  gem1_ref            62499999
+  gem2_ref            62499999
+  gem3_ref           124999999
+   gem0_tx             unknown
+   gem1_tx             unknown
+   gem2_tx             unknown
+   gem3_tx             unknown
+  qspi_ref           124999999
+ sdio0_ref            99999999
+ sdio1_ref           187499998
+ uart0_ref            62499999
+ uart1_ref            99999999
+  spi0_ref            62499999
+  spi1_ref           187499998
+  nand_ref             9375000
+  i2c0_ref           299999997
+  i2c1_ref            99999999
+  can0_ref            46875000
+  can1_ref            46875000
+      can0             unknown
+      can1             unknown
+   dll_ref             unknown
+  adma_ref             unknown
+timestamp_ref             unknown
+   ams_ref             unknown
+       pl0            99999999
+       pl1            99999999
+       pl2             9375000
+       pl3             9375000
+       wdt            99999999
+ZynqMP> 
+[HOST] 2026-10-25T12:58:57.701909+08:00 TX id=clock-b690ce54ef-7: help zynqmp
+help zynqmp
+zynqmp - ZynqMP sub-system
+
+Usage:
+zynqmp secure src len [key_addr] - verifies secure images of $len bytes
+                            long at address $src. Optional key_addr
+                            can be specified if user key needs to
+                            be used for decryption
+zynqmp mmio_read address - read from address
+zynqmp mmio_write address mask value - write value after masking to
+					address
+zynqmp aes srcaddr ivaddr len aesop keysrc dstaddr [keyaddr]
+	Encrypts or decrypts blob of data at src address and puts it
+	back to dstaddr using key and iv at keyaddr and ivaddr
+	respectively. keysrc value specifies from which source key
+	has to be used, it can be User/Device/PUF key. A value of 0
+	for KUP(user key),1 for DeviceKey and 2 for PUF key. The
+	aesop value specifies the operation which can be 0 for
+	decrypt and 1 for encrypt operation
+zynqmp tcminit mode - Initialize the TCM with zeros. TCM needs to be
+		       initialized before accessing to avoid ECC
+		       errors. mode specifies in which mode TCM has
+		       to be initialized. Supported modes will be
+		       lock(0)/split(1)
+zynqmp rsa srcaddr srclen mod exp rsaop
+	Performs RSA encryption and RSA decryption on blob of data
+	at srcaddr and puts it back in srcaddr using modulus and
+	public or private exponent
+	srclen : must be key size(4096 bits)
+	exp :	private key exponent for RSA decryption(4096 bits)
+		public key exponent for RSA encryption(32 bits)
+	rsaop :	0 for RSA Decryption, 1 for RSA Encryption
+zynqmp sha3 srcaddr srclen [key_addr]
+	Generates sha3 hash value for data blob at srcaddr and puts
+	48 bytes hash value into srcaddr
+	Optional key_addr can be specified for saving sha3 hash value
+	Note: srcaddr/srclen should not be 0
+
+ZynqMP> 
+[HOST] 2026-10-25T12:58:58.028963+08:00 TX id=clock-b690ce54ef-8: zynqmp mmio_read 0xff5e0020
+zynqmp mmio_read 0xff5e0020
+mmio read value at 0xff5e0020 = 0x15a00
+ZynqMP> 
+[HOST] 2026-10-25T12:58:58.247453+08:00 TX id=clock-b690ce54ef-9: zynqmp mmio_read 0xff5e0030
+zynqmp mmio_read 0xff5e0030
+mmio read value at 0xff5e0030 = 0x14000
+ZynqMP> 
+[HOST] 2026-10-25T12:58:58.465373+08:00 TX id=clock-b690ce54ef-10: zynqmp mmio_read 0xfd1a002c
+zynqmp mmio_read 0xfd1a002c
+mmio read value at 0xfd1a002c = 0x14000
+ZynqMP> 
+[HOST] 2026-10-25T12:58:58.683389+08:00 TX id=clock-b690ce54ef-11: zynqmp mmio_read 0xff5e00c0
+zynqmp mmio_read 0xff5e00c0
+mmio read value at 0xff5e00c0 = 0x1010f00
+ZynqMP> 
+[HOST] 2026-10-25T12:58:58.900204+08:00 TX id=clock-b690ce54ef-12: zynqmp mmio_read 0xff5e0128
+zynqmp mmio_read 0xff5e0128
+mmio read value at 0xff5e0128 = 0x1000f00
+ZynqMP> 
+[HOST] 2026-10-25T12:58:59.115277+08:00 TX id=clock-b690ce54ef-13: zynqmp mmio_read 0xfd1a0080
+zynqmp mmio_read 0xfd1a0080
+mmio read value at 0xfd1a0080 = 0x1000200
+ZynqMP> 
+[HOST] 2026-10-25T12:58:59.332651+08:00 TX id=clock-b690ce54ef-14: zynqmp mmio_read 0xff260020
+zynqmp mmio_read 0xff260020
+Failed: mmio read
+ZynqMP> 
+[HOST] 2026-10-25T12:58:59.549498+08:00 TX id=clock-b690ce54ef-15: sf probe 0
+sf probe 0
+SF: Detected n25q512a with page size 256 Bytes, erase size 64 KiB, total 64 MiB
+ZynqMP> 
+[HOST] 2026-10-25T12:58:59.770104+08:00 TX id=clock-b690ce54ef-16: sf read 0x20000000 0x100000 0x20
+sf read 0x20000000 0x100000 0x20
+device 0 offset 0x100000, size 0x20
+SF: 32 bytes @ 0x100000 Read: OK
+ZynqMP> 
+[HOST] 2026-10-25T12:58:59.989973+08:00 TX id=clock-b690ce54ef-17: md.l 0x20000000 8
+md.l 0x20000000 8
+20000000: 4d554241 00000001 00000004 aeb2bcb9    ABUM............
+20000010: 01000100 00200000 00f80000 01e00000    ...... .........
+ZynqMP> 
+[HOST] 2026-10-25T12:59:00.208416+08:00 TX id=clock-b690ce54ef-18: sf read 0x20000000 0x120000 0x20
+sf read 0x20000000 0x120000 0x20
+device 0 offset 0x120000, size 0x20
+SF: 32 bytes @ 0x120000 Read: OK
+ZynqMP> 
+[HOST] 2026-10-25T12:59:00.424457+08:00 TX id=clock-b690ce54ef-19: md.l 0x20000000 8
+md.l 0x20000000 8
+20000000: 4d554241 00000001 00000004 aeb2bcb9    ABUM............
+20000010: 01000100 00200000 00f80000 01e00000    ...... .........
+ZynqMP> 
+[HOST] 2026-10-25T12:59:00.642461+08:00 TX id=clock-b690ce54ef-20: run bootcmd
+run bootcmd
+switch to partitions #0, OK
+mmc1 is current device
+Scanning mmc 1:1...
+Found U-Boot script /boot.scr
+617 bytes read in 25 ms (23.4 KiB/s)
+## Executing script at 20000000
+Qwen25 KV260 AUTOBOOT QWUART 2026-10-25
+7797692 bytes read in 885 ms (8.4 MiB/s)
+Using SD mmc 1
+FPGA configured
+999656 bytes read in 140 ms (6.8 MiB/s)
+## Starting application at 0x00110400 ...
+
+Qwen25 KV260 100 MHz UART interactive inference
+PL numerical model signoff pending. No CPU inference fallback.
+CSR_ID=515732354b563236 VERSION=0000000000010000
+TOKENIZER_SELFTEST_OK 40 tokens
+Loading 0:/QWEN25/DESC.BIN (6144 bytes)
+Loading 0:/QWEN25/SCALE.BIN (912128 bytes)
+Loading 0:/QWEN25/BIAS.BIN (55296 bytes)
+Loading 0:/QWEN25/GAMMA.BIN (87808 bytes)
+Loading 0:/QWEN25/WEIGHTS.BIN (357826560 bytes)
+Loading 0:/QWEN25/LMW.BIN (136134656 bytes)
+Loading 0:/QWEN25/EMBED.BIN (272269312 bytes)
+Enter UTF-8 prompt and press Enter. Each request starts a fresh context.
+/max N (1..255), /mode text|ids|events, /template chat|raw, /encode TEXT, /selftest, /reset, /help
+KV capacity 256 including chat template and output reserve. Default /max 20.
+
+READY
+prompt> 
