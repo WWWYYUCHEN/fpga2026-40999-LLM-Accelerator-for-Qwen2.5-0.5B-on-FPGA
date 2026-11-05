@@ -1,0 +1,14 @@
+{
+  "status": "FAIL",
+  "returncode": 4294967295,
+  "generated": [],
+  "seconds": 548.81,
+  "prompt": "你好",
+  "template": "chat",
+  "real_ps_firmware": true,
+  "actual_compiled_rtl": true,
+  "scripted_tokens": false,
+  "vendor_operators": "existing behavioral math/XPM/DSP simulation models",
+  "numeric_model_signoff": false,
+  "board_tested": false
+}

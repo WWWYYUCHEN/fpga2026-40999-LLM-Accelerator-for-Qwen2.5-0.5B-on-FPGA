@@ -1,0 +1,3 @@
+/mode events
+/max 8
+你好

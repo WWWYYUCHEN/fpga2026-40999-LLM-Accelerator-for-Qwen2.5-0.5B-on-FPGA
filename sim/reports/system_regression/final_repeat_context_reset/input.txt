@@ -1,0 +1,5 @@
+/template raw
+/mode events
+/max 1
+你好
+你好
