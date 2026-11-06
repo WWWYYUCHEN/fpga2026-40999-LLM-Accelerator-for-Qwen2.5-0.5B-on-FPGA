@@ -1,4 +1,4 @@
-# Qwen2.5-0.5B KV260 Transformer Accelerator — Candidate 9
+# Qwen2.5-0.5B KV260 Transformer Accelerator
 
 2026 全国大学生嵌入式芯片与系统设计竞赛（AMD 赛题）参赛项目。
 
